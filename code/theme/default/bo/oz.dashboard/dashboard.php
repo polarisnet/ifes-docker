@@ -1,0 +1,1 @@
+<div><?php echo getSystemFormAlert('dashboard', '', $winReady); ?></div>

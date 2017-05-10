@@ -1,0 +1,5 @@
+<?php
+	define('SESSION_NAME', 'IFESDONATIONPORTAL');
+	define('COOKIE_NAME', 'IFESDONATIONPORTAL');
+	define('MY_DB_PORT', '3306');
+?>

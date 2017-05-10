@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Droid Sans'), local('DroidSans'), url(font/droidsans.woff) format('woff');
+}
+
+@font-face {
+	font-family: 'DIN-Medium';
+	font-weight: normal;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	src: url('font/DIN-Medium.eot');
+	src: local('?'), url('font/DIN-Medium.woff') format('woff'), url('font/DIN-Medium.ttf') format('truetype'), url('font/DIN-Medium.svg') format('svg');
+}

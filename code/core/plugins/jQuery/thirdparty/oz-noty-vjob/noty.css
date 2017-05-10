@@ -1,0 +1,19 @@
+.oz-noty-wrapper{
+	background: #78ba01;
+	color: #ffffff;
+	height: 80px;
+	width: 300px;
+	padding: 15px 15px;
+	position: relative;
+	z-index: 100;
+	cursor: default;
+}
+.oz-noty-close{ background: url(cancel.png); width: 16px; height: 16px; cursor: pointer; position: relative;}
+.oz-noty-error{ background: #d40000;}
+.oz-noty-message{ background: #41C8F5;}
+.oz-noty-warning{ background: #808080;}
+.oz-noty-standard{ background: #78ba01;}
+
+.oz-noty-title{
+	font-size: 16px;
+}

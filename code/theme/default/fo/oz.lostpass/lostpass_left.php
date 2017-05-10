@@ -1,0 +1,1 @@
+<img src="<?php echo HTTP_MEDIA;?>/site-image/login-banner.png">

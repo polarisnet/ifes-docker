@@ -1,0 +1,1 @@
+<?php if(MODULE_UID == 'oz.dashboard'){ ?><div style="text-align: right;">v<?php echo $updaterData['version']; ?>&nbsp;&nbsp;</div><?php } ?>

@@ -1,0 +1,1 @@
+C:\PolarisNet\DataConnector\mysql\bin\mysqldump.exe --port 7676 -u root -proot dataconnector_db > C:\PolarisNet\DataConnector\apache24\htdocs\_updater\backup_db\db.sql

@@ -1,0 +1,166 @@
+html, body {
+	height: 100%; 
+	width: 100%; 
+	margin: 0;
+}
+html{
+	overflow: hidden;
+}
+body{
+	font-family: Droid Sans !important, Arial;
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+}
+.site-content{
+	min-width: 100%;
+	width: auto;
+}
+.site-left, .site-right, .site-center{
+	vertical-align: top;
+}
+/** Overide ExtJS 4.2.1 - Start **/
+.x-body, .x-window-header-text-container-default{
+	font-family: Droid Sans !important;
+}
+.x-body{
+	font-size: 12px !important;
+}
+/** Overide ExtJS 4.2.1 - End **/
+
+.hyperlink1, .hyperlink1:visited{
+	text-decoration: none;
+	color: #004883;
+	cursor: pointer;
+}
+.hyperlink1:hover{
+	text-decoration: underline;
+	color: #0160ab;
+	cursor: pointer;
+}
+
+.flat-input{
+	min-width: 200px;
+	border: 1px solid #bfbfbf;
+	font-family: Droid Sans, Arial;
+	padding: 3px;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+}
+.flat-input:hover, .flat-input:focus{
+	border: 1px solid #41C8F5;
+}
+.flat-checkbox{
+	position: relative;
+	top: -15px;
+	left: 18px;
+}
+.flat-button-default{
+	color: #ffffff;
+	background-color: #004983;
+	border: 0;
+	padding: 3px 5px 3px 5px;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+}
+.flat-button-default:hover{
+	background-color: #0160ab;
+}
+.flat-button-default:active{
+	background-color: #000000;
+}
+.nivo-controlNav{
+	padding: 0 !important;
+}
+.nivoSlider {
+    position:relative;
+}
+.nivoSlider img {
+    position:absolute;
+    top:0px;
+    left:0px;
+    display:none;
+}
+.nivoSlider a {
+    border:0;
+    display:block;
+}
+.oz-noty-error, .oz-noty-warning{
+	font-family: Droid Sans !important, Arial;
+}
+.password-calc{
+	width: 204px;
+	height: 18px;
+	padding: 4px 2px 4px 2px;
+	overflow: hidden;
+}
+.password-inner{
+	width: 204px;
+	height: 3px;
+	position: relative;
+	top: 10px;
+	overflow: hidden;
+}
+.password-bar{
+	height: 3px;
+	width: 0;
+}
+.clearfix:after,.radio-option:after{visibility:hidden;display:block;font-size:0;content:'.';clear:both;height:0}
+* html .clearfix,* html .radio-option{zoom:1}
+*:first-child+html .clearfix,*:first-child+html .radio-option{zoom:1}
+.english-text{direction:ltr;text-align:left}
+.recovery .stacked-label{line-height:18px;margin-bottom:8px}
+.recovery .radio-option input[type="radio"]{float:left;margin-top:1px}
+.recovery .radio-option .radio-label{margin-left:22px;display:block;line-height:18px}
+.recovery .hideable-box{margin-top:10px;margin-left:22px;line-height:18px}
+.recovery .hideable-wrapper{overflow:hidden;-ms-transition:all 500ms ease-in-out;-moz-transition:all 500ms ease-in-out;-o-transition:all 500ms ease-in-out;-webkit-transition:all 500ms ease-in-out;transition:all 500ms ease-in-out}
+.recovery img#google-play{position:relative;left:3px;top:3px}
+.recovery .android-option img{margin-right:4px}
+.recovery .android-option label.radio-label span{vertical-align:top}
+.recovery .android-app>*{display:inline-block;vertical-align:middle;max-width:410px}
+.recovery .android-app>div{vertical-align:top}.recovery .android-app h2{font-size:17px}
+.recovery .android img{position:relative;left:100px}.recovery .timer>*{vertical-align:middle}
+.recovery .timer canvas{margin-right:5px}.recovery hr{margin-top:25px;border:1px solid #ebebeb}
+.recovery span#phone_wrapper{display:inline-block}
+.recovery .disabledtext{color:#b8b8b8}
+.recovery .hideable-box div{margin-top:5px;margin-bottom:5px}
+.recovery .hideable-box .left{margin-right:5px;float:left}
+.recovery .hideable-box .right{margin-left:0px;float:left}
+.recovery .hideable-box .confirmation-box{margin-bottom:5px}
+.recovery .hideable-box .secret-question-text{font-weight:bold}
+.recovery .recovery-submit{margin-top:20px}
+.recovery .additional-recovery-option-text{margin-left:20px}
+.recovery .confirmation-hint-text{white-space:nowrap}
+.tool-tip-bubble{width:255px;line-height:18px}
+.big-tool-tip-bubble{width:280px;line-height:18px}
+.internal-header{font-size:1.4em;position:absolute;color:red;font-weight:bold;text-align:center;left:50%;margin-left:-5em;margin-top:2px}
+input[type="radio"]{cursor: pointer}
+
+/* Selection */
+::selection{
+	background:#41C8F5;
+	color:#FFF
+}
+
+/* Mozilla based browsers */
+::-moz-selection {
+background-color: #41C8F5;
+color: #FFF;
+}
+
+/* Works in Opera */
+::-o-selection {
+background-color: #41C8F5;
+color: #FFF;
+}
+::-ms-selection {
+background-color: #41C8F5;
+color: #FFF;
+}
+
+/* Works in Internet Explorer */
+::-webkit-selection {
+background-color: #41C8F5;
+color: #FFF;
+}

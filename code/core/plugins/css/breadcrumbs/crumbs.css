@@ -1,0 +1,40 @@
+.crumbs {display: block; margin-left: -27px; position: relative; top: -10px;font-family: DIN-Medium;}  
+.crumbs li {  display: inline;}  
+.crumbs li.first { padding-left: 2px; }  
+.crumbs li a,  
+.crumbs li a:link,  
+.crumbs li a:visited {  
+    display: block;  
+    float: left;  
+    font-size: 12px;  
+	color: #ffffff;
+    margin-left: -13px;  
+    padding: 7px 17px 6px 17px;  
+    position: relative;  
+    text-decoration: none;  
+}  
+.crumbs li a {  
+    background-image: url('bg-blue.png');  
+    background-repeat: no-repeat;  
+    background-position: 100% 0;  
+    position: relative;  
+}  
+.crumbs li a:hover {   
+    background-position: 100% -48px;  
+    cursor: pointer;  
+}  
+.crumbs li a:active { 
+    background-position: 100% -96px;  
+}  
+.crumbs li.first a span {  
+    height: 29px;  
+    width: 3px;  
+    border-left: 1px solid #d9d9d9;  
+    position: absolute;  
+    top: 0px;  
+    left: 0px;  
+}  
+.crumbs li .onhover, .crumbs li .onhover:hover, .crumbs li .onhover:active{
+	background-position: 100% 0;
+	cursor: default;
+}
