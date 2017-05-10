@@ -15,7 +15,7 @@ COPY php.ini /etc/php/7.0/fpm/php.ini
 RUN chmod 777 /etc/php/7.0/fpm/php.ini
 
 COPY code /var/www/html
-RUN chmod -R 777 /var/www/html
+#RUN chmod -R 777 /var/www/html
 
 EXPOSE 80
 

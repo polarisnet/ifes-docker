@@ -1,0 +1,4 @@
+ifesroot
+SPhptF7ZltCQYP
+
+ifes.cqplcgg2jwao.ap-southeast-1.rds.amazonaws.com:3306
