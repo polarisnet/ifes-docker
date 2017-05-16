@@ -1,4 +1,8 @@
 <?php
+	require DIR_PLUGINS.'/ip_geolocation/geoip2.phar';
+	
+	use GeoIp2\Database\Reader;
+		
 	/** Compatibility - Start **/
 	if(!defined('PHP_VERSION_ID')){
 		$version = explode('.', PHP_VERSION);
@@ -2052,12 +2056,7 @@
 		}
 	}
 	
-	function getISOcodeFromIP(){
-		require DIR_PLUGINS.'/ip_geolocation/geoip2.phar';
-		
-		use GeoIp2\WebService\Client;
-		use GeoIp2\Database\Reader;
-		
+	function getISOcodeFromIP(){		
 		$output = '';
 		$caught = false;
 
@@ -2067,10 +2066,10 @@
 		// Replace "city" with the appropriate method for your database, e.g., "country".
 		try{
 			$record = $reader->country($_SERVER['REMOTE_ADDR']);
-		}catch (\GeoIp2\Exception\AddressNotFoundException $e){
+		}catch (Exception $e){
 			//default to US if address not found in database
 			$caught = true;
-			$output = 'US'
+			$output = 'US';
 		}
 		
 		if(!$caught) {
