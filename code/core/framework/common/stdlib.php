@@ -1,4 +1,8 @@
 <?php
+	require DIR_PLUGINS.'/ip_geolocation/geoip2.phar';
+	
+	use GeoIp2\Database\Reader;
+		
 	/** Compatibility - Start **/
 	if(!defined('PHP_VERSION_ID')){
 		$version = explode('.', PHP_VERSION);
@@ -2050,6 +2054,29 @@
 		}else{
 			return false;
 		}
+	}
+	
+	function getISOcodeFromIP(){		
+		$output = '';
+		$caught = false;
+
+		// This creates the Reader object, which should be reused across lookups.
+		$reader = new Reader(DIR_PLUGINS.'/ip_geolocation/GeoLite2-Country.mmdb');
+
+		// Replace "city" with the appropriate method for your database, e.g., "country".
+		try{
+			$record = $reader->country($_SERVER['REMOTE_ADDR']);
+		}catch (Exception $e){
+			//default to US if address not found in database
+			$caught = true;
+			$output = 'US';
+		}
+		
+		if(!$caught) {
+			$output = $record->country->isoCode;
+		}
+		
+		return $output;
 	}
 
 	/*** Cloud - Start ***/
