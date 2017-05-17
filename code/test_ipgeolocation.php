@@ -17,7 +17,7 @@
 	// Replace "city" with the appropriate method for your database, e.g., "country".
 	try{
 		$record = $reader->country($_SERVER['REMOTE_ADDR']); //e.g., '175.139.129.71', '128.101.101.101'
-	}catch (\GeoIp2\Exception\AddressNotFoundException $e){
+	}catch (Exception $e){
 		//default to US if address not found in database
 		$caught = true;
 		echo $e->getMessage();
