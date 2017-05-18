@@ -11,8 +11,8 @@ COPY default /etc/nginx/sites-available/default
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 
-COPY code /var/www/html
-RUN chmod -R 777 /var/www/html
+#COPY code /var/www/html
+#RUN chmod -R 777 /var/www/html
 
 COPY startphpfpm /etc/startphpfpm
 
