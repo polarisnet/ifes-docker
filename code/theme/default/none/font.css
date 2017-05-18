@@ -1,3 +1,4 @@
+/*
 @font-face {
   font-family: 'Droid Sans';
   font-style: normal;
@@ -12,4 +13,11 @@
 	-webkit-font-smoothing: antialiased;
 	src: url('font/DIN-Medium.eot');
 	src: local('?'), url('font/DIN-Medium.woff') format('woff'), url('font/DIN-Medium.ttf') format('truetype'), url('font/DIN-Medium.svg') format('svg');
+}
+*/
+@font-face {
+	font-family: 'Montserrat', sans-serif;
+}
+@font-face {
+	font-family: 'Open Sans', sans-serif;
 }

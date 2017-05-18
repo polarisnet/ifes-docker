@@ -7,7 +7,7 @@ html{
 	overflow: hidden;
 }
 body{
-	font-family: Droid Sans !important, Arial;
+	font-family: Open Sans !important, Arial;
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
@@ -21,7 +21,7 @@ body{
 }
 /** Overide ExtJS 4.2.1 - Start **/
 .x-body, .x-window-header-text-container-default{
-	font-family: Droid Sans !important;
+	font-family: Open Sans !important;
 }
 .x-body{
 	font-size: 12px !important;
@@ -30,25 +30,25 @@ body{
 
 .hyperlink1, .hyperlink1:visited{
 	text-decoration: none;
-	color: #004883;
+	color: #007696;
 	cursor: pointer;
 }
 .hyperlink1:hover{
 	text-decoration: underline;
-	color: #0160ab;
+	color: #73CAEA;
 	cursor: pointer;
 }
 
 .flat-input{
 	min-width: 200px;
 	border: 1px solid #bfbfbf;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 }
 .flat-input:hover, .flat-input:focus{
-	border: 1px solid #41C8F5;
+	border: 1px solid #73CAEA;
 }
 .flat-checkbox{
 	position: relative;
@@ -57,7 +57,7 @@ body{
 }
 .flat-button-default{
 	color: #ffffff;
-	background-color: #004983;
+	background-color: #251F4F;
 	border: 0;
 	padding: 3px 5px 3px 5px;
 	cursor: pointer;
@@ -65,7 +65,7 @@ body{
 	-webkit-border-radius: 0;
 }
 .flat-button-default:hover{
-	background-color: #0160ab;
+	background-color: #73CAEA;
 }
 .flat-button-default:active{
 	background-color: #000000;
@@ -87,7 +87,7 @@ body{
     display:block;
 }
 .oz-noty-error, .oz-noty-warning{
-	font-family: Droid Sans !important, Arial;
+	font-family: Open Sans !important, Arial;
 }
 .password-calc{
 	width: 204px;
@@ -139,28 +139,28 @@ input[type="radio"]{cursor: pointer}
 
 /* Selection */
 ::selection{
-	background:#41C8F5;
+	background:#73CAEA;
 	color:#FFF
 }
 
 /* Mozilla based browsers */
 ::-moz-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 
 /* Works in Opera */
 ::-o-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 ::-ms-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 
 /* Works in Internet Explorer */
 ::-webkit-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }

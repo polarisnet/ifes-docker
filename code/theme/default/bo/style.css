@@ -7,7 +7,7 @@ html, #full-page-container{
 	overflow: hidden;
 }
 body{
-	font-family: Droid Sans !important, Arial;
+	font-family: Open Sans !important, Arial;
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
@@ -22,7 +22,7 @@ body{
 	vertical-align: top;
 }
 .site-left{
-	font-family: Droid Sans !important, Arial;
+	font-family: Open Sans !important, Arial;
 	background-color: #f3f3f3;
 	padding: 0;
 }
@@ -51,24 +51,24 @@ body{
 /** Overide ExtJS 4.2.1 - Start **/
 
 .x-body, .x-window-header-text-container-default, .x-field{
-	font-family: Droid Sans;
+	font-family: Open Sans;
 }
 .x-form-item, .x-form-field, .x-datepicker-date{
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: Droid Sans;
+	font-family: Open Sans;
 }
 .x-body{
 	font-size: 12px !important;
 }
 .x-btn-default-toolbar-small .x-btn-inner{
 	font-weight: normal !important;
-	font-family: Droid Sans;
+	font-family: Open Sans;
 }
 .x-column-header, .x-grid-cell, .x-toolbar-text, .x-progress-default .x-progress-text, .x-form-trigger-wrap, .x-form-item-label{
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: Droid Sans;
+	font-family: Open Sans;
 }
 .x-docked{
 	z-index: 0;
@@ -78,23 +78,23 @@ body{
 	-webkit-border-radius: 0;
 }
 .x-form-focus, .x-form-trigger-wrap-focus .x-form-trigger-wrap{
-	border-color: #41C8F5;
+	border-color: #73CAEA;
 }
 /*
 .x-grid-row-selected {
-	background-color: #41C8F5;
+	background-color: #73CAEA;
 	color: #ffffff;
 }
 */
 .x-progress-default .x-progress-bar-default{
 	background-image:none;
-	background-color:#41C8F5
+	background-color:#73CAEA
 }
 .x-boundlist{
 	border: 1px solid #bfbfbf;
 }
 .x-form-display-field{
-	font:normal 12px Droid Sans;
+	font:normal 12px Open Sans;
 	color:black;
 	margin-top:4px;
 }
@@ -140,12 +140,12 @@ body{
 
 .hyperlink1, .hyperlink1:visited{
 	text-decoration: none;
-	color: #004883;
+	color: #007696;
 	cursor: pointer;
 }
 .hyperlink1:hover{
 	text-decoration: underline;
-	color: #0160ab;
+	color: #73CAEA;
 	cursor: pointer;
 }
 #bar-username{
@@ -164,7 +164,7 @@ body{
 	position: relative;
 }
 #bar-settings:hover{
-	background: #0160ab;
+	background: #73CAEA;
 }
 #bar-settings img{
 	width: 24px;
@@ -193,7 +193,7 @@ body{
 	padding: 8px 18px;
 }
 .bar-settings-toggle a:hover{
-	background: #0160ab;
+	background: #73CAEA;
 	color: #ffffff;
 	width: 100%;
 }
@@ -201,33 +201,33 @@ body{
 	float: right; position: relative; z-index: 1;
 }
 .flat-header{
-	font-family: DIN-Medium !important;
+	font-family: Montserrat !important;
         color: #666;
 	font-size: 16px; 
-	background-color: #004983;
+	background-color: #251F4F;
 	height: 50px;
 }
 .flat-content-header{
 	font-size: 16px; 
-	font-family: DIN-Medium;
+	font-family: Montserrat;
 }
 
 .flat-textarea{
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	min-width: 200px;
 	min-height: 50px;
 	resize: none;
 	padding: 3px;
-        -webkit-appearance: none;
+	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 }
 
 .aa-bs .flat-textarea{
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	min-width: 208px;
 	min-height: 58px;
 	resize: none;
@@ -238,14 +238,14 @@ body{
 }
 
 .flat-textarea:hover, .flat-textarea:focus{
-	border: 1px solid #41C8F5;
+	border: 1px solid #73CAEA;
 }
 .flat-input{
 	min-width: 200px;
 	min-height: 18px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -256,7 +256,7 @@ body{
 	min-height: 26px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -264,32 +264,32 @@ body{
 }
 
 .flat-input:hover, .flat-input:focus{
-	border: 1px solid #41C8F5;
+	border: 1px solid #73CAEA;
 }
 .flat-input2{
 	min-width: 137px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 }
 .flat-input2:hover, .flat-input2:focus{
-	border: 1px solid #41C8F5;
+	border: 1px solid #73CAEA;
 }
 .flat-input3{
 	min-width: 137px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	padding: 3px;
 	margin-left: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 }
 .flat-input3:hover, .flat-input3:focus{
-	border: 1px solid #41C8F5;
+	border: 1px solid #73CAEA;
 }
 .flat-selectbox{
 	min-width: 208px;
@@ -297,7 +297,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 3px;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	margin-left: 2px;
 	-webkit-border-radius: 0;
 }
@@ -310,7 +310,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 3px;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;
+	font-family: Open Sans, Arial;
 	-webkit-border-radius: 0;
         line-height: 16px;
 }
@@ -320,7 +320,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 2px;
 	font-size: 12px;
-	font-family: Droid Sans, Arial;	
+	font-family: Open Sans, Arial;	
 	-webkit-border-radius: 0;
 }
 .flat-checkbox{
@@ -346,8 +346,8 @@ body{
 }
 .flat-button-default{
 	color: #ffffff;
-	background-color: #004983;
-        font-family: Droid Sans;
+	background-color: #251F4F;
+        font-family: Open Sans;
 	border: 0;
 	padding: 3px 5px 3px 5px;
 	cursor: pointer;
@@ -355,7 +355,7 @@ body{
 	-webkit-border-radius: 0;
 }
 .flat-button-default:hover{
-	background-color: #0160ab;
+	background-color: #73CAEA;
 }
 .flat-button-default:active{
 	background-color: #000000;
@@ -363,14 +363,14 @@ body{
 .flat-subbutton-default{
 	color: #ffffff;
 	text-align: left;
-	background-color: #004983;
+	background-color: #251F4F;
 	border: 0;	
 	cursor: pointer;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 }
 .flat-subbutton-default:hover{
-	background-color: #0160ab;
+	background-color: #73CAEA;
 }
 .flat-subbutton-default:active{
 	background-color: #000000;
@@ -406,19 +406,19 @@ body{
 	position: relative; 
 	width: 100%; 
 	height: 140px; 
-	background-color: #004983; 
+	background-color: #251F4F; 
 	color: #ffffff;
-        font-family: DIN-Medium !important;
+	font-family: Montserrat !important;
 	padding: 10px;
 	text-align: center;
 	cursor: pointer;
 	/*margin-left: -5px;*/
 	/*margin-bottom: 10px;*/
 	float: left;
-        overflow:hidden;
+	overflow:hidden;
 }
 .tile-bed .tile-container:hover{
-	background-color: #0160ab; 
+	background-color: #73CAEA; 
 }
 .flat-simple-line{
 	width: 100%;
@@ -435,12 +435,12 @@ body{
 }
 .sidebar-navigation a, .sidebar-navigation a:visited, .sidebar-navigation a:active{
 	text-decoration: none;
-	color: #004883;
+	color: #007696;
 	cursor: pointer;
 }
 .sidebar-navigation a:hover{
 	text-decoration: underline;
-	color: #0160ab;
+	color: #73CAEA;
 }
 .insite-link{
 	list-style-type: none;
@@ -452,12 +452,12 @@ body{
 }
 .insite-link a, .insite-link a:visited, .insite-link a:active{
 	text-decoration: none;
-	color: #004883;
+	color: #007696;
 	cursor: pointer;
 }
 .insite-link a:hover{
 	text-decoration: underline;
-	color: #0160ab;
+	color: #73CAEA;
 }
 .std-form table{
 	width: 100%;
@@ -559,12 +559,12 @@ body{
 	float: left;
 	min-width: 50px;
 	padding: 3px 30px 3px 3px;
-	font-family: DIN-Medium, Arial; 
+	font-family: Montserrat, Arial; 
 	font-size: 16px;
 	border: 1px solid #bfbfbf;
 }
 .sidebar-quick-search:hover, .sidebar-quick-search:focus{
-	border: 1px solid #41C8F5;
+	border: 1px solid #73CAEA;
 }
 .crumbs{
 	position: relative;
@@ -604,7 +604,7 @@ body{
 
 /* custom row color for contact */
 .project-row .x-grid-cell { 
-    color: #004883; 
+    color: #007696; 
 } 
 
 /*activities info*/
@@ -638,7 +638,7 @@ body{
 
 .system-form-alert{
 	display: none;
-	background: #004983;
+	background: #251F4F;
 	color: #FFFFFF;
 	width: 500px;
 	margin: auto;
@@ -657,17 +657,17 @@ body{
 	background-color: #FFFFFF;
 }
 .report-header, .report-footer{
-	font:normal 12px Droid Sans;
+	font:normal 12px Open Sans;
 	line-height: 20px;
 }
 .report-header{	
 	color: #FFFFFF;
 	height: 24px;	
-	background-color: #004883;
+	background-color: #007696;
 }
 .report-table{
 	text-align: center;
-	font:normal 12px Droid Sans;
+	font:normal 12px Open Sans;
 	border-collapse: collapse;
 	table-layout:fixed; 
 	word-wrap:break-word; 
@@ -683,7 +683,7 @@ body{
 }
 
 .report-table-td td{
-	background-color: #004883;
+	background-color: #007696;
 }
 
 .report-table, .report-table-td{
@@ -702,7 +702,7 @@ body{
 	background-color: #FFFFFF;
 }
 .default-header, .default-footer{
-	font:normal 12px Droid Sans;
+	font:normal 12px Open Sans;
 	font-weight: bold;
 }
 .default-header{	
@@ -715,7 +715,7 @@ body{
 	display:table;
 	vertical-align:middle;
 	text-align: center;
-	font:normal 12px Droid Sans;
+	font:normal 12px Open Sans;
 	table-layout:fixed; 
 	word-wrap:break-word; 
 	width:100%; 
@@ -727,20 +727,20 @@ body{
 	height: 30px;
       line-height: 30px;
 }
-.td1{	background-color: #f5f8fa; }
-.td2{	background-color: #f0f1ff; }
-.td3{	background-color: #f5f8fa; }
-.td4{	background-color: #f0f1ff; }
-.td5{	background-color: #f5f8fa; }
-.td6{	background-color: #f0f1ff; }
-.td7{	background-color: #f5f8fa; }
-.td8{	background-color: #f0f1ff; }
+.td1{	background-color: #007696; }
+.td2{	background-color: #251F4F; }
+.td3{	background-color: #007696; }
+.td4{	background-color: #251F4F; }
+.td5{	background-color: #007696; }
+.td6{	background-color: #251F4F; }
+.td7{	background-color: #007696; }
+.td8{	background-color: #251F4F; }
 
-/*.td1{	background-color: #f5f8fa; }
+/*.td1{	background-color: #007696; }
 .td2{	background-color: #fff0f2; }
 .td3{	background-color: #effff6; }
 .td4{	background-color: #edfaff; }
-.td5{	background-color: #f0f1ff; }
+.td5{	background-color: #251F4F; }
 .td6{	background-color: #fffaee; }
 .td7{	background-color: #ffeef9; }
 .td8{	background-color: #e3dec7; }
@@ -756,7 +756,7 @@ body{
       padding: 10px;
       font-size: 12px !important;
 	  font-weight: normal !important;
-	  font-family: Droid Sans;
+	  font-family: Open Sans;
       text-align: center;
       color: rgb(113, 157, 171);
       background: rgb(255, 255, 255);
@@ -840,7 +840,7 @@ body{
 	color:#fff;
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: Droid Sans;
+	font-family: Open Sans;
 	text-align:center;
 	text-decoration:none;
 	background-color:#808080;
@@ -860,29 +860,29 @@ body{
 
 /* Selection */
 ::selection{
-	background:#41C8F5;
+	background:#73CAEA;
 	color:#FFF
 }
 
 /* Mozilla based browsers */
 ::-moz-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 
 /* Works in Opera */
 ::-o-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 ::-ms-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 
 /* Works in Internet Explorer */
 ::-webkit-selection {
-background-color: #41C8F5;
+background-color: #73CAEA;
 color: #FFF;
 }
 
