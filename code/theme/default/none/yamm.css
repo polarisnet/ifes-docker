@@ -1,0 +1,78 @@
+/*!
+ * Yamm!3 - Yet another megamenu for Bootstrap 3
+ * http://geedmo.github.com/yamm3
+ * 
+ * @geedmo - Licensed under the MIT license
+ */
+.aa-bs .yamm .nav.yamm-aw
+,.aa-bs .yamm .collapse.yamm-aw,
+.aa-bs .yamm .dropup.yamm-aw,
+.aa-bs .yamm .dropdown.yamm-aw {
+  position: static;
+}
+.aa-bs .yamm .container.yamm-aw {
+  position: relative;
+}
+.aa-bs .yamm .dropdown-menu.yamm-aw {
+  /*left: 625px;*/
+}
+.aa-bs .yamm .yamm-content.yamm-aw {
+  padding: 5px 30px;
+}
+
+.aa-bs .yamm .yamm-content.yamm-aw .row li:last-child:not(.divider):not(.megaheader) {
+  padding-bottom: 5px;
+}
+
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > a {
+  display: block;
+  padding: 3px 5px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: black;
+  white-space: nowrap;
+}
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > a:hover,
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > a:focus {
+  text-decoration: none;
+  color: #fff;
+  background-color: #004983;
+}
+
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > p {
+  color: black;
+}
+
+.aa-bs .megaheader {
+  padding-left:5px;
+}
+
+@media (max-width: 1215px) {
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > a {
+    padding: 3px 20px;
+  color: black;
+}
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > p {
+  color: black;
+}
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > a:hover,
+.aa-bs .yamm .yamm-content.yamm-aw .row > ul > li > a:focus {
+  text-decoration: none;
+  color: white;
+  background-color: #004983;
+}
+.aa-bs .megaheader {
+  padding-left:10px;
+}
+
+}
+
+.aa-bs .yamm .dropdown.yamm-fw .dropdown-menu {
+  left: 0;
+  right: 0;
+}
+
+/* menu styes */
+.list-unstyled,
+.list-unstyled ul { min-width: 190px }

@@ -1,1 +1,2 @@
-<div style="height:5vh;"  id="login-footer" class="col-xs-12  text-center">Copyright &copy; <a href="http://www.polarisnet.com.my/" target="_blank">Polaris Net Sdn Bhd</a> (719142-W). All rights reserved.<br>Powered by Oz Framework</div>
+<?php /*?><div class="flat-simple-line"></div>
+Copyright &copy; <a href="http://www.polarisnet.com.my/" class="hyperlink1" target="_blank">Polaris Net Sdn Bhd</a> (719142-W). All rights reserved.<br>Powered by Oz Framework<?php */?>

@@ -7,7 +7,7 @@ html{
 	overflow: hidden;
 }
 body{
-	font-family: Open Sans !important, Arial;
+	font-family: 'Open Sans' !important, Arial;
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
@@ -21,7 +21,7 @@ body{
 }
 /** Overide ExtJS 4.2.1 - Start **/
 .x-body, .x-window-header-text-container-default{
-	font-family: Open Sans !important;
+	font-family: 'Open Sans' !important;
 }
 .x-body{
 	font-size: 12px !important;
@@ -42,7 +42,7 @@ body{
 .flat-input{
 	min-width: 200px;
 	border: 1px solid #bfbfbf;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -87,7 +87,7 @@ body{
     display:block;
 }
 .oz-noty-error, .oz-noty-warning{
-	font-family: Open Sans !important, Arial;
+	font-family: 'Open Sans' !important, Arial;
 }
 .password-calc{
 	width: 204px;
