@@ -1,0 +1,15 @@
+/* Use For Title */
+@font-face {
+	font-family: 'Montserrat Light', sans-serif;
+	src: local('☺'), url('font/Montserrat-Light.ttf') format('truetype');
+}
+/* Use For Headings */
+@font-face {
+	font-family: 'Montserrat', sans-serif;
+	src: local('☺'), url('font/Montserrat-Regular.ttf') format('truetype');
+}
+/* Use For Body */
+@font-face {
+	font-family: 'Open Sans', sans-serif;
+	src: local('☺'), url('font/OpenSans-Regular.ttf') format('truetype');
+}

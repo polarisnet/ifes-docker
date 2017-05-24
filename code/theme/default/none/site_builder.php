@@ -25,7 +25,7 @@
 			var HTTP_AJAX = <?php echo json_encode($HTTP_AJAX) ?>;
 			var JS_SERVER = <?php echo json_encode(HTTP_SERVER); ?>;
 			var JS_ROOT = <?php echo json_encode(HTTP_ROOT); ?>;
-
+			
 			$(document).ready(function(){
 				<?php echo onReadyMessageVJOB($message, $message2, $error, $warning); ?>
 			});
