@@ -2152,6 +2152,36 @@
 			}
 		}
 	}
+
+	function onReadyMessageVJOB($message, $message2, $error, $warning){
+		$template = "";
+		$content = "";
+		if(!empty($message) && isset($message['content']) && $message['content'] != ''){
+			$template .= "var n = noty({
+                            text: '".$message['content']."',
+                            type: 'information'
+                        });";
+		}
+		if(!empty($message2) && isset($message2['content']) && $message2['content'] != ''){
+			$template .= "var n = noty({
+                            text: '".$message2['content']."',
+                            type: 'information'
+                        });";
+		}
+		if(!empty($error) && isset($error['content']) && $error['content'] != ''){
+			$template .= "var n = noty({
+                            text: '".$error['content']."',
+                            type: 'error'
+                        });";
+		}
+		if(!empty($warning) && isset($warning['content']) && $warning['content'] != ''){
+			$template .= "var n = noty({
+                            text: '".$warning['content']."',
+                            type: 'warning'
+                        });";
+		}   
+		return $template;
+	}
 	/*** Cloud - End ***/
 
 	/*** Updater - Start ***/
