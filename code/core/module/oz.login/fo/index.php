@@ -1,0 +1,157 @@
+<?php
+	require DIR_MODULE.'/site/donor/donor.class.php';
+	$objDonor = new Donor($GLOBALS['myDB']);
+	$breadCrumbData = getBreadCrumbData(MODULE_UID, "/");
+	$setting = array(
+		"title" 			=> SITE_NAME.$breadCrumbData['title'],
+		"meta_keyword" 		=> "",
+		"meta_description" 	=> "",
+		"extjs" 			=> "1",
+		"header" 			=> "1",
+		"header_dir" 		=> "",
+		"left" 				=> "0",
+		"left_dir" 			=> DIR_ACTIVE_PUBLIC_THEME."/leftbar.php",
+		"left_width" 		=> "180",
+		"left_maximize" 	=> getCookieValue('toggle_leftbar'),
+		"left_uid" 			=> '',
+		"left_module" 		=> MODULE_NAME,
+		"center_dir" 		=> DIR_ACTIVE_PUBLIC_THEME."/oz.login/login.php",
+		"right" 			=> "0",
+		"right_dir" 		=> "",
+		"footer" 			=> "1",
+		"footer_dir" 		=> DIR_ACTIVE_PUBLIC_THEME."/footer.php",
+		"widgets" 			=> "0",
+		"current" 			=> "",
+		"load_tile" 		=> "0",
+		"load_breadcrumb" 	=> "0"
+	);
+	$actionData = $GLOBALS['seo']->getActionURL();
+	$action		= array_shift($actionData);
+	$error 		= array('type' => 'error', 'title' => 'Error', 'content' => '', 'position' => 'right', 'autoclose' => false);
+	$warning 	= array('type' => 'warning', 'title' => 'Warning', 'content' => '', 'position' => 'right', 'autoclose' => false);	
+	$message 	= array('type' => 'message', 'title' => 'Message', 'content' => '', 'position' => 'right', 'autoclose' => false);	
+	$markError 	= array();
+	$HTTP_AJAX 	= HTTP_ACTIVE_MODULE.'/ajax';
+	switch(MODULE_UID){
+		default:
+			$username = getCookieValue('remember');
+			$rememberOn = false;
+			if($username != ""){
+				$rememberOn = true;
+			}
+			$password = "";
+			if(matchCookieSession()){
+
+				if(!empty($_GET)){
+					$getAction = checkParam('action');
+					if($getAction == 'logout'){
+						if($objUser->logout()){
+							$message['title'] = $setting['title'];
+							$message['content'] = "You have successfully logout.";
+							$message['autoclose'] = true;
+							break;
+						}
+					} else if($getAction == 'relogin'){
+						if($objUser->logout()){
+							$message['title'] = $setting['title'];
+							$message['content'] = "You have successfully changed your password. Please login again with the new password you have set.";
+							$message['autoclose'] = true;
+							break;
+						}
+					}
+				}
+				header("Location: ".HTTP_SERVER.HTTP_ROOT.'/login');
+				exit;
+				
+			} 
+			if(!empty($_GET)){
+				$getAction = checkParam('action');
+				if($getAction == 'reset'){							
+					$message['title'] = $setting['title'];
+					$message['content'] = "You have successfully changed your password. Please login again with the new password you have set.";
+					$message['autoclose'] = true;
+					break;							
+				} else if ($getAction == 'sendmail'){		
+					$message['title'] = $setting['title'];
+					$message['content'] = "An email is successfully sent to your email address. Please check your mailbox for further process.";
+					$message['autoclose'] = true;
+					break;							
+				}  else if($getAction == 'expired'){					
+					//$message['title'] = $setting['title'];
+					$warning['title'] = "Session Expired";
+					$warning['content'] = "You have been logged out. Your session may have expired or you may have logged in via another browser/location.";
+					$warning['autoclose'] = true;
+					break;					
+				}				
+			}
+			if(!empty($_POST)){
+				$username = checkParam('username');
+				$password = checkParam('password');
+				$remember = checkParam('remember');
+				if($username == ""){
+					$error['content'] = 'Username cannot be empty.';
+					array_push($markError, 'username');
+					break;
+				}
+				$credentialData = $objDonor->getLoginCredential($username);
+				//DISABLE: Login Attempt check
+				/*
+				$objUser->autoClearLoginAttempt();
+				
+				$attemptData = $objUser->getLoginAttempt($_SERVER['REMOTE_ADDR']);
+				if(!empty($attemptData) && $attemptData['attempt'] > $GLOBALS['siteSetting']['max_login_attempt']){
+					$error['content'] = "Your IP is lockdown for ".$GLOBALS['siteSetting']['max_login_lockdown']." minutes because you have input invalid login details for more than ".$GLOBALS['siteSetting']['max_login_attempt']." times.";
+					break;
+				}else{
+					if(empty($credentialData)){
+						$objUser->createLoginAttempt($attemptData);
+						$error['content'] = 'Invalid login details.';
+						array_push($markError, 'username', 'password');
+						break;
+					}else{
+						if($credentialData['status'] == '0'){
+							$error['content'] = "Your account has been blocked.";
+							array_push($markError, 'username');
+							break;
+						}else{
+						//create user session
+						}
+					}
+				}
+				*/
+										
+				$hashPassword = hashPassword(strtolower($username), $password, $credentialData['salt']);
+				if(!empty($credentialData) && $credentialData['password'] == $hashPassword){
+					if($objDonor->createLoginSession($username)){
+						$objDonor->createLoginCookies($remember, $username);
+					}
+					//$objDonor->deleteLoginAttempt($_SERVER['REMOTE_ADDR']);
+					$trails = array();
+					$trails['session'] = session_id();
+					$trails['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+					$trails['ip_address'] = $_SERVER['REMOTE_ADDR'];
+					insertAuditTrails('', 'login', json_encode($trails));
+
+					if($remember == "on"){
+						setCookieValue($userData['username'], 'remember');
+					}else{
+						setCookieValue("", 'remember');
+					}
+					if(isset($_GET['return'])){
+						header("Location: ".HTTP_SERVER.HTTP_ROOT.$_GET['return']);
+					}else{
+						header("Location: ".HTTP_SERVER.HTTP_ROOT."/profile");
+					}
+					exit;
+				}
+				else{
+					//$objUser->createLoginAttempt($attemptData);
+					$error['content'] = 'Invalid login details.';
+					array_push($markError, 'username', 'password');
+					break;
+				}
+			}
+		break;
+	}
+	require DIR_ACTIVE_PUBLIC_THEME.'/site_builder.php';
+?>

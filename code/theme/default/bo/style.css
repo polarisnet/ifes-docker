@@ -7,7 +7,7 @@ html, #full-page-container{
 	overflow: hidden;
 }
 body{
-	font-family: Open Sans !important, Arial;
+	font-family: 'Open Sans' !important, Arial;
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
@@ -22,7 +22,7 @@ body{
 	vertical-align: top;
 }
 .site-left{
-	font-family: Open Sans !important, Arial;
+	font-family: 'Open Sans' !important, Arial;
 	background-color: #f3f3f3;
 	padding: 0;
 }
@@ -51,24 +51,24 @@ body{
 /** Overide ExtJS 4.2.1 - Start **/
 
 .x-body, .x-window-header-text-container-default, .x-field{
-	font-family: Open Sans;
+	font-family: 'Open Sans';
 }
 .x-form-item, .x-form-field, .x-datepicker-date{
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: Open Sans;
+	font-family: 'Open Sans';
 }
 .x-body{
 	font-size: 12px !important;
 }
 .x-btn-default-toolbar-small .x-btn-inner{
 	font-weight: normal !important;
-	font-family: Open Sans;
+	font-family: 'Open Sans';
 }
 .x-column-header, .x-grid-cell, .x-toolbar-text, .x-progress-default .x-progress-text, .x-form-trigger-wrap, .x-form-item-label{
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: Open Sans;
+	font-family: 'Open Sans';
 }
 .x-docked{
 	z-index: 0;
@@ -94,7 +94,7 @@ body{
 	border: 1px solid #bfbfbf;
 }
 .x-form-display-field{
-	font:normal 12px Open Sans;
+	font:normal 12px 'Open Sans';
 	color:black;
 	margin-top:4px;
 }
@@ -201,7 +201,7 @@ body{
 	float: right; position: relative; z-index: 1;
 }
 .flat-header{
-	font-family: Montserrat !important;
+	font-family: 'Montserrat' !important;
         color: #666;
 	font-size: 16px; 
 	background-color: #251F4F;
@@ -209,13 +209,13 @@ body{
 }
 .flat-content-header{
 	font-size: 16px; 
-	font-family: Montserrat;
+	font-family: 'Montserrat';
 }
 
 .flat-textarea{
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	min-width: 200px;
 	min-height: 50px;
 	resize: none;
@@ -227,7 +227,7 @@ body{
 .aa-bs .flat-textarea{
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	min-width: 208px;
 	min-height: 58px;
 	resize: none;
@@ -245,7 +245,7 @@ body{
 	min-height: 18px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -256,7 +256,7 @@ body{
 	min-height: 26px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -270,7 +270,7 @@ body{
 	min-width: 137px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -282,7 +282,7 @@ body{
 	min-width: 137px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	padding: 3px;
 	margin-left: 3px;
 	-webkit-appearance: none;
@@ -297,7 +297,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 3px;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	margin-left: 2px;
 	-webkit-border-radius: 0;
 }
@@ -310,7 +310,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 3px;
 	font-size: 12px;
-	font-family: Open Sans, Arial;
+	font-family: 'Open Sans', Arial;
 	-webkit-border-radius: 0;
         line-height: 16px;
 }
@@ -320,7 +320,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 2px;
 	font-size: 12px;
-	font-family: Open Sans, Arial;	
+	font-family: 'Open Sans', Arial;	
 	-webkit-border-radius: 0;
 }
 .flat-checkbox{
@@ -347,7 +347,7 @@ body{
 .flat-button-default{
 	color: #ffffff;
 	background-color: #251F4F;
-        font-family: Open Sans;
+        font-family: 'Open Sans';
 	border: 0;
 	padding: 3px 5px 3px 5px;
 	cursor: pointer;
@@ -408,7 +408,7 @@ body{
 	height: 140px; 
 	background-color: #251F4F; 
 	color: #ffffff;
-	font-family: Montserrat !important;
+	font-family: 'Montserrat' !important;
 	padding: 10px;
 	text-align: center;
 	cursor: pointer;
@@ -559,7 +559,7 @@ body{
 	float: left;
 	min-width: 50px;
 	padding: 3px 30px 3px 3px;
-	font-family: Montserrat, Arial; 
+	font-family: 'Montserrat', Arial; 
 	font-size: 16px;
 	border: 1px solid #bfbfbf;
 }
@@ -657,7 +657,7 @@ body{
 	background-color: #FFFFFF;
 }
 .report-header, .report-footer{
-	font:normal 12px Open Sans;
+	font:normal 12px 'Open Sans';
 	line-height: 20px;
 }
 .report-header{	
@@ -667,7 +667,7 @@ body{
 }
 .report-table{
 	text-align: center;
-	font:normal 12px Open Sans;
+	font:normal 12px 'Open Sans';
 	border-collapse: collapse;
 	table-layout:fixed; 
 	word-wrap:break-word; 
@@ -702,7 +702,7 @@ body{
 	background-color: #FFFFFF;
 }
 .default-header, .default-footer{
-	font:normal 12px Open Sans;
+	font:normal 12px 'Open Sans';
 	font-weight: bold;
 }
 .default-header{	
@@ -715,7 +715,7 @@ body{
 	display:table;
 	vertical-align:middle;
 	text-align: center;
-	font:normal 12px Open Sans;
+	font:normal 12px 'Open Sans';
 	table-layout:fixed; 
 	word-wrap:break-word; 
 	width:100%; 
@@ -756,7 +756,7 @@ body{
       padding: 10px;
       font-size: 12px !important;
 	  font-weight: normal !important;
-	  font-family: Open Sans;
+	  font-family: 'Open Sans';
       text-align: center;
       color: rgb(113, 157, 171);
       background: rgb(255, 255, 255);
@@ -840,7 +840,7 @@ body{
 	color:#fff;
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: Open Sans;
+	font-family: 'Open Sans';
 	text-align:center;
 	text-decoration:none;
 	background-color:#808080;

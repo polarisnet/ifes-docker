@@ -23,17 +23,17 @@
         <link href="<?php echo HTTP_PLUGIN; ?>/bootstrap/demo.css" rel="stylesheet">
         <link href="<?php echo HTTP_PLUGIN; ?>/submenu/bootstrap-submenu.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/yamm.css" />
-		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/font.css" />     
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/font.css" />  
 	</head>
 	<?php $winReady = ""; ?>
 	<body class="x-body" style="padding-bottom: 0;">
-            <div id="oz-noty" style="position: relative;"></div>
-            <div class="aa-bs">
-		<div class="container" style="height:100vh">
-		<?php require $setting['center_dir']; ?>
-                <?php if($setting['footer_dir'] != ''){ require $setting['footer_dir']; }?>
-                </div>
-            </div>
+		<div id="oz-noty" style="position: relative;"></div>
+		<!-- <div class="aa-bs"> -->
+			<div class="container" style="position: relative;">
+				<?php require $setting['center_dir']; ?>
+				<?php if($setting['footer_dir'] != ''){ require $setting['footer_dir']; }?>
+			</div>
+		<!-- </div> -->
 		<script type="text/javascript">
 			var headerHeight = 0;
 			var headerWidth = 0;
