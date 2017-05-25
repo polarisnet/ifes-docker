@@ -19,13 +19,11 @@
 	</head>
 	<body>
 		<script type="text/javascript">
-
 			var SITE_NAME = <?php echo json_encode(SITE_NAME); ?>;
 			var HTTP_MEDIA = <?php echo json_encode(HTTP_MEDIA); ?>;
 			var HTTP_AJAX = <?php echo json_encode($HTTP_AJAX) ?>;
 			var JS_SERVER = <?php echo json_encode(HTTP_SERVER); ?>;
 			var JS_ROOT = <?php echo json_encode(HTTP_ROOT); ?>;
-			
 			$(document).ready(function(){
 				<?php echo onReadyMessageVJOB($message, $message2, $error, $warning); ?>
 			});
