@@ -6,7 +6,7 @@
 		<meta name="keywords" content="<?php echo $setting['meta_keyword']; ?>">
 		<meta name="description" content="<?php echo $setting['meta_description']; ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="icon" href="<?php echo HTTP_MEDIA;?>/site-image/ifes-favicon.png" type="image/png">
+		<link rel="icon" href="<?php echo HTTP_MEDIA;?>/site-image/favicon.ico" type="image/x-icon">
 		<?php if($GLOBALS['siteSetting']['debug_mode'] == '0'){ ?>
 			<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/jquery-1.10.1-min.js"></script>
 		<?php }else{ ?>

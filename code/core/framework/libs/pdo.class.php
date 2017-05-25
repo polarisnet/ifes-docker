@@ -29,8 +29,10 @@
 			}
 			if($this->config['mode'] == "foxpro"){
 				$this->connection = new PDO($dsn);
+			}else if($this->config['mode'] == "mysql" && isset($config['ssl_ca_cert'])){
+				$this->connection = new PDO($dsn, $this->config['user'], $this->config['password'], array(PDO::MYSQL_ATTR_SSL_CA => $config['ssl_ca_cert']));
 			}else{
-				$this->connection = new PDO($dsn, $this->config['user'], $this->config['password']);
+				$this->connection = new PDO($dsn, $this->config['user'], $this->config['password']);	
 			}
 			$this->connection->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
 			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

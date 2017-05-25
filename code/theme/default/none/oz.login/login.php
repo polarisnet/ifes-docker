@@ -28,7 +28,7 @@
 			min-width: 320px;
 		}
 		body{
-			background-image: url('<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/world-map-color-lg.png');
+			background-image: url('<?php echo HTTP_MEDIA; ?>/site-image/world-map-color-lg.png');
 			background-repeat: no-repeat;
 			background-attachment: fixed;
 			background-position: center;
