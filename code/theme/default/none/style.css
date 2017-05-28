@@ -195,6 +195,17 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .btn-add-gift:active{
 	background-color: #000000 !important;
 }
+.btn-ifes{
+	font-family: 'Muli',Helvetica;
+	background-color: #cdcecd;
+	color: #000000;
+}
+.btn-ifes:hover, .btn-ifes:focus{
+	background-color: #464646;
+}
+.btn-ifes:active{
+	background-color: #000000 !important;
+}
 .giving-table{
 	width: 100%; background-color: #ebebeb; font-family: 'Muli', Helvetica;
 }
@@ -216,7 +227,7 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	margin-top: 5px;
 }
 .giving-table .radio-inline{
-padding-right: 10px;
+	padding-right: 10px;
 }
 .giving-center-link{
 	text-align: center;
@@ -228,4 +239,65 @@ padding-right: 10px;
 .giving-center-link a{
 	margin: 10px;
 	cursor: pointer;
+}
+.bootstrap-select{
+	font-family: 'Muli', Helvetica;
+	font-size: 16px;
+}
+.bootstrap-select .btn-default, .bootstrap-select .btn-default:hover, .bootstrap-select .btn-default:focus, .bootstrap-select.open > .dropdown-toggle.btn-default, .bootstrap-select.open > .dropdown-toggle.btn-default:hover{
+	background-color: #ffffff;
+	color: #222222;
+	border: 1px solid #cccccc;
+}
+.bootstrap-select .dropdown-menu > .active > a, .bootstrap-select .dropdown-menu > .active > a:hover, .bootstrap-select .dropdown-menu > .active > a:focus{
+	background-color: #cdcecd;
+}
+.gift-catalog-default-search-container{
+	margin-top: 20px; height: 350px; background-color: #ffffff; border: 1px solid #cccccc; padding: 10px; overflow: hidden;
+}
+.gift-catalog-default-search-label{
+	font-weight: bold; font-size: 12px;
+}
+.gift-catalog-default-search-result{
+	height: 300px; overflow-y: auto;
+}
+.gift-catalog-default-search-result .result-container{
+	border-top: 1px solid #cccccc; padding: 15px 0; height: 65px;
+}
+.gift-catalog-default-search-result .result-container .result-label{
+	padding-left: 0; padding: 6px 0; font-family: 'Muli-Bold',Helvetica;
+}
+.gift-catalog-default-search-result .result-container .result-form{
+	padding-right: 0;
+}
+.gift-list-container{
+	font-family: 'Muli-Bold',Helvetica; height: 110px; border-bottom: 1px solid #cccccc;
+}
+.gift-list-input-comment{
+	font-family: 'Muli', Helvetica;
+}
+.gift-list-input-anonymous{
+	margin-top: 4px !important;
+}
+.gift-list-view-comment{
+	padding: 6px 0; color: #646464;
+}
+.gift-list-view-anonymous{
+	padding: 6px 0;
+	display: none;
+}
+.gift-list-datepicker{
+	float: right; font-family: 'Muli', Helvetica; width: 100px;
+}
+.gift-list-view-recurring{
+	padding: 6px 0;
+}
+.gift-list-master{
+	height: auto; min-height: 250px; font-family: 'Muli', Helvetica; font-size: 16px; padding: 5px 24px;
+}
+.p-loading-container{
+	z-index: 99;
+	position: absolute;
+	top: 0;
+	left: 0;
 }

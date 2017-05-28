@@ -12,10 +12,18 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/font/font.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/animate.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-3.3.6/css/bootstrap-custom.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-select-1.10.0/dist/css/bootstrap-select.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/css/p-loading.min.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/style.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/jquery-1.10.1-min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/jquery.noty.packaged.min.js?ver=<?php echo HTTP_VERSION; ?>'></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-3.3.6/js/bootstrap.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-select-1.10.0/dist/js/bootstrap-select.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/moment/min/moment.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/js/p-loading.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/js/core.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 	</head>
 	<body>
 		<script type="text/javascript">
