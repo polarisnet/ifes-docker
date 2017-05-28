@@ -295,9 +295,20 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .gift-list-master{
 	height: auto; min-height: 250px; font-family: 'Muli', Helvetica; font-size: 16px; padding: 5px 24px;
 }
+.gift-cc-total-style{
+	padding: 5px 15px; font-family: 'Muli-Bold', Helvetica; text-align: right; font-size: 18px; font-weight: bold;
+}
 .p-loading-container{
 	z-index: 99;
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+.selectpicker{
+	font-family: 'Muli', Helvetica; 
+}
+
+.bootstrap-select .btn{
+	font-size: 16px;
+	padding: 5px 12px;
 }

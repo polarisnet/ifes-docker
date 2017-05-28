@@ -143,6 +143,7 @@
 
 			$listOfferingEvents = $objThankQPDO->listOfferingEvents();
 			
+			$listCreditCards = array('a');
 
 			//$result = $objIFESPDO->selectAll("SHOW COLUMNS FROM `thankq_sourcecode`", array());
 			//print_r($result); exit;

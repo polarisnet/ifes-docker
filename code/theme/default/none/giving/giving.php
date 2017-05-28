@@ -183,7 +183,7 @@
 						Select the event you’re attending from the dropdown menu
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;">
-								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true">
+								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true" data-size="8">
 									<?php foreach($listOfferingEvents AS $eventData){ ?>
 									<option data-subtext="<?php echo $eventData['sourcecode']; ?>" value="<?php echo $eventData['sourcecode']; ?>"><?php echo $eventData['sourcedescription']; ?></option>
 									<?php } ?>
@@ -244,10 +244,10 @@
 			</td>
 		</tr>
 		<tr>
-			<td style="padding: 5px 24px; font-family: 'Muli-Bold', Helvetica; text-align: right; font-size: 18px; font-weight: bold;">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-list-total-recurring">0.00</span></td>
+			<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-list-total-recurring">0.00</span></td>
 		</tr>
 		<tr>
-			<td style="padding: 5px 24px; font-family: 'Muli-Bold', Helvetica; text-align: right; font-size: 18px; font-weight: bold;">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-list-total-onetime">0.00</span></td>
+			<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-list-total-onetime">0.00</span></td>
 		</tr>
 		<tr>
 			<td style="padding: 5px 24px; text-align: right; font-family: 'Muli', Helvetica;">
@@ -273,6 +273,98 @@
 		</tr>
 	</table>
 </div>
+<div style="height: auto; background-color: #ebebeb; margin-top: 50px; padding-bottom: 20px;">
+	<div class="container">
+		<table style="width: 600px; max-width: 600px; margin: auto;">
+			<tr>
+				<td style="padding-top: 20px; font-family: 'Muli-Bold', Helvetica; text-align: center; font-size: 22px; font-weight: bold;">Secure Payment Information</td>
+			</tr>
+			<?php if(!empty($listCreditCards)){ ?>
+			<tr id="gift-cc-form-select">
+				<td style="text-align: center; padding-top: 20px;">
+					<div class="col-xs-12">
+						<select id="gift-cc-select" class="selectpicker" data-size="8" data-none-selected-text="Please select a credit card"></select>
+					</div>
+					<div class="col-xs-12" style="text-align: right; padding-top: 10px;">
+						<button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment();">NEW CARD</button>
+					</div>
+				</td>
+			</tr>
+			<?php } ?>
+			<tr id="gift-cc-form-new" style="<?php if(!empty($listCreditCards)){echo "display: none;";} ?>">
+				<td style="text-align: center; padding-top: 20px; font-family: 'Muli', Helvetica;">
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-cc-input-number" class="form-control" placeholder="Card Number">
+					</div>
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-cc-input-name" class="form-control" placeholder="Name on Card">
+					</div>
+					<div class="col-xs-6" style="padding-right: 5px;">
+						<input type="text" id="gift-cc-input-expiration" class="form-control" placeholder="Expiration MM/YY">
+					</div>
+					<div class="col-xs-6" style="padding-left: 5px;">
+						<input type="text" id="gift-cc-input-cvv" class="form-control" placeholder="CVV">
+					</div>
+					<?php if(!empty($listCreditCards)){ ?>
+					<div class="col-xs-12" style="text-align: right; padding-top: 10px;">
+						<button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment();">CANCEL</button>
+					</div>
+					<?php } ?>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 12px 15px;">
+					<label class="checkbox-inline" style="font-size: 14px; font-family: 'Muli', Helvetica;"><input type="checkbox" id="gift-cc-process-fee" class="gift-cc-process-fee" style="margin-top: 4px;" onclick="calcGiftList();">I’d like to increase my donation by <span class='gift-cc-process-currency'><?php echo $formCurrencySymbol; ?></span> 5.00 to help towards the cost of online transactions.</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-payment-total-recurring">0.00</span></td>
+			</tr>
+			<tr>
+				<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-payment-total-onetime">0.00</span></td>
+			</tr>
+			<tr>
+				<td style="padding-top: 40px; font-family: 'Muli-Bold', Helvetica; text-align: center; font-size: 22px; font-weight: bold;">Billing Information</td>
+			</tr>
+			<tr id="gift-cc-form-billing">
+				<td style="text-align: center; padding-top: 20px; font-family: 'Muli', Helvetica;">
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-billing-input-name" class="form-control" placeholder="Full Name">
+					</div>
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-billing-input-address1" class="form-control" placeholder="Address 1">
+					</div>
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-billing-input-address2" class="form-control" placeholder="Address 2">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="text" id="gift-billing-input-city" class="form-control" placeholder="City">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<input type="text" id="gift-billing-input-city" class="form-control" placeholder="State/Provice">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="text" id="gift-billing-input-zipcode" class="form-control" placeholder="Zip/Postal Code">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<select id="gift-billing-input-country" class="selectpicker" data-size="8" data-none-selected-text="Country"></select>
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="text" id="gift-billing-input-email" class="form-control" placeholder="Email">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<input type="text" id="gift-billing-input-phone" class="form-control" placeholder="Phone">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 12px 15px;">
+					<label class="checkbox-inline" style="font-size: 14px; font-family: 'Muli', Helvetica;"><input type="checkbox" id="gift-add-mailing" class="gift-cc-process-fee" style="margin-top: 4px;" onclick="">Add a preferred mailing address</label>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
 <br><br>
 <script type="text/javascript">
 	var giftLists = [];
@@ -283,6 +375,7 @@
 		$('.gift-catalog-currency-code').html(code+' <span class="caret"></span>');
 		$('.gift-catalog-currency-symbol').html(symbol);
 		$('.gift-list-currency-symbol').html(symbol);
+		$('.gift-cc-process-currency').html(symbol);
 		giftCurrencySymbol = symbol;
 		giftCurrencyCode = code;
 	}
@@ -498,8 +591,20 @@
 				tmpRecurring += giftLists[i].amount;
 			}
 		}
+
+		if($('#gift-cc-process-fee').prop('checked')){
+			if(tmpOnetime > 0){
+				tmpOnetime += 5;
+			}
+			if(tmpRecurring > 0){
+				tmpRecurring += 5;
+			}
+		}
+
 		$('#gift-list-total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
+		$('#gift-payment-total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
 		$('#gift-list-total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
+		$('#gift-payment-total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
 	}
 
 	$(document).ready(function(){
@@ -548,5 +653,16 @@
 				$(e.target).parent().parent().parent().find('.gift-list-input-save').click();
 			}
 		});
+	}
+
+	function toggleCardPayment(){
+		if($('#gift-cc-form-new').is(':visible')){
+			$('#gift-cc-input-number').val('');
+			$('#gift-cc-input-name').val('');
+			$('#gift-cc-input-expiration').val('');
+			$('#gift-cc-input-cvv').val('');
+		}
+		$('#gift-cc-form-select').toggle();
+		$('#gift-cc-form-new').toggle();
 	}
 </script>
