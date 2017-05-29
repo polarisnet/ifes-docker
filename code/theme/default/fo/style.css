@@ -1,111 +1,216 @@
-html, body {
-	height: 100%; 
-	width: 100%; 
-	margin: 0;
+html {
+	position: relative;
+	min-height: 100%;
 }
-html{
-	overflow: hidden;
+body {
+	color: #232323;
+	/* Margin bottom by footer height */
+	margin-bottom: 150px;
 }
-body{
-	font-family: 'Open Sans' !important, Arial;
-	margin: 0;
-	padding: 0;
+a{
+	cursor: pointer;
+	color: #534f71;
+}
+a:hover{
+	color: #534f71;
+}
+input[type=number]{
+	-moz-appearance:textfield;
+	text-align: right;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+	-webkit-appearance: none; 
+	margin: 0; 
+}
+.input-group-btn:last-child > .btn{
+	z-index: 0;
+}
+.form-control{
+	font-size: 16px;
+	padding: 6px 12px;
+}
+.header{
+	margin-top: 20px;
+}
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 150px;
+	background-color: #251f4f;
+	color: #fff;
+	font-family: 'Montserrat',Helvetica;
+}
+.footer .container .title{
+	font-size: 22px;
+	padding-top: 25px;
+}
+.footer .container .content{
+	font-family: 'Muli';
 	font-size: 12px;
 }
-.site-content{
-	min-width: 100%;
-	width: auto;
+.no-padding{
+	padding-left: 0px;
+	padding-right: 0px;
 }
-.site-left, .site-right, .site-center{
-	vertical-align: top;
+.text-center{
+	text-align: center;
 }
-/** Overide ExtJS 4.2.1 - Start **/
-.x-body, .x-window-header-text-container-default{
-	font-family: 'Open Sans' !important;
+.content-white{
+	width: 100%;
+	padding: 20px;
+	background-color: rgba(255, 255, 255, 0.8);
 }
-.x-body{
-	font-size: 12px !important;
+.donor-title-content{
+	font-size: 16px;
+	font-weight: bold;
+	font-family: 'OpenSans',Helvetica;
+	color: #1c244e;
 }
-/** Overide ExtJS 4.2.1 - End **/
+.donor-regular-content{
+	font-size: 14px;
+	font-weight: normal;
+	font-family: 'OpenSans-Bold',Helvetica;
+	color: #1c244e;
+}
+.social-header {
+	float: right;
+}
+.social-header a.social-link {
+	display: block;
+	height: 32px;
+	width: 32px;
+	background-color: #1c244e;
+	border-radius: 100%;
+	float: left;
+	background-repeat: no-repeat;
+	background-size: 32px;
+}
+.social-header a.social-link + a.social-link {
+	margin-left: 5px;
+}
+.span-link{
+	cursor: pointer;
+}
+.navbar {
+	min-height: 40px;
+}
+.navbar-default .navbar-nav > li > a{
+	font-family: 'Montserrat',Helvetica;
+	font-size: 16px;
+	color: #fff;
+}
+.nav > li > a{
+	padding: 10px 5px;
+	line-height: 20px;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus{
+	background-color: #534f71;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{
+	background-color: #534f71;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus{
+	background-color: #534f71;
+}
+.navbar-default .dropdown-menu{
+	background-color: #534f71;
+}
+.navbar-default .dropdown-menu > li > a:hover, .navbar-default .dropdown-menu > .active > a, .navbar-default .dropdown-menu > .active > a:hover {
+	background-color: #1c244e;
+}
+.navbar-default{
+	background-color: #1c244e;
+}
+.navbar-default .navbar-nav > li.dropdown:hover > a, 
+.navbar-default .navbar-nav > li.dropdown:hover > a:hover,
+.navbar-default .navbar-nav > li.dropdown:hover > a:focus {
+	background-color: #534f71;
+}
+.nav.navbar-nav > li > a{
+	margin-right: 5px;
+}
+.nav.navbar-nav.navbar-right > li > a{
+	margin-left: 5px;
+}
+ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;    
+}
+@media (min-width: 979px) {
+	ul.nav li.dropdown:hover > ul.dropdown-menu {
+		display: block;
+	}
+}
+.caret{
+	margin-left: 0;
+	margin-top: -2px;
+}
+.dropdown-menu > li > a{
+	padding: 6px 5px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+.navbar .dropdown-menu > li > a, .navbar .dropdown-menu > li > a:focus{
+	font-family: 'Montserrat',Helvetica;
+	font-size: 16px;
+}
+.navbar{
+	margin-bottom: 0;
+}
 
-.hyperlink1, .hyperlink1:visited{
-	text-decoration: none;
-	color: #007696;
-	cursor: pointer;
+.pg-title{
+	font-size: 36px; 
+	font-weight: bold; 
+	font-family: 'Montserrat-Bold',Helvetica; 
+	color: #1c244e;
 }
-.hyperlink1:hover{
-	text-decoration: underline;
-	color: #73CAEA;
-	cursor: pointer;
+.pg-title-content{
+	font-size: 16px; 
+	font-weight: bold; 
+	font-family: 'Montserrat',Helvetica;
+	color: #1c244e;
 }
 
-.flat-input{
-	min-width: 200px;
-	border: 1px solid #bfbfbf;
-	font-family: 'Open Sans', Arial;
-	padding: 3px;
-	-webkit-appearance: none;
-	-webkit-border-radius: 0;
+.donor-table{
+	width: 100%; background-color: #ebebeb; font-family: 'Muli', Helvetica;
 }
-.flat-input:hover, .flat-input:focus{
-	border: 1px solid #73CAEA;
+.donor-table .header{
+	font-family: 'Muli-Bold', Helvetica; text-align: center; font-size: 18px; font-weight: bold;
 }
-.flat-checkbox{
-	position: relative;
-	top: -15px;
-	left: 18px;
-}
-.flat-button-default{
-	color: #ffffff;
-	background-color: #251F4F;
-	border: 0;
-	padding: 3px 5px 3px 5px;
+.donor-table .header td{
+	padding: 8px;
 	cursor: pointer;
-	-webkit-appearance: none;
-	-webkit-border-radius: 0;
+	background-color: #f3f3f3;
 }
-.flat-button-default:hover{
-	background-color: #73CAEA;
+.donor-table .header td:hover, .donor-table .header td.active{
+	background-color: #ebebeb;
 }
-.flat-button-default:active{
-	background-color: #000000;
+.donor-table label{
+	font-size: 16px;
 }
-.nivo-controlNav{
-	padding: 0 !important;
+.donor-table input[type="radio"]{
+	margin-top: 5px;
 }
-.nivoSlider {
-    position:relative;
+.donor-table .radio-inline{
+padding-right: 10px;
 }
-.nivoSlider img {
-    position:absolute;
-    top:0px;
-    left:0px;
-    display:none;
+.donor-center-link{
+	text-align: center;
+	font-family: 'Muli',Helvetica;
+	font-size: 14px;
+	padding: 10px;
+	padding-top: 20px;
 }
-.nivoSlider a {
-    border:0;
-    display:block;
+.donor-center-link a{
+	margin: 10px;
+	cursor: pointer;
 }
-.oz-noty-error, .oz-noty-warning{
-	font-family: 'Open Sans' !important, Arial;
+.container.ifes-content{
+	padding-top: 30px;
 }
-.password-calc{
-	width: 204px;
-	height: 18px;
-	padding: 4px 2px 4px 2px;
-	overflow: hidden;
-}
-.password-inner{
-	width: 204px;
-	height: 3px;
-	position: relative;
-	top: 10px;
-	overflow: hidden;
-}
-.password-bar{
-	height: 3px;
-	width: 0;
-}
+
 .clearfix:after,.radio-option:after{visibility:hidden;display:block;font-size:0;content:'.';clear:both;height:0}
 * html .clearfix,* html .radio-option{zoom:1}
 *:first-child+html .clearfix,*:first-child+html .radio-option{zoom:1}
