@@ -69,7 +69,6 @@
 		}
 		
 		/** Login - Start **/
-		/** Login - Start **/
 		function getLoginCredential($username){
 			$output = array();
 			$sql = "SELECT `password`, `salt` FROM `donors` WHERE LOWER(`username`)='".strtolower($username)."' LIMIT 1";
@@ -92,6 +91,7 @@
 				$_SESSION['email'] = $output['email'];
 				$_SESSION['uid'] = $output['uid'];
 				$_SESSION['login']['token'] = generateSalt(12);
+				$_SESSION['login']['mode'] = "fo";
 				$_SESSION['dynamic_salt'] = generateSalt(12);
 				$_SESSION['enc_user_id'] =  encryption($output['id'], $_SESSION['salt'], true);
 			}
