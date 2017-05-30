@@ -2,6 +2,9 @@
 	require_once DIR_LIBS.'/thankq.pdo.class.php';
 	$objThankQPDO = new ThankQPDO();
 
+	require_once 'giving.class.php';
+	$objGiving = new Giving($GLOBALS['myDB']);
+
 	$breadCrumbData = getBreadCrumbData(MODULE_UID, "/");
 	$setting = array(
 		"title" => SITE_NAME.$breadCrumbData['title'],
@@ -144,6 +147,7 @@
 			$listOfferingEvents = $objThankQPDO->listOfferingEvents();
 			
 			$listCreditCards = array('a');
+			$listCountries = $objGiving->listCountries();
 
 			//$result = $objIFESPDO->selectAll("SHOW COLUMNS FROM `thankq_sourcecode`", array());
 			//print_r($result); exit;

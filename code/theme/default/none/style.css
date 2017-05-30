@@ -298,6 +298,25 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .gift-cc-total-style{
 	padding: 5px 15px; font-family: 'Muli-Bold', Helvetica; text-align: right; font-size: 18px; font-weight: bold;
 }
+
+.gift-section-newsletter{
+	height: auto; margin-top: 20px; padding-bottom: 20px;
+	font-size: 14px; font-family: 'Muli', Helvetica;
+}
+.gift-section-newsletter table{
+	width: 600px; max-width: 600px; margin: auto;
+}
+.gift-section-newsletter label, .gift-section-newsletter td{
+	font-size: 14px; font-family: 'Muli', Helvetica;
+}
+.gift-section-newsletter td.gift-cc-total-style{
+	font-size: 18px; font-family: 'Muli-Bold', Helvetica;
+	padding: 3px 15px;
+}
+.gift-section-newsletter td{
+	padding: 12px 15px;
+}
+
 .p-loading-container{
 	z-index: 99;
 	position: absolute;
