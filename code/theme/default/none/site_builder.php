@@ -103,7 +103,13 @@
 				<p class="title">International Fellowship of Evangelical Students</p>
 			</div>
 			<div class="container">
-				<p class="content">International Fellowship of Evangelical Students/USA, Inc. (IFES/USA) is a &sect;501(c)(3)<br>organization, gifts to which are deductible as charitable contributions for Federal income tax purposes.</p>
+				<p class="content">
+					<?php if(defined('REGION') && REGION == "us"){ ?>
+						International Fellowship of Evangelical Students/USA, Inc. (IFES/USA) is a &sect;501(c)(3)<br>organization, gifts to which are deductible as charitable contributions for Federal income tax purposes.
+					<?php }else{ ?>
+						&copy; 2014 IFES, une organisation déclarée à Lausanne, Suisse.<br>IFES is a registered charity in England and Wales (247919), and a limited company (876229).<br>The IFES website uses cookies to give you the best experience through your visit.
+					<?php } ?>
+				</p>
 			</div>
 		</footer>
 	</body>

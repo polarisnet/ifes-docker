@@ -112,6 +112,7 @@
 				}
 			break;
 			case 'fo':
+				regionChecking();
 				if(matchCookieSession() && isset($_SESSION['login']['mode'])){
 					if($_SESSION['login']['mode'] == "fo" || $_SESSION['login']['mode'] == "both"){
 						loadModule($seoData['module_dir']);
@@ -134,6 +135,7 @@
 			break;
 			case 'none':
 			default:
+				regionChecking();
 				loadModule($seoData['module_dir']);
 			break;
 		}
@@ -1787,9 +1789,58 @@
 		}
 		return $array;
 	}
+
+	function regionChecking(){
+		define('REGION_IP', strtolower(getISOcodeFromIP()));
+
+		$url = $_SERVER['REQUEST_URI'];
+		//Remove root
+		if(HTTP_ROOT != ""){
+			$url = substr($url, strlen(HTTP_ROOT));
+		}
+
+		//Remove GET
+		$getURL = "";
+		$dirty = strpos($url, '?');
+		if($dirty !== false){
+			$getURL = substr($url, $dirty);
+			$url = substr_replace($url, '', $dirty);
+		}
+
+		//Remove .php
+		$dirty = strripos($url, '.php');
+		if($dirty !== false){
+			$subDirty = strrpos($url, '/');
+			$url = substr_replace($url, '', $subDirty);
+		}
+		if(substr($url, -1) == "/"){
+			$url =  substr($url, 0, -1);
+		}
+
+		$arrURL = explode("/", $url);
+		if(empty($arrURL)){
+			define('REGION_URL', REGION_IP);
+		}else{
+			$endURL = trim(strtolower(end($arrURL)));
+			if(in_array($endURL, array("uk", "us", "ca"))){
+				define('REGION_URL', $endURL);
+			}else{
+				define('REGION_URL', '');
+			}
+		}
+
+		$region = "";
+		if(REGION_IP == "row" && REGION_URL != ""){
+			$region = REGION_URL;
+		}else if(in_array(REGION_IP, array("uk", "us", "ca"))){
+			$region = REGION_IP;
+		}
+		define('REGION', $region);
+		define('REGION_GET', $getURL);
+	}
 	/** Global Function - End **/
 	
-	/** System Start - End **/
+	/** System Alerts - Start **/
 	function getSystemFormAlert($table, $id = '', &$winReady){
 		global $myDB;
 		$template = '';
@@ -2069,13 +2120,12 @@
 		}catch (Exception $e){
 			//default to US if address not found in database
 			$caught = true;
-			$output = 'US';
+			$output = 'ROW';
 		}
 		
 		if(!$caught) {
 			$output = $record->country->isoCode;
 		}
-		
 		return $output;
 	}
 
