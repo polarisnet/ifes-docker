@@ -26,6 +26,8 @@
 			$region = "row";
 			$formCurrencySymbol = "&dollar;";
 			$formCurrencyCode = "USD";
+
+			$ipCountryCode = getISOcodeFromIP();
 			//$HTTP_AJAX 	= HTTP_ACTIVE_MODULE.'/ajax';
 			//print_r($action);
 

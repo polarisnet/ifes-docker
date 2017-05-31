@@ -99,6 +99,11 @@
 				$resultData = $this->db->getRecord();
 				define('SITE_FO_LOGIN', $resultData['seo_url']);
 			}
+
+			if($tempCleanURL == ""){
+				header("Location: https://www.ifesworld.org");
+				exit;
+			}
 			
 			$tempSEO = explode("/", $tempCleanURL);
 			$seoData = array();

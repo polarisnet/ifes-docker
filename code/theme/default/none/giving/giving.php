@@ -436,10 +436,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-payment-total-recurring">0.00</span></td>
+				<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-list-total-recurring">0.00</span></td>
 			</tr>
 			<tr>
-				<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-payment-total-onetime">0.00</span></td>
+				<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-list-total-onetime">0.00</span></td>
 			</tr>
 			<tr>
 				<td>
@@ -536,7 +536,7 @@
 						giftLists[i].amount += Number(giftValue);
 						$('#gift-list-container-'+giftLists[i].id).find('.gift-list-currency-value').html(number_format(giftLists[i].amount, 2, ".", ","));
 						$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-currency').val(giftLists[i].amount);
-						noty({text: "Your gift list has been updated.", type: 'message'});
+						noty({text: "Your gift list has been updated.", type: 'information'});
 						rebind();
 						calcGiftList();
 						break;
@@ -578,7 +578,7 @@
 								$('.gift-list-master').append(msg.template);
 							}
 							
-							noty({text: "Your gift list has been updated.", type: 'message'});
+							noty({text: "Your gift list has been updated.", type: 'information'});
 							rebind();
 							calcGiftList();
 						}else{

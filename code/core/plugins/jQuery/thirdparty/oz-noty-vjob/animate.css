@@ -3159,5 +3159,5 @@ Copyright (c) 2014 Daniel Eden
 
 
 .noty_text{color: white }
-.noty_message{ background: #1dbf21;}
+/*.noty_message{ background: #1dbf21;}*/
 .noty_close{ background: url(cancel.png); width: 16px; height: 16px; cursor: pointer; position: relative;}
