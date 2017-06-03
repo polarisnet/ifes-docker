@@ -244,10 +244,10 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-list-total-recurring">0.00</span></td>
+			<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-list-total-recurring">0.00</span></td>
 		</tr>
 		<tr>
-			<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-list-total-onetime">0.00</span></td>
+			<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-list-total-onetime">0.00</span></td>
 		</tr>
 		<tr>
 			<td style="padding: 5px 24px; text-align: right; font-family: 'Muli', Helvetica;">
@@ -318,10 +318,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-payment-total-recurring">0.00</span></td>
+				<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-list-total-recurring">0.00</span></td>
 			</tr>
 			<tr>
-				<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span id="gift-payment-total-onetime">0.00</span></td>
+				<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-list-total-onetime">0.00</span></td>
 			</tr>
 			<tr>
 				<td style="padding-top: 40px; font-family: 'Muli-Bold', Helvetica; text-align: center; font-size: 22px; font-weight: bold;">Billing Information</td>
@@ -347,7 +347,11 @@
 						<input type="text" id="gift-billing-input-zipcode" class="form-control" placeholder="Zip/Postal Code">
 					</div>
 					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
-						<select id="gift-billing-input-country" class="selectpicker" data-size="8" data-none-selected-text="Country"></select>
+						<select id="gift-billing-input-country" class="selectpicker" data-size="8" data-none-selected-text="Country">
+							<?php foreach($listCountries AS $countryData){ ?>
+							<option value="<?php echo $countryData['iso']; ?>"><?php echo $countryData['name']; ?></option>
+							<?php } ?>
+						</select>
 					</div>
 					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
 						<input type="text" id="gift-billing-input-email" class="form-control" placeholder="Email">
@@ -359,7 +363,92 @@
 			</tr>
 			<tr>
 				<td style="padding: 12px 15px;">
-					<label class="checkbox-inline" style="font-size: 14px; font-family: 'Muli', Helvetica;"><input type="checkbox" id="gift-add-mailing" class="gift-cc-process-fee" style="margin-top: 4px;" onclick="">Add a preferred mailing address</label>
+					<label class="checkbox-inline" style="font-size: 14px; font-family: 'Muli', Helvetica;"><input type="checkbox" id="gift-add-mailing" class="gift-cc-process-fee" style="margin-top: 4px;" onclick="$('#gift-cc-form-mailing').toggle();">Add a preferred mailing address</label>
+				</td>
+			</tr>
+			<tr id="gift-cc-form-mailing" style="display: none;">
+				<td style="text-align: center; padding-top: 20px; font-family: 'Muli', Helvetica;">
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-mailing-input-name" class="form-control" placeholder="Full Name">
+					</div>
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-mailing-input-address1" class="form-control" placeholder="Address 1">
+					</div>
+					<div class="col-xs-12" style="padding-bottom: 10px;">
+						<input type="text" id="gift-mailing-input-address2" class="form-control" placeholder="Address 2">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="text" id="gift-mailing-input-city" class="form-control" placeholder="City">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<input type="text" id="gift-mailing-input-city" class="form-control" placeholder="State/Provice">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="text" id="gift-mailing-input-zipcode" class="form-control" placeholder="Zip/Postal Code">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<select id="gift-mailing-input-country" class="selectpicker" data-size="8" data-none-selected-text="Country">
+							<?php foreach($listCountries AS $countryData){ ?>
+							<option value="<?php echo $countryData['iso']; ?>"><?php echo $countryData['name']; ?></option>
+							<?php } ?>
+						</select>
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="text" id="gift-mailing-input-email" class="form-control" placeholder="Email">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<input type="text" id="gift-mailing-input-phone" class="form-control" placeholder="Phone">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 12px 15px; font-size: 14px; font-family: 'Muli', Helvetica;">
+					<a style="text-decoration: underline;" onclick="$('.gift-create-account-form').show();">Create an account</a> for quick and easy giving, access to your giving history, and to edit and customize your settings.
+				</td>
+			</tr>
+			<tr class="gift-create-account-form" style="display: none;">
+				<td style="text-align: center; padding-top: 20px; font-family: 'Muli', Helvetica;">
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<input type="password" id="gift-save-password" class="form-control" placeholder="Password">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<input type="password" id="gift-save-confirm-password" class="form-control" placeholder="Confirm Password">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 12px 15px;">
+					<label class="checkbox-inline" style="font-size: 14px; font-family: 'Muli', Helvetica;"><input type="checkbox" id="gift-save-payment" class="gift-cc-process-fee" style="margin-top: 4px;">Save payment method information on my account</label>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="gift-section-newsletter">
+	<div class="container">
+		<table>
+			<tr>
+				<td>
+					I want to stay connected with IFES updates<br>
+					<label class="checkbox-inline"><input type="checkbox" class="gift-cc-process-fee" style="margin-top: 4px;" checked="">Prayerline emails (weekly)</label><br>
+					<label class="checkbox-inline"><input type="checkbox" class="gift-cc-process-fee" style="margin-top: 4px;" checked="">News and prayer updates by email (6-8 per year)</label><br><br>
+					<span>I am happy to be contacted by </span><label class="checkbox-inline"><input type="checkbox" class="gift-cc-process-fee" style="margin-top: 4px;" checked="">Email</label> <label class="checkbox-inline"><input type="checkbox" class="gift-cc-process-fee" style="margin-top: 4px;" checked="">Post</label> <label class="checkbox-inline"><input type="checkbox" class="gift-cc-process-fee" style="margin-top: 4px;" checked="">Phone</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="gift-cc-total-style">Total monthly gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-payment-total-recurring">0.00</span></td>
+			</tr>
+			<tr>
+				<td class="gift-cc-total-style">Total one-time gift:&nbsp;<span class="gift-list-currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="gift-payment-total-onetime">0.00</span></td>
+			</tr>
+			<tr>
+				<td>
+					<div class="col-xs-6" style="padding-left: 0; font-family: 'Muli-Bold', Helvetica; font-size: 18px;">
+						Thank you for your gift!
+					</div>
+					<div class="col-xs-6" style="text-align: right; padding-right: 0;">
+						<button type="button" class="btn btn-default btn-ifes" onclick="">GIVE NOW</button>
+					</div>
 				</td>
 			</tr>
 		</table>
@@ -601,10 +690,8 @@
 			}
 		}
 
-		$('#gift-list-total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
-		$('#gift-payment-total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
-		$('#gift-list-total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
-		$('#gift-payment-total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
+		$('.gift-list-total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
+		$('.gift-list-total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
 	}
 
 	$(document).ready(function(){

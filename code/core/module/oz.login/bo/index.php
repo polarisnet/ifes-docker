@@ -149,6 +149,6 @@
 			}
 		break;
 	}
-	require DIR_ACTIVE_THEME."/oz.login/login.php";
-	//require DIR_ACTIVE_THEME.'/site_builder.php';
+	//require DIR_ACTIVE_THEME."/oz.login/login_screen.php";
+	require DIR_ACTIVE_THEME.'/site_builder.php';
 ?>

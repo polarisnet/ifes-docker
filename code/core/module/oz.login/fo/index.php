@@ -1,6 +1,6 @@
 <?php
-	require DIR_MODULE.'/site/donor/donor.class.php';
-	$objDonor = new Donor($GLOBALS['myDB']);
+	require DIR_LIBS.'/user.class.php';
+	$objUser = new User($GLOBALS['myDB']);
 	$breadCrumbData = getBreadCrumbData(MODULE_UID, "/");
 	$setting = array(
 		"title" 			=> SITE_NAME.$breadCrumbData['title'],
@@ -41,7 +41,6 @@
 			}
 			$password = "";
 			if(matchCookieSession()){
-
 				if(!empty($_GET)){
 					$getAction = checkParam('action');
 					if($getAction == 'logout'){
@@ -60,7 +59,7 @@
 						}
 					}
 				}
-				header("Location: ".HTTP_SERVER.HTTP_ROOT.'/login');
+				header("Location: ".HTTP_SERVER.HTTP_ROOT.'/donor');
 				exit;
 				
 			} 
@@ -93,7 +92,7 @@
 					array_push($markError, 'username');
 					break;
 				}
-				$credentialData = $objDonor->getLoginCredential($username);
+				$credentialData = $objUser->getLoginCredential($username);
 				//DISABLE: Login Attempt check
 				/*
 				$objUser->autoClearLoginAttempt();
@@ -122,10 +121,10 @@
 										
 				$hashPassword = hashPassword(strtolower($username), $password, $credentialData['salt']);
 				if(!empty($credentialData) && $credentialData['password'] == $hashPassword){
-					if($objDonor->createLoginSession($username)){
-						$objDonor->createLoginCookies($remember, $username);
+					if($objUser->createLoginSession($username)){
+						$objUser->createLoginCookies($remember, $username);
 					}
-					//$objDonor->deleteLoginAttempt($_SERVER['REMOTE_ADDR']);
+					//$objUser->deleteLoginAttempt($_SERVER['REMOTE_ADDR']);
 					$trails = array();
 					$trails['session'] = session_id();
 					$trails['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
@@ -137,10 +136,11 @@
 					}else{
 						setCookieValue("", 'remember');
 					}
+					header("Location: ".HTTP_SERVER.HTTP_ROOT."/giving"); //debug
 					if(isset($_GET['return'])){
 						header("Location: ".HTTP_SERVER.HTTP_ROOT.$_GET['return']);
 					}else{
-						header("Location: ".HTTP_SERVER.HTTP_ROOT."/profile");
+						header("Location: ".HTTP_SERVER.HTTP_ROOT."/donor");
 					}
 					exit;
 				}
