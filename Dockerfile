@@ -11,6 +11,8 @@ COPY default /etc/nginx/sites-available/default
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 
+COPY www.conf /etc/php/7.0/fpm/pool.d/www.conf
+
 #COPY code /var/www/html
 #RUN chmod -R 777 /var/www/html
 
@@ -19,7 +21,7 @@ COPY startphpfpm /etc/startphpfpm
 COPY startnginx /etc/startnginx
 
 COPY start.sh /etc/start.sh
-RUN chmod 777 /etc/nginx/nginx.conf && chmod 777 /etc/nginx/sites-available/default && chmod 777 /etc/php/7.0/fpm/php.ini && chmod 777 /etc/startphpfpm && chmod 777 /etc/startnginx && chmod 777 /etc/start.sh
+RUN chmod 777 /etc/nginx/nginx.conf && chmod 777 /etc/nginx/sites-available/default && chmod 777 /etc/php/7.0/fpm/php.ini && chmod 777 /etc/php/7.0/fpm/pool.d/www.conf && chmod 777 /etc/startphpfpm && chmod 777 /etc/startnginx && chmod 777 /etc/start.sh
 
 EXPOSE 80
 

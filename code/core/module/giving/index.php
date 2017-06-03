@@ -23,9 +23,15 @@
 
 	switch(MODULE_UID){
 		default:
-			$region = "row";
-			$formCurrencySymbol = "&dollar;";
-			$formCurrencyCode = "USD";
+			$formCurrencySymbol = "&euro;";
+			$formCurrencyCode = "EUR";
+			if(REGION == "uk"){
+				$formCurrencySymbol = "&pound;";
+				$formCurrencyCode = "GBP";
+			}else if(REGION == "us"){
+				$formCurrencySymbol = "&dollar;";
+				$formCurrencyCode = "USD";
+			}
 			//$HTTP_AJAX 	= HTTP_ACTIVE_MODULE.'/ajax';
 			//print_r($action);
 

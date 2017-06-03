@@ -52,8 +52,23 @@
 								<li><a href="https://www.ifesworld.org/en/our-governance">Our governance</a></li>
 							</ul>
 						</li>
-						<li><a href="#cont">Regions</a></li>
-						<li class="active"><a href="#co">Get involved</a></li>
+						<li class="dropdown">
+							<a href="https://www.ifesworld.org/en/en/regions" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Regions <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="https://www.ifesworld.org/en/regions/caribbean">Caribbean</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/epsa-english-and-portuguese-speaking-africa">EPSA - English- and Portuguese- Speaking Africa</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/east-asia">East Asia</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/eurasia">Eurasia</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/europe">Europe</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/francophone-africa">Francophone Africa</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/latin-america">Latin America</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/mena-middle-east-and-north-africa">MENA - Middle East and North Africa</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/north-america">North America</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/south-asia">South Asia</a></li>
+								<li><a href="https://www.ifesworld.org/en/regions/south-pacific">South Pacific</a></li>
+							</ul>
+						</li>
+						<li class="dropdown active"><a href="https://www.ifesworld.org/en/en/get-involved" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Get involved <span class="caret"></span></a></li>
 						<li class="dropdown">
 							<a href="https://www.ifesworld.org/en/events" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -88,7 +103,13 @@
 				<p class="title">International Fellowship of Evangelical Students</p>
 			</div>
 			<div class="container">
-				<p class="content">International Fellowship of Evangelical Students/USA, Inc. (IFES/USA) is a &sect;501(c)(3)<br>organization, gifts to which are deductible as charitable contributions for Federal income tax purposes.</p>
+				<p class="content">
+					<?php if(defined('REGION') && REGION == "us"){ ?>
+						International Fellowship of Evangelical Students/USA, Inc. (IFES/USA) is a &sect;501(c)(3)<br>organization, gifts to which are deductible as charitable contributions for Federal income tax purposes.
+					<?php }else{ ?>
+						&copy; 2014 IFES, une organisation déclarée à Lausanne, Suisse.<br>IFES is a registered charity in England and Wales (247919), and a limited company (876229).<br>The IFES website uses cookies to give you the best experience through your visit.
+					<?php } ?>
+				</p>
 			</div>
 		</footer>
 	</body>
