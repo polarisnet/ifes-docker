@@ -49,6 +49,16 @@
 }
 
 @font-face {
+	font-family: 'OpenSans-SemiBold';
+	src: url('OpenSans-Semibold.eot');
+	src: url('OpenSans-Semibold.eot?#iefix') format('embedded-opentype'),
+		url('OpenSans-Semibold.woff') format('woff'),
+		url('OpenSans-Semibold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
 	font-family: 'OpenSans-Bold';
 	src: url('OpenSans-Bold.eot');
 	src: url('OpenSans-Bold.eot?#iefix') format('embedded-opentype'),
