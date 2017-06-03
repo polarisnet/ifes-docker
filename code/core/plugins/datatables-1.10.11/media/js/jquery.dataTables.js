@@ -5123,7 +5123,7 @@
 			msg += '. For more information about this error, please see '+
 			'http://datatables.net/tn/'+tn;
 		}
-		msg = 'Connection to server has been interrupted. Please refresh your browser. If problem still persist, please contact administrator.';
+		//msg = 'Connection to server has been interrupted. Please refresh your browser. If problem still persist, please contact administrator.';
 		if ( ! level  ) {
 			// Backwards compatibility pre 1.10
 			var ext = DataTable.ext;

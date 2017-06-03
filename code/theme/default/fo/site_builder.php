@@ -12,10 +12,24 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/font/font.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/animate.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-3.3.6/css/bootstrap-custom.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-select-1.10.0/dist/css/bootstrap-select.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/datatables-1.10.11/media/css/dataTables.bootstrap.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/datatables-1.10.11/extensions/Responsive/css/responsive.bootstrap.css?ver=<?php echo HTTP_VERSION; ?>" />
+	
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/css/p-loading.min.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/style.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/jquery-1.10.1-min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/jquery.noty.packaged.min.js?ver=<?php echo HTTP_VERSION; ?>'></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-3.3.6/js/bootstrap.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-select-1.10.0/dist/js/bootstrap-select.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/moment/min/moment.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/datatables-1.10.11/media/js/jquery.dataTables.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/datatables-1.10.11/media/js/dataTables.bootstrap.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/datatables-1.10.11/extensions/Responsive/js/dataTables.responsive.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/js/p-loading.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/js/core.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 	</head>
 	<body>
 		<script type="text/javascript">
@@ -67,7 +81,19 @@
 						<li><a href="https://www.ifesworld.org/en/form/contact-us">Contact</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="../navbar/">Log in</a></li>
+						<?php if(matchCookieSession()){
+							echo '<li class="dropdown">';
+								echo '<a href="'.getModuleURL('donor').'" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">'.$_SESSION['user_fullname'].' <span class="caret"></span></a>';
+								echo '<ul class="dropdown-menu">';
+								echo	'<li><a href="'.HTTP_SERVER.HTTP_ROOT.SITE_FO_LOGIN.'?action=logout">Log Out</a></li>';
+	
+								echo '</ul>';
+							echo '</li>';
+							
+						}else{
+							echo '<li><a href="'.HTTP_SERVER.HTTP_ROOT.'/login>Log in</a></li>';
+						}
+						?>
 						<li><a href="../navbar/">Language</a></li>
 						<li><a href="../navbar/">Search</a></li>
 					</ul>
