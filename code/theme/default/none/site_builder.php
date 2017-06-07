@@ -95,7 +95,18 @@
 						<li><a href="https://www.ifesworld.org/en/form/contact-us">Contact</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="../navbar/">Log in</a></li>
+						<?php if(matchCookieSession()){
+							echo '<li class="dropdown">';
+								echo '<a href="'.getModuleURL('donor').'" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">'.$_SESSION['user_fullname'].' <span class="caret"></span></a>';
+								echo '<ul class="dropdown-menu">';
+								echo	'<li><a href="'.HTTP_SERVER.HTTP_ROOT.SITE_FO_LOGIN.'?action=logout">Log Out</a></li>';
+								echo '</ul>';
+							echo '</li>';
+							
+						}else{
+							echo '<li><a href="'.HTTP_SERVER.HTTP_ROOT.'/login">Log in</a></li>';
+						}
+						?>
 						<li><a href="../navbar/">Language</a></li>
 						<li><a href="../navbar/">Search</a></li>
 					</ul>

@@ -1800,6 +1800,18 @@
 	function regionChecking(){
 		define('REGION_IP', strtolower(getISOcodeFromIP()));
 
+		if(isset($_SESSION['login'])){
+			global $myDB;
+			$sql = "SELECT `region` FROM sys_users WHERE id='".$_SESSION['user_id']."'";
+			$myDB->query($sql);
+			if($myDB->nextRecord()){
+				$result = $myDB->getRecord();
+				define('REGION', $result['region']);
+			}
+		}else{
+			define('REGION', REGION_IP);
+		}
+		/*
 		$url = $_SERVER['REQUEST_URI'];
 		//Remove root
 		if(HTTP_ROOT != ""){
@@ -1843,7 +1855,7 @@
 			$region = REGION_IP;
 		}
 		define('REGION', $region);
-		define('REGION_GET', $getURL);
+		define('REGION_GET', $getURL);*/
 	}
 	/** Global Function - End **/
 	
