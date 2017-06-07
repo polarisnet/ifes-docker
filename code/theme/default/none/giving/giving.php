@@ -292,6 +292,7 @@
 		<tr>
 			<td class="gift-total">Total one-time gift:&nbsp;<span class="currency-symbol"><?php echo $formCurrencySymbol; ?></span>&nbsp;<span class="total-onetime">0.00</span></td>
 		</tr>
+		<?php if(!matchCookieSession()){ ?>
 		<tr>
 			<td class="gift-list-login">
 				<div class="login-container">
@@ -311,6 +312,7 @@
 				</div>
 			</td>
 		</tr>
+		<?php } ?>
 		<tr><td style="padding-bottom: 20px;"></td></tr>
 	</table>
 </div>
@@ -374,9 +376,14 @@
 				<tr id="gift-cc-form-select">
 					<td>
 						<div class="col-xs-12">
-							<select id="gift-cc-select" class="selectpicker" data-size="8" name="payment-cc-select" data-none-selected-text="Please select a credit card"></select>
+							<select id="gift-cc-select" class="selectpicker" data-size="8" name="payment-cc-select" data-none-selected-text="Please select a credit card">
+								<?php foreach($listCreditCards AS $creditCardData){ ?>
+								<option value="<?php echo $creditCardData['id']; ?>"><?php echo ccMasking($creditCardData['number']); ?></option>
+								<?php } ?>	
+							</select>
 						</div>
 						<div class="col-xs-12" style="text-align: right; padding-top: 10px;">
+							<?php if(!empty($listCreditCards)){ ?><button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment('edit');" style="margin-right: 15px;">EDIT CARD</button><?php } ?>
 							<button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment('new');">NEW CARD</button>
 						</div>
 					</td>
@@ -386,13 +393,13 @@
 					<td>
 						<div class="col-xs-12" style="padding-bottom: 10px;">
 							<input type="hidden" id="gift-cc-input-mode" name="payment-cc-mode" value="<?php if(empty($listCreditCards)){echo "new";}else{echo "select";} ?>">
-							<input type="text" id="gift-cc-input-number" name="payment-cc-number" class="form-control" placeholder="Card Number">
+							<input type="text" id="gift-cc-input-number" name="payment-cc-number" class="form-control" placeholder="Card Number" value="<?php echo $formPaymentCCNumber; ?>">
 						</div>
 						<div class="col-xs-12" style="padding-bottom: 10px;">
-							<input type="text" id="gift-cc-input-name" name="payment-cc-name" class="form-control" placeholder="Name on Card">
+							<input type="text" id="gift-cc-input-name" name="payment-cc-name" class="form-control" placeholder="Name on Card" value="<?php echo $formPaymentCCName; ?>">
 						</div>
 						<div class="col-xs-6" style="padding-right: 5px;">
-							<input type="text" id="gift-cc-input-expiration" name="payment-cc-expiration" class="form-control" placeholder="Expiration MM/YY">
+							<input type="text" id="gift-cc-input-expiration" name="payment-cc-expiration" class="form-control" placeholder="Expiration MM/YY" value="<?php echo $formPaymentCCExpiration; ?>">
 						</div>
 						<div class="col-xs-6" style="padding-left: 5px;">
 							<input type="text" id="gift-cc-input-cvv" name="payment-cc-cvv" class="form-control" placeholder="CVV">
@@ -406,7 +413,7 @@
 				</tr>
 				<tr id="gift-cc-form-process-fee">
 					<td>
-						<label class="checkbox-inline"><input type="checkbox" id="gift-cc-input-process-fee" name="payment-cc-process-fee" onclick="calcGiftList();">I’d like to increase my donation by <span class='gift-cc-process-currency'><?php echo $formCurrencySymbol; ?></span> 5.00 to help towards the cost of online transactions.</label>
+						<label class="checkbox-inline"><input type="checkbox" id="gift-cc-input-process-fee" name="payment-cc-process-fee" onclick="calcGiftList();" <?php if($formPaymentCCProcessFee != ""){echo 'checked';} ?>>I’d like to increase my donation by <span class='currency-symbol'><?php echo $formCurrencySymbol; ?></span> 5.00 to help towards the cost of online transactions.</label>
 					</td>
 				</tr>
 				<tr>
@@ -493,6 +500,7 @@
 						</div>
 					</td>
 				</tr>
+				<?php if(!$isLogin){ ?>
 				<tr id="gift-create-account-form-1">
 					<td>
 						<label class="checkbox-inline"><input type="checkbox" id="gift-create-account" name="payment-create-account" onclick="toggleCreateAccount();" <?php if($formPaymentCreateAccount != ""){echo 'checked';} ?>><a style="text-decoration: underline;">Create an account</a> for quick and easy giving, access to your giving history, and to edit and customize your settings.</label>
@@ -508,7 +516,8 @@
 						</div>
 					</td>
 				</tr>
-				<tr id="gift-payment-save-details" style="display: none;">
+				<?php } ?>
+				<tr id="gift-payment-save-details" style="<?php if(!$isLogin){ ?>display: none;<?php } ?>">
 					<td>
 						<label class="checkbox-inline"><input type="checkbox" id="gift-save-payment" name="payment-save-information" <?php if($formPaymentSaveInformation != ""){echo 'checked';} ?>>Save payment method information on my account</label>
 					</td>
@@ -650,6 +659,7 @@
 
 	function addGift(obj, type, mode, desc, code){
 		$('.gift-catalog-linebreak, .gift-list-outer-container').show();
+		<?php if($isLogin){ ?>revealPayment();<?php } ?>
 		var objCurrency = $(obj).parent().parent();
 		var giftValue = objCurrency.find('.gift-catalog-currency-value').val();
 		if(giftValue == "" || giftValue <= 0){
@@ -1091,15 +1101,49 @@
 	}
 
 	function toggleCardPayment(mode){
-		if($('#gift-cc-form-new').is(':visible')){
-			$('#gift-cc-input-number').val('');
-			$('#gift-cc-input-name').val('');
-			$('#gift-cc-input-expiration').val('');
-			$('#gift-cc-input-cvv').val('');
+		if(mode == "edit"){
+			$('.gift-payment').ploading({action: 'show'});
+			$.ajax({
+				url: HTTP_AJAX,
+				type: 'POST',
+				dataType: 'json',
+				data:{
+					opt: 'get_cc_details',
+					id: $('#gift-cc-select').val()
+				}
+			}).done(function(msg){
+				if(msg.success){
+					if(msg.valid){
+						$('#gift-cc-input-number').val(msg.number);
+						$('#gift-cc-input-name').val(msg.name);
+						$('#gift-cc-input-expiration').val(msg.expiration);
+						$('#gift-cc-input-cvv').val('');
+						$('#gift-cc-input-mode').val(mode);
+						$('#gift-cc-form-select').toggle();
+						$('#gift-cc-form-new').toggle();
+					}else{
+						noty({text: "Requested card information does not available.", type: 'error'});
+					}
+					$('.gift-payment').ploading({action: 'hide'});
+				}else{
+					noty({text: "Could not get data from server. Please try again.", type: 'error'});
+					$('.gift-payment').ploading({action: 'hide'});
+				}
+			}).fail(function(jqXHR, textStatus){
+				noty({text: "Could not connect with server. Please refresh your browser and try again.", type: 'error'});
+				$('body').ploading({action: 'hide'});
+			});
+		}else{
+			if($('#gift-cc-form-new').is(':visible')){
+				$('#gift-cc-input-number').val('');
+				$('#gift-cc-input-name').val('');
+				$('#gift-cc-input-expiration').val('');
+				$('#gift-cc-input-cvv').val('');
+			}
+			$('#gift-cc-input-mode').val(mode);
+			$('#gift-cc-form-select').toggle();
+			$('#gift-cc-form-new').toggle();
 		}
-		$('#gift-cc-input-mode').val(mode);
-		$('#gift-cc-form-select').toggle();
-		$('#gift-cc-form-new').toggle();
 	}
 
 	function toggleUSPayment(mode){

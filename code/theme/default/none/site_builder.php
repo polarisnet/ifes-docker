@@ -102,7 +102,6 @@
 								echo	'<li><a href="'.HTTP_SERVER.HTTP_ROOT.SITE_FO_LOGIN.'?action=logout">Log Out</a></li>';
 								echo '</ul>';
 							echo '</li>';
-							
 						}else{
 							echo '<li><a href="'.HTTP_SERVER.HTTP_ROOT.'/login">Log in</a></li>';
 						}

@@ -23,6 +23,10 @@
 
 	switch(MODULE_UID){
 		default:
+			$isLogin = matchCookieSession();
+			if($isLogin){
+				$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION['username']);
+			}
 			$formCurrencySymbol = "&euro;";
 			$formCurrencyCode = "EUR";
 			$formCurrencyToogle = '<ul class="dropdown-menu">';
@@ -72,6 +76,20 @@
 						$output['result'] = $searchResult;
 						$output['success'] = true;
 					break;
+					case "get_cc_details":
+						$creditCardId = checkParam('id');
+						$creditCardData = $objGiving->getPaymentData($creditCardId);
+						
+						if(!empty($creditCardData) && $creditCardData['user_id'] == $formDonorAccountData['id'] && $creditCardData['display_info'] == "1"){
+							$output['valid'] = true;
+							$output['number'] = $creditCardData['number'];
+							$output['name'] = $creditCardData['name'];
+							$output['expiration'] = $creditCardData['name_1'];
+						}else{
+							$output['valid'] = false;
+						}
+						$output['success'] = true;
+					break;
 				}
 				echo json_encode($output);
 				exit;
@@ -79,6 +97,9 @@
 
 			$listOfferingEvents = $objThankQPDO->listOfferingEvents();
 			$listCreditCards = array();
+			if($isLogin){
+				$listCreditCards = $objGiving->listCreditCards($formDonorAccountData['id']);
+			}
 			$listCountries = $objGiving->listCountries();
 
 			$formPaymentUSPaymode = "cc";
@@ -92,37 +113,63 @@
 			$formPaymentECheckName = "";
 			$formPaymentECheckType = "";
 
+			$formPaymentCCProcessFee = "";
+			$formPaymentCCSelect = "";
 			$formPaymentCCNumber = "";
 			$formPaymentCCName = "";
 			$formPaymentCCExpiration = "";
 			$formPaymentCCCVV = "";
 
-			$formPaymentBillingName = "";
-			$formPaymentBillingAddress1 = "";
-			$formPaymentBillingAddress2 = "";
-			$formPaymentBillingCity = "";
-			$formPaymentBillingState = "";
-			$formPaymentBillingZipcode = "";
-			if(REGION == "us"){
-				$formPaymentBillingCountry = "us";
-			}else if(REGION == "uk"){
-				$formPaymentBillingCountry = "uk";
+			if($isLogin){
+				$formPaymentBillingName = $formDonorAccountData['billing_fullname'];
+				$formPaymentBillingAddress1 = $formDonorAccountData['billing_address1'];
+				$formPaymentBillingAddress2 = $formDonorAccountData['billing_address2'];
+				$formPaymentBillingCity = $formDonorAccountData['billing_city'];
+				$formPaymentBillingState = $formDonorAccountData['billing_state'];
+				$formPaymentBillingZipcode = $formDonorAccountData['billing_zipcode'];
+				$formPaymentBillingCountry = $formDonorAccountData['billing_country'];
+				$formPaymentBillingEmail = $formDonorAccountData['billing_email'];
+				$formPaymentBillingPhone = $formDonorAccountData['billing_phone'];
 			}else{
-				$formPaymentBillingCountry = "";
+				$formPaymentBillingName = "";
+				$formPaymentBillingAddress1 = "";
+				$formPaymentBillingAddress2 = "";
+				$formPaymentBillingCity = "";
+				$formPaymentBillingState = "";
+				$formPaymentBillingZipcode = "";
+				if(REGION == "us"){
+					$formPaymentBillingCountry = "us";
+				}else if(REGION == "uk"){
+					$formPaymentBillingCountry = "uk";
+				}else{
+					$formPaymentBillingCountry = "";
+				}
+				$formPaymentBillingEmail = "";
+				$formPaymentBillingPhone = "";
 			}
-			$formPaymentBillingEmail = "";
-			$formPaymentBillingPhone = "";
 
 			$formPaymentAddMailing = "";
-			$formPaymentMailingName = "";
-			$formPaymentMailingAddress1 = "";
-			$formPaymentMailingAddress2 = "";
-			$formPaymentMailingCity = "";
-			$formPaymentMailingState = "";
-			$formPaymentMailingZipcode = "";
-			$formPaymentMailingCountry = "";
-			$formPaymentMailingEmail = "";
-			$formPaymentMailingPhone = "";
+			if($isLogin){
+				$formPaymentMailingName = $formDonorAccountData['mailing_fullname'];
+				$formPaymentMailingAddress1 = $formDonorAccountData['mailing_address1'];
+				$formPaymentMailingAddress2 = $formDonorAccountData['mailing_address2'];
+				$formPaymentMailingCity = $formDonorAccountData['mailing_city'];
+				$formPaymentMailingState = $formDonorAccountData['mailing_state'];
+				$formPaymentMailingZipcode = $formDonorAccountData['mailing_zipcode'];
+				$formPaymentMailingCountry = $formDonorAccountData['mailing_country'];
+				$formPaymentMailingEmail = $formDonorAccountData['mailing_email'];
+				$formPaymentMailingPhone = $formDonorAccountData['mailing_phone'];
+			}else{
+				$formPaymentMailingName = "";
+				$formPaymentMailingAddress1 = "";
+				$formPaymentMailingAddress2 = "";
+				$formPaymentMailingCity = "";
+				$formPaymentMailingState = "";
+				$formPaymentMailingZipcode = "";
+				$formPaymentMailingCountry = "";
+				$formPaymentMailingEmail = "";
+				$formPaymentMailingPhone = "";
+			}
 
 			$formPaymentCreateAccount = "";
 			$formPaymentAccountPassword = "";
@@ -132,25 +179,99 @@
 
 			$formPaymentPreferredReceipt = "email";
 
-			$formNewsletterUSWeekly = "on";
-			$formNewsletterUSBimonthly = "on";
-			$formNewsletterUSBimonthlyMode = "email";
+			if($isLogin && REGION == "us"){
+				if($formDonorAccountData['newsletter_us_weekly'] == "1"){
+					$formNewsletterUSWeekly = "on";
+				}else{
+					$formNewsletterUSWeekly = "";
+				}
+				if($formDonorAccountData['newsletter_us_bimonthly'] == "1"){
+					$formNewsletterUSBimonthly = "on";
+				}else{
+					$formNewsletterUSBimonthly = "";
+				}
+				$formNewsletterUSBimonthlyMode = $formDonorAccountData['newsletter_us_bimonthly_mode'];
+			}else{
+				$formNewsletterUSWeekly = "on";
+				$formNewsletterUSBimonthly = "on";
+				$formNewsletterUSBimonthlyMode = "email";
+			}
 
-			$formNewsletterUKEmail = "";
-			$formNewsletterUKNot = "";
-			$formNewsletterUKEmailWeekly = "";
-			$formNewsletterUKContactEmail = "on";
-			$formNewsletterUKContactPost = "on";
-			$formNewsletterUKContactPhone = "on";
+			if($isLogin && REGION == "uk"){
+				if($formDonorAccountData['newsletter_uk_email'] == "1"){
+					$formNewsletterUKEmail = $formDonorAccountData['newsletter_uk_email'];
+				}else{
+					$formNewsletterUKEmail = "";
+				}
+				if($formDonorAccountData['newsletter_uk_not'] == "1"){
+					$formNewsletterUKNot = $formDonorAccountData['newsletter_uk_not'];
+				}else{
+					$formNewsletterUKNot = "";
+				}
+				if($formDonorAccountData['newsletter_uk_email_weekly'] == "1"){
+					$formNewsletterUKEmailWeekly = $formDonorAccountData['newsletter_uk_email_weekly'];
+				}else{
+					$formNewsletterUKEmailWeekly = "";
+				}
+				if($formDonorAccountData['newsletter_uk_contact_email'] == "1"){
+					$formNewsletterUKContactEmail = $formDonorAccountData['newsletter_uk_contact_email'];
+				}else{
+					$formNewsletterUKContactEmail = "";
+				}
+				if($formDonorAccountData['newsletter_uk_contact_post'] == "1"){
+					$formNewsletterUKContactPost = $formDonorAccountData['newsletter_uk_contact_post'];
+				}else{
+					$formNewsletterUKContactPost = "";
+				}
+				if($formDonorAccountData['newsletter_uk_contact_phone'] == "1"){
+					$formNewsletterUKContactPhone = $formDonorAccountData['newsletter_uk_contact_phone'];
+				}else{
+					$formNewsletterUKContactPhone = "";
+				}
+			}else{
+				$formNewsletterUKEmail = "";
+				$formNewsletterUKNot = "";
+				$formNewsletterUKEmailWeekly = "";
+				$formNewsletterUKContactEmail = "on";
+				$formNewsletterUKContactPost = "on";
+				$formNewsletterUKContactPhone = "on";
+			}
 
-			$formNewsletterROWWeekly = "on";
-			$formNewsletterROWYearly = "on";
-			$formNewsletterROWEmail = "on";
-			$formNewsletterROWPost = "on";
-			$formNewsletterROWPhone = "on";
+			if($isLogin && REGION != "us" && REGION != "uk"){
+				if($formDonorAccountData['newsletter_row_weekly'] == "1"){
+					$formNewsletterROWWeekly = "on";
+				}else{
+					$formNewsletterROWWeekly = "";
+				}
+				if($formDonorAccountData['newsletter_row_yearly'] == "1"){
+					$formNewsletterROWYearly = "on";
+				}else{
+					$formNewsletterROWYearly = "";
+				}
+				if($formDonorAccountData['newsletter_row_email'] == "1"){
+					$formNewsletterROWEmail = "on";
+				}else{
+					$formNewsletterROWEmail = "";
+				}
+				if($formDonorAccountData['newsletter_row_post'] == "1"){
+					$formNewsletterROWPost = "on";
+				}else{
+					$formNewsletterROWPost = "";
+				}
+				if($formDonorAccountData['newsletter_row_phone'] == "1"){
+					$formNewsletterROWPhone = "on";
+				}else{
+					$formNewsletterROWPhone = "";
+				}
+			}else{
+				$formNewsletterROWWeekly = "on";
+				$formNewsletterROWYearly = "on";
+				$formNewsletterROWEmail = "on";
+				$formNewsletterROWPost = "on";
+				$formNewsletterROWPhone = "on";
+			}
 
 			$formGiftLists = array();
-
 			if(!empty($_POST)){
 				$formCurrencyCode = checkParam('submit-currency-code');
 				$formCurrencySymbol = checkParam('submit-currency-symbol');
@@ -219,7 +340,7 @@
 				$formNewsletterROWEmail = checkParam('newsletter-row-email');
 				$formNewsletterROWPost = checkParam('newsletter-row-post');
 				$formNewsletterROWPhone = checkParam('newsletter-row-phone');
-			
+
 				$formGiftCatalogType = checkParam('catalog-value-type');
 				$formGiftCatalogMode = checkParam('catalog-value-mode');
 				$formGiftCatalogCode = checkParam('catalog-value-code');
@@ -241,9 +362,9 @@
 					$formGiftLists[$typeKey]['amount'] = $formGiftCatalogAmount[$typeKey];
 					$formGiftLists[$typeKey]['recurring'] = $formGiftCatalogRecurring[$typeKey];
 					if($formGiftLists[$typeKey]['recurring'] == ""){
-						$formTotalOneTime += $formGiftCatalogRecurring[$typeKey];
+						$formTotalOneTime += $formGiftCatalogAmount[$typeKey];
 					}else{
-						$formTotalRecurring += $formGiftCatalogRecurring[$typeKey];
+						$formTotalRecurring += $formGiftCatalogAmount[$typeKey];
 					}
 				}
 
@@ -251,8 +372,8 @@
 
 				$formDonorId = "";
 				$formDonorAccountData = array();
-				if(isset($_SESSION['login'])){
-					$formDonorId = "A";
+				if($isLogin){
+					$formDonorId = $_SESSION['user_id'];
 				}else{
 					$formDonorAccountData = $objGiving->getDonorAccountData($formPaymentBillingEmail);
 					if(!empty($formDonorAccountData) && $formPaymentCreateAccount != ""){
@@ -289,6 +410,7 @@
 				$formPaymentId = "";
 				if(REGION == "US" && $formPaymentUSPaymode == "check"){
 					$paymentData = array();
+					$paymentData['user_id'] = $formDonorId;
 					$paymentData['type'] = "check";
 					$paymentData['type_1'] = $formPaymentECheckType;
 					$paymentData['number'] = $formPaymentECheckAccNo;
@@ -303,6 +425,7 @@
 				}else{
 					if($formPaymentCCMode == "new"){
 						$paymentData = array();
+						$paymentData['user_id'] = $formDonorId;
 						$paymentData['type'] = "card";
 						$paymentData['type_1'] = "";
 						$paymentData['number'] = $formPaymentCCNumber;
@@ -326,6 +449,7 @@
 						}else{
 							$formPaymentId = $paymentData['id'];
 							if($formPaymentCCMode == "edit"){
+								$paymentData['user_id'] = $formDonorId;
 								$paymentData['type'] = "card";
 								$paymentData['type_1'] = "";
 								$paymentData['number'] = $formPaymentCCNumber;
@@ -446,22 +570,74 @@
 							}
 
 							if(REGION == "us"){
-								$formDonorAccountData['newsletter_us_weekly'] = $formNewsletterUSWeekly;
-								$formDonorAccountData['newsletter_us_bimonthly'] = $formNewsletterUSBimonthly;
+								if($formNewsletterUSWeekly == "on"){
+									$formDonorAccountData['newsletter_us_weekly'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_us_weekly'] = "0";
+								}
+								if($formNewsletterUSBimonthly == "on"){
+									$formDonorAccountData['newsletter_us_bimonthly'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_us_bimonthly'] = "0";
+								}
 								$formDonorAccountData['newsletter_us_bimonthly_mode'] = $formNewsletterUSBimonthlyMode;
-							}else if(REGION == "uk"){ 
-								$formDonorAccountData['newsletter_uk_email'] = $formNewsletterUKEmail;
-								$formDonorAccountData['newsletter_uk_not'] = $formNewsletterUKNot;
-								$formDonorAccountData['newsletter_uk_email_weekly'] = $formNewsletterUKEmailWeekly;
-								$formDonorAccountData['newsletter_uk_contact_email'] = $formNewsletterUKContactEmail;
-								$formDonorAccountData['newsletter_uk_contact_post'] = $formNewsletterUKContactPost;
-								$formDonorAccountData['newsletter_uk_contact_phone'] = $formNewsletterUKContactPhone;
+							}else if(REGION == "uk"){
+								if($formNewsletterUKEmail == "on"){
+									$formDonorAccountData['newsletter_uk_email'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_uk_email'] = "0";
+								}
+								if($formNewsletterUKNot == "on"){
+									$formDonorAccountData['newsletter_uk_not'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_uk_not'] = "0";
+								}
+								if($formNewsletterUKEmailWeekly == "on"){
+									$formDonorAccountData['newsletter_uk_email_weekly'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_uk_email_weekly'] = "0";
+								}
+								if($formNewsletterUKContactEmail == "on"){
+									$formDonorAccountData['newsletter_uk_contact_email'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_uk_contact_email'] = "0";
+								}
+								if($formNewsletterUKContactPost == "on"){
+									$formDonorAccountData['newsletter_uk_contact_post'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_uk_contact_post'] = "0";
+								}
+								if($formNewsletterUKContactPhone == "on"){
+									$formDonorAccountData['newsletter_uk_contact_phone'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_uk_contact_phone'] = "0";
+								}
 							}else{
-								$formDonorAccountData['newsletter_row_weekly'] = $formNewsletterROWWeekly;
-								$formDonorAccountData['newsletter_row_yearly'] = $formNewsletterROWYearly;
-								$formDonorAccountData['newsletter_row_email'] = $formNewsletterROWEmail;
-								$formDonorAccountData['newsletter_row_post'] = $formNewsletterROWPost;
-								$formDonorAccountData['newsletter_row_phone'] = $formNewsletterROWPhone;
+								if($formNewsletterROWWeekly == "on"){
+									$formDonorAccountData['newsletter_row_weekly'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_row_weekly'] = "0";
+								}
+								if($formNewsletterROWYearly == "on"){
+									$formDonorAccountData['newsletter_row_yearly'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_row_yearly'] = "0";
+								}
+								if($formNewsletterROWEmail == "on"){
+									$formDonorAccountData['newsletter_row_email'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_row_email'] = "0";
+								}
+								if($formNewsletterROWPost == "on"){
+									$formDonorAccountData['newsletter_row_post'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_row_post'] = "0";
+								}
+								if($formNewsletterROWPhone == "on"){
+									$formDonorAccountData['newsletter_row_phone'] = "1";
+								}else{
+									$formDonorAccountData['newsletter_row_phone'] = "0";
+								}
 							}
 
 							if(!$GLOBALS['myDB']->update('sys_users', $formDonorAccountData, "`id`='$formDonorId'")){

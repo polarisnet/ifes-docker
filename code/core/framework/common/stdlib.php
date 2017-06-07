@@ -77,6 +77,10 @@
 	    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
 
+	function ccMasking($number, $maskingCharacter = 'X') {
+    	return substr($number, 0, 4) . str_repeat($maskingCharacter, strlen($number) - 8) . substr($number, -4);
+	}
+
 	function checkLogin($seoData, $cleanURL, $getURL){
 		session_name(SESSION_NAME); 
 		session_start();

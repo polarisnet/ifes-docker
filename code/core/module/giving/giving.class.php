@@ -25,6 +25,16 @@
 			return $output;
 		}
 
+		function listCreditCards($userId){
+			$output = array();
+			$sql = "SELECT * FROM `payments` WHERE user_id = '$userId' ORDER BY id ASC";
+			$this->db->query($sql);
+			while($this->db->nextRecord()){
+				array_push($output, $this->db->getRecord());
+			}
+			return $output;
+		}
+
 		function getPaymentData($id){
 			$output = array();
 			$sql = "SELECT * FROM `payments` WHERE `id`='$id'";
