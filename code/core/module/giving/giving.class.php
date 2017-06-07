@@ -24,5 +24,25 @@
 			}
 			return $output;
 		}
+
+		function getPaymentData($id){
+			$output = array();
+			$sql = "SELECT * FROM `payments` WHERE `id`='$id'";
+			$this->db->query($sql);
+			if($this->db->nextRecord()){
+				$output = $this->db->getRecord();
+			}
+			return $output;
+		}
+
+		function getDonorAccountData($username){
+			$output = array();
+			$sql = "SELECT * FROM `sys_users` WHERE `username`='$username'";
+			$this->db->query($sql);
+			if($this->db->nextRecord()){
+				$output = $this->db->getRecord();
+			}
+			return $output;
+		}
 	}
 ?>
