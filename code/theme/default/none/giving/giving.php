@@ -297,16 +297,16 @@
 			<td class="gift-list-login">
 				<div class="login-container">
 					<div class="col-xs-6" style="padding-left: 0; padding-right: 10px;">
-						<input type="text" class="form-control" placeholder="User Name">
+						<input type="text" class="form-control" placeholder="User Name" id="login-username">
 					</div>
 					<div class="col-xs-6" style="padding-left: 10px; padding-right: 0;">
-						<input type="password" class="form-control" placeholder="Password">
+						<input type="password" class="form-control" placeholder="Password" id="login-password">
 					</div>
 					<div class="col-xs-12" style="padding: 10px; padding-right: 0;">
 						<a style="font-size: 14px;">Forget your password?</a>
 					</div>
 					<div class="col-xs-12 paddingless">
-						<button type="button" class="btn btn-default btn-ifes" style="margin-right: 15px;">LOG IN</button>
+						<button type="button" class="btn btn-default btn-ifes" style="margin-right: 15px;" onclick="login();">LOG IN</button>
 						<button type="button" class="btn btn-default btn-ifes" onclick="revealPayment();">GIVE AS GUEST</button>
 					</div>
 				</div>
@@ -592,6 +592,43 @@
 	var giftLists = [];
 	var giftCurrencySymbol = '<?php echo $formCurrencySymbol; ?>';
 	var giftCurrencyCode = '<?php echo $formCurrencyCode; ?>';
+
+	<?php if(!$isLogin){ ?>
+	function login(){
+		$('.gift-list-outer-container').ploading({action: 'show'});
+		$.ajax({
+			url: HTTP_AJAX,
+			type: 'POST',
+			dataType: 'json',
+			data:{
+				opt: 'login',
+				username: $('#login-username'),
+				password: $('#login-password')
+			}
+		}).done(function(msg){
+			if(msg.success){
+			/*	$('#gift-catalog-'+type+'-search-label').html('Showing most relevant results for '+searchQuery+' (Total '+msg.total+' results)');
+				var tmpTemplates = "";
+				var catalogTemplate = $('.gift-catalog-template').html();
+				for(var i=0; i<msg.total; i++){
+					var tmpTemplate = catalogTemplate;
+					tmpTemplate = tmpTemplate.replace(/%templateDescription%/g, msg.result[i].destinationdescription);
+					tmpTemplate = tmpTemplate.replace(/%templateCode%/g, msg.result[i].destinationcode);
+					tmpTemplate = tmpTemplate.replace(/%templateSearchType%/g, type);
+					tmpTemplates += tmpTemplate;
+				}
+				$('#gift-catalog-'+type+'-search-result').html(tmpTemplates);
+				rebind();*/
+			}else{
+				noty({text: "Could not get data from server. Please try again.", type: 'error'});
+			}
+			$('.gift-list-outer-container').ploading({action: 'hide'});
+		}).fail(function(jqXHR, textStatus){
+			$('.gift-list-outer-container').ploading({action: 'hide'});
+			noty({text: "Could not connect with server. Please refresh your browser and try again.", type: 'error'});
+		});
+	}
+	<?php } ?>
 
 	function toggleCurrency(code, symbol){
 		$('.currency-code').html(code+' <span class="caret"></span>');
@@ -906,7 +943,7 @@
 	});
 
 	function validateCC(){
-		if($('#gift-cc-input-mode').val() == 'new'){
+		if($('#gift-cc-input-mode').val() != 'select'){
 			if(!bootstrapValidateEmpty("gift-cc-input-number", "")){
 				noty({text: "Please fill in card number.", type: 'error'});
 				return false;
@@ -923,8 +960,6 @@
 				noty({text: "Please fill in card cvv.", type: 'error'});
 				return false;
 			}
-		}else{
-
 		}
 		return true;
 	}
@@ -934,7 +969,6 @@
 			noty({text: "Please add at least 1 gift before submit this donation form.", type: 'error'});
 			return false;
 		}
-
 
 		<?php if(REGION == 'uk'){ ?>
 			if($('#gift-uk-extra-aid').prop('checked')){

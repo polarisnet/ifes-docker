@@ -48,6 +48,10 @@
 				$output = array('success' => false, 'message' => 'Missing ajax operation. Please contact administrator.');
 				$opt = checkParam('opt');
 				switch($opt){
+					case "login":
+						$username = checkParam('username');
+						$password = checkParam('password');
+					break;
 					case "search_gift_catalog":
 						$searchType = checkParam('type');
 						$searchQuery = checkParam('query');
