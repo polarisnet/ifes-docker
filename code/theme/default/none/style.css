@@ -194,7 +194,10 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .btn-ifes:active{
 	background-color: #000000 !important;
 }
-
+.btn-ifes-active{
+	color: #ffffff !important;
+	background-color: #464646 !important;
+}
 
 /*** Giving Page - Start ***/
 .gift-upper-box{

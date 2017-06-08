@@ -1,5 +1,5 @@
 <?php
-	define('HTTP_ROOT', '');
+	define('HTTP_ROOT', '/ifes-docker/code');
 	define('HTTP_VERSION', '1');
 	define('SITE_NAME', 'IFES');
 	define('PUBLIC_SALT', 'JL2Y7nKpaimZjN');
@@ -11,7 +11,7 @@
 		define('MY_DB_PASS', 'SPhptF7ZltCQYP');
 	}else{
 		define('MY_DB_DATABASE', 'ifes_db'); //admin_oz
-		define('MY_DB_SERVER', '172.17.0.1');
+		define('MY_DB_SERVER', 'localhost');
 		define('MY_DB_USER', 'root');
 		define('MY_DB_PASS', 'root');
 	}

@@ -72,6 +72,7 @@
 						<li class="dropdown active">
 							<a href="https://www.ifesworld.org/en/en/get-involved" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Get involved <span class="caret"></span></a>
 							<ul class="dropdown-menu">
+								<li><a href="<?php echo getModuleURL('giving'); ?>">Give</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -103,7 +104,7 @@
 								echo '</ul>';
 							echo '</li>';
 						}else{
-							echo '<li><a href="'.HTTP_SERVER.HTTP_ROOT.'/login">Log in</a></li>';
+							echo '<li class="navbar-login"><a href="'.HTTP_SERVER.HTTP_ROOT.'/login">Log in</a></li>';
 						}
 						?>
 						<li><a href="../navbar/">Language</a></li>

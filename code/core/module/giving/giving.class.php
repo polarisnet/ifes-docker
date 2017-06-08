@@ -27,7 +27,7 @@
 
 		function listCreditCards($userId){
 			$output = array();
-			$sql = "SELECT * FROM `payments` WHERE user_id = '$userId' ORDER BY id ASC";
+			$sql = "SELECT * FROM `payments` WHERE user_id = '$userId' AND type = 'card' AND display_info = '1' ORDER BY id ASC";
 			$this->db->query($sql);
 			while($this->db->nextRecord()){
 				array_push($output, $this->db->getRecord());

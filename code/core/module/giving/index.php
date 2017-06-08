@@ -49,8 +49,36 @@
 				$opt = checkParam('opt');
 				switch($opt){
 					case "login":
+						require DIR_LIBS.'/user.class.php';
+						$objUser = new User($GLOBALS['myDB']);
+
 						$username = checkParam('username');
 						$password = checkParam('password');
+
+						$credentialData = $objGiving->getDonorAccountData($username);
+						$output['success'] = true;
+						$output['login'] = false;
+						if(empty($credentialData)){
+							$output['message'] = 'Invalid login details.';
+						}else{
+							$hashPassword = hashPassword(strtolower($username), $password, $credentialData['salt']);
+							if($credentialData['status'] == '0'){
+								$output['message'] = 'Your account has been deactivated.';
+							}else if(!empty($credentialData) && $credentialData['password'] == $hashPassword){
+								if($objUser->createLoginSession($username)){
+									$objUser->createLoginCookies("1", $username);
+								}
+
+								$trails = array();
+								$trails['session'] = session_id();
+								$trails['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+								$trails['ip_address'] = $_SERVER['REMOTE_ADDR'];
+								insertAuditTrails('', 'login', json_encode($trails));
+							
+								setCookieValue($credentialData['username'], 'remember');
+								$output['login'] = true;
+							}
+						}
 					break;
 					case "search_gift_catalog":
 						$searchType = checkParam('type');
@@ -75,7 +103,7 @@
 							$output['total'] = 0;
 						}
 						foreach($searchResult AS $resultKey => $result){
-							$searchResult[$resultKey]['destinationdescription'] = ucwords($result['destinationdescription']);
+							$searchResult[$resultKey]['destinationdescription'] = ucwords($result['destinationdescription']);	
 						}
 						$output['result'] = $searchResult;
 						$output['success'] = true;
@@ -277,6 +305,8 @@
 
 			$formGiftLists = array();
 			if(!empty($_POST)){
+				$formLoginMode = checkParam('login-mode');
+
 				$formCurrencyCode = checkParam('submit-currency-code');
 				$formCurrencySymbol = checkParam('submit-currency-symbol');
 
@@ -299,26 +329,28 @@
 				$formPaymentCCExpiration = checkParam('payment-cc-expiration');
 				$formPaymentCCCVV = checkParam('payment-cc-cvv');
 
-				$formPaymentBillingName = checkParam('payment-billing-name');
-				$formPaymentBillingAddress1 = checkParam('payment-billing-address1');
-				$formPaymentBillingAddress2 = checkParam('payment-billing-address2');
-				$formPaymentBillingCity = checkParam('payment-billing-city');
-				$formPaymentBillingState = checkParam('payment-billing-state');
-				$formPaymentBillingZipcode = checkParam('payment-billing-zipcode');
-				$formPaymentBillingCountry = checkParam('payment-billing-country');
-				$formPaymentBillingEmail = checkParam('payment-billing-email');
-				$formPaymentBillingPhone = checkParam('payment-billing-phone');
+				if($formLoginMode != "1"){
+					$formPaymentBillingName = checkParam('payment-billing-name');
+					$formPaymentBillingAddress1 = checkParam('payment-billing-address1');
+					$formPaymentBillingAddress2 = checkParam('payment-billing-address2');
+					$formPaymentBillingCity = checkParam('payment-billing-city');
+					$formPaymentBillingState = checkParam('payment-billing-state');
+					$formPaymentBillingZipcode = checkParam('payment-billing-zipcode');
+					$formPaymentBillingCountry = checkParam('payment-billing-country');
+					$formPaymentBillingEmail = checkParam('payment-billing-email');
+					$formPaymentBillingPhone = checkParam('payment-billing-phone');
 
-				$formPaymentAddMailing = checkParam('payment-add-mailing-address');
-				$formPaymentMailingName = checkParam('payment-mailing-name');
-				$formPaymentMailingAddress1 = checkParam('payment-mailing-address1');
-				$formPaymentMailingAddress2 = checkParam('payment-mailing-address2');
-				$formPaymentMailingCity = checkParam('payment-mailing-city');
-				$formPaymentMailingState = checkParam('payment-mailing-state');
-				$formPaymentMailingZipcode = checkParam('payment-mailing-zipcode');
-				$formPaymentMailingCountry = checkParam('payment-mailing-country');
-				$formPaymentMailingEmail = checkParam('payment-mailing-email');
-				$formPaymentMailingPhone = checkParam('payment-mailing-phone');
+					$formPaymentAddMailing = checkParam('payment-add-mailing-address');
+					$formPaymentMailingName = checkParam('payment-mailing-name');
+					$formPaymentMailingAddress1 = checkParam('payment-mailing-address1');
+					$formPaymentMailingAddress2 = checkParam('payment-mailing-address2');
+					$formPaymentMailingCity = checkParam('payment-mailing-city');
+					$formPaymentMailingState = checkParam('payment-mailing-state');
+					$formPaymentMailingZipcode = checkParam('payment-mailing-zipcode');
+					$formPaymentMailingCountry = checkParam('payment-mailing-country');
+					$formPaymentMailingEmail = checkParam('payment-mailing-email');
+					$formPaymentMailingPhone = checkParam('payment-mailing-phone');
+				}
 
 				$formPaymentCreateAccount = checkParam('payment-create-account');
 				$formPaymentAccountPassword = checkParam('payment-account-password');
@@ -326,24 +358,26 @@
 
 				$formPaymentSaveInformation = checkParam('payment-save-information');
 
-				$formPaymentPreferredReceipt = checkParam('payment-preferred-receipt');
-				
-				$formNewsletterUSWeekly = checkParam('newsletter-us-weekly');
-				$formNewsletterUSBimonthly = checkParam('newsletter-us-bimonthly');
-				$formNewsletterUSBimonthlyMode = checkParam('newsletter-us-bimonthly-mode');
+				if($formLoginMode != "1"){
+					$formPaymentPreferredReceipt = checkParam('payment-preferred-receipt');
 
-				$formNewsletterUKEmail = checkParam('newsletter-uk-email');
-				$formNewsletterUKNot = checkParam('newsletter-uk-not');
-				$formNewsletterUKEmailWeekly = checkParam('newsletter-uk-email-weekly');
-				$formNewsletterUKContactEmail = checkParam('newsletter-uk-contact-email');
-				$formNewsletterUKContactPost = checkParam('newsletter-uk-contact-post');
-				$formNewsletterUKContactPhone = checkParam('newsletter-uk-contact-phone');
-				
-				$formNewsletterROWWeekly = checkParam('newsletter-row-weekly');
-				$formNewsletterROWYearly = checkParam('newsletter-row-yearly');
-				$formNewsletterROWEmail = checkParam('newsletter-row-email');
-				$formNewsletterROWPost = checkParam('newsletter-row-post');
-				$formNewsletterROWPhone = checkParam('newsletter-row-phone');
+					$formNewsletterUSWeekly = checkParam('newsletter-us-weekly');
+					$formNewsletterUSBimonthly = checkParam('newsletter-us-bimonthly');
+					$formNewsletterUSBimonthlyMode = checkParam('newsletter-us-bimonthly-mode');
+
+					$formNewsletterUKEmail = checkParam('newsletter-uk-email');
+					$formNewsletterUKNot = checkParam('newsletter-uk-not');
+					$formNewsletterUKEmailWeekly = checkParam('newsletter-uk-email-weekly');
+					$formNewsletterUKContactEmail = checkParam('newsletter-uk-contact-email');
+					$formNewsletterUKContactPost = checkParam('newsletter-uk-contact-post');
+					$formNewsletterUKContactPhone = checkParam('newsletter-uk-contact-phone');
+					
+					$formNewsletterROWWeekly = checkParam('newsletter-row-weekly');
+					$formNewsletterROWYearly = checkParam('newsletter-row-yearly');
+					$formNewsletterROWEmail = checkParam('newsletter-row-email');
+					$formNewsletterROWPost = checkParam('newsletter-row-post');
+					$formNewsletterROWPhone = checkParam('newsletter-row-phone');
+				}
 
 				$formGiftCatalogType = checkParam('catalog-value-type');
 				$formGiftCatalogMode = checkParam('catalog-value-mode');
@@ -370,6 +404,11 @@
 					}else{
 						$formTotalRecurring += $formGiftCatalogAmount[$typeKey];
 					}
+				}
+
+				if($formLoginMode == "1"){
+					$message['content'] = "Welcome back ".$_SESSION['user_fullname'];
+					break;
 				}
 
 				$GLOBALS['myDB']->beginTrans();
@@ -412,60 +451,66 @@
 				$formPaymentCreateAccount = "";
 
 				$formPaymentId = "";
-				if(REGION == "US" && $formPaymentUSPaymode == "check"){
-					$paymentData = array();
-					$paymentData['user_id'] = $formDonorId;
-					$paymentData['type'] = "check";
-					$paymentData['type_1'] = $formPaymentECheckType;
-					$paymentData['number'] = $formPaymentECheckAccNo;
-					$paymentData['number_1'] = $formPaymentECheckRouterNo;
-					$paymentData['name_1'] = $formPaymentECheckBankName;
-					$paymentData['name'] = $formPaymentECheckName;
-					$paymentData['created_by'] = $formDonorId;
-					$paymentData['created_date'] = date("Y-m-d H:i:s");
-					if($GLOBALS['myDB']->insert('payments', $paymentData)){
-						$formPaymentId = $GLOBALS['myDB']->getInsertedId();
-					}
+				if($formPaymentSaveInformation == ""){
+					$formPaymentId = "-1";
 				}else{
-					if($formPaymentCCMode == "new"){
+					if(REGION == "US" && $formPaymentUSPaymode == "check"){
 						$paymentData = array();
 						$paymentData['user_id'] = $formDonorId;
-						$paymentData['type'] = "card";
-						$paymentData['type_1'] = "";
-						$paymentData['number'] = $formPaymentCCNumber;
-						$paymentData['number_1'] = $formPaymentCCCVV;
-						$paymentData['name_1'] = $formPaymentCCExpiration;
-						$paymentData['name'] = $formPaymentCCName;
+						$paymentData['type'] = "check";
+						$paymentData['type_1'] = $formPaymentECheckType;
+						$paymentData['number'] = $formPaymentECheckAccNo;
+						$paymentData['number_1'] = $formPaymentECheckRouterNo;
+						$paymentData['name_1'] = $formPaymentECheckBankName;
+						$paymentData['name'] = $formPaymentECheckName;
 						$paymentData['created_by'] = $formDonorId;
 						$paymentData['created_date'] = date("Y-m-d H:i:s");
-						if($formPaymentSaveInformation != ""){
-							$paymentData['display_info'] = "1";
-						}
 						if($GLOBALS['myDB']->insert('payments', $paymentData)){
 							$formPaymentId = $GLOBALS['myDB']->getInsertedId();
 						}
-					}else if($formPaymentCCMode == "edit" || $formPaymentCCMode == "select"){
-						$paymentData = $objGiving->getPaymentData($formPaymentCCSelect);
-						if(empty($paymentData)){
-							$GLOBALS['myDB']->rollbackTrans();
-							$error['content'] = "Could not retrieve your payment card details. Please try again.";
-							break;
-						}else{
-							$formPaymentId = $paymentData['id'];
-							if($formPaymentCCMode == "edit"){
-								$paymentData['user_id'] = $formDonorId;
-								$paymentData['type'] = "card";
-								$paymentData['type_1'] = "";
-								$paymentData['number'] = $formPaymentCCNumber;
-								$paymentData['number_1'] = $formPaymentCCCVV;
-								$paymentData['name_1'] = $formPaymentCCExpiration;
-								$paymentData['name'] = $formPaymentCCName;
-								$paymentData['modified_by'] = $formDonorId;
-								$paymentData['modified_date'] = date("Y-m-d H:i:s");
-								if(!$GLOBALS['myDB']->update('payments', $paymentData, "`id`='$formPaymentId'")){
-									$GLOBALS['myDB']->rollbackTrans();
-									$error['content'] = "Could not update your payment card details. Please try again.";
-									break;
+					}else{
+						if($formPaymentCCMode == "new"){
+							$paymentData = array();
+							$paymentData['user_id'] = $formDonorId;
+							$paymentData['type'] = "card";
+							$paymentData['type_1'] = "";
+							$paymentData['display_info'] = "1";
+							$paymentData['number'] = $formPaymentCCNumber;
+							$paymentData['number_1'] = $formPaymentCCCVV;
+							$paymentData['name_1'] = $formPaymentCCExpiration;
+							$paymentData['name'] = $formPaymentCCName;
+							$paymentData['created_by'] = $formDonorId;
+							$paymentData['created_date'] = date("Y-m-d H:i:s");
+							if($formPaymentSaveInformation != ""){
+								$paymentData['display_info'] = "1";
+							}
+							if($GLOBALS['myDB']->insert('payments', $paymentData)){
+								$formPaymentId = $GLOBALS['myDB']->getInsertedId();
+							}
+						}else if($formPaymentCCMode == "edit" || $formPaymentCCMode == "select"){
+							$paymentData = $objGiving->getPaymentData($formPaymentCCSelect);
+							if(empty($paymentData)){
+								$GLOBALS['myDB']->rollbackTrans();
+								$error['content'] = "Could not retrieve your payment card details. Please try again.";
+								break;
+							}else{
+								$formPaymentId = $paymentData['id'];
+								if($formPaymentCCMode == "edit"){
+									$paymentData['user_id'] = $formDonorId;
+									$paymentData['type'] = "card";
+									$paymentData['type_1'] = "";
+									$paymentData['number'] = $formPaymentCCNumber;
+									$paymentData['number_1'] = $formPaymentCCCVV;
+									$paymentData['name_1'] = $formPaymentCCExpiration;
+									$paymentData['name'] = $formPaymentCCName;
+									$paymentData['display_info'] = "1";
+									$paymentData['modified_by'] = $formDonorId;
+									$paymentData['modified_date'] = date("Y-m-d H:i:s");
+									if(!$GLOBALS['myDB']->update('payments', $paymentData, "`id`='$formPaymentId'")){
+										$GLOBALS['myDB']->rollbackTrans();
+										$error['content'] = "Could not update your payment card details. Please try again.";
+										break;
+									}
 								}
 							}
 						}

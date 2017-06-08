@@ -6,15 +6,26 @@
 		var $objPDO;
 
 		function __construct(){
-			$this->objPDO = new OZPDO(array(
-				"mode" => "mysql",
-				"server" => THANKQ_HOST,
-				"port" => THANKQ_PORT,
-				"db" => THANKQ_DB,
-				"user" => THANKQ_USERNAME,
-				"password" => THANKQ_PASSWORD,
-				"ssl_ca_cert" => THANKQ_CA_CERT
-			));
+			if(THANKQ_CA_CERT != ''){
+				$this->objPDO = new OZPDO(array(
+					"mode" => "mysql",
+					"server" => THANKQ_HOST,
+					"port" => THANKQ_PORT,
+					"db" => THANKQ_DB,
+					"user" => THANKQ_USERNAME,
+					"password" => THANKQ_PASSWORD,
+					"ssl_ca_cert" => THANKQ_CA_CERT
+				));
+			}else{
+				$this->objPDO = new OZPDO(array(
+					"mode" => "mysql",
+					"server" => THANKQ_HOST,
+					"port" => THANKQ_PORT,
+					"db" => THANKQ_DB,
+					"user" => THANKQ_USERNAME,
+					"password" => THANKQ_PASSWORD
+				));
+			}
 		}
 
 		function listOfferingEvents(){
@@ -22,7 +33,7 @@
 		}
 
 		function listDestinationCodes($condition){
-			return $this->objPDO->selectAll("SELECT destinationcode, destinationdescription FROM thankq_destinationcode WHERE ExcludeFromDropdown = '0' $condition", array());
+			return $this->objPDO->selectAll("SELECT destinationcode, destinationdescription, destinationgroup FROM thankq_destinationcode WHERE ExcludeFromDropdown = '0' $condition", array());
 		}
 
 		function customDestinationGroupOrder($mode){

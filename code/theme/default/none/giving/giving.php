@@ -213,7 +213,7 @@
 	</table>
 	<div class="gift-catalog-template" style="display: none;">
 		<div class="result-container">
-			<div class="col-xs-8 result-label">%templateDescription%</div>
+			<div class="col-xs-8 result-label">%templateDescriptionLabel%</div>
 			<div class="col-xs-4 result-form">
 				<div class="input-group currency-box">
 					<span class="input-group-addon currency-symbol"><?php echo $formCurrencySymbol; ?></span>
@@ -326,9 +326,9 @@
 				<?php if(REGION == 'us'){ ?>
 				<tr>
 					<td style="text-align: center; padding-top: 10px;">
-						<button type="button" class="btn btn-default btn-ifes" style="margin-right: 15px;" onclick="toggleUSPayment('cc');">GIVE BY CREDIT OR DEBIT CARD</button>
-						<button type="button" class="btn btn-default btn-ifes" onclick="toggleUSPayment('check');">GIVE BY eCHECK</button>
-						<input type="hidden" id="payment-us-paymode" name="payment-us-paymode" value="cc">
+						<button type="button" id="btn-us-payment-cc" class="btn btn-default btn-ifes <?php if($formPaymentUSPaymode == "cc"){echo 'btn-ifes-active';} ?>" style="margin-right: 15px;" onclick="toggleUSPayment('cc', this);">GIVE BY CREDIT OR DEBIT CARD</button>
+						<button type="button" id="btn-us-payment-check" class="btn btn-default btn-ifes <?php if($formPaymentUSPaymode == "check"){echo 'btn-ifes-active';} ?>" onclick="toggleUSPayment('check', this);">GIVE BY eCHECK</button>
+						<input type="hidden" id="payment-us-paymode" name="payment-us-paymode" value="<?php echo $formPaymentUSPaymode; ?>">
 					</td>
 				</tr>
 				<?php }else if(REGION == 'uk'){ ?>
@@ -594,7 +594,29 @@
 	var giftCurrencyCode = '<?php echo $formCurrencyCode; ?>';
 
 	<?php if(!$isLogin){ ?>
+	$("#login-username").on('keyup', function (e){
+		if(e.keyCode === 13){
+			$('#login-password').focus();
+		}
+	});
+
+	$("#login-password").on('keyup', function (e){
+		if(e.keyCode === 13){
+			login();
+		}
+	});
+
 	function login(){
+		if(!bootstrapValidateEmpty("login-username", "")){
+			noty({text: "Please fill in username.", type: 'error'});
+			return false;
+		}
+
+		if(!bootstrapValidateEmpty("login-password", "")){
+			noty({text: "Please fill in password.", type: 'error'});
+			return false;
+		}
+
 		$('.gift-list-outer-container').ploading({action: 'show'});
 		$.ajax({
 			url: HTTP_AJAX,
@@ -602,23 +624,32 @@
 			dataType: 'json',
 			data:{
 				opt: 'login',
-				username: $('#login-username'),
-				password: $('#login-password')
+				username: $('#login-username').val(),
+				password: $('#login-password').val()
 			}
 		}).done(function(msg){
 			if(msg.success){
-			/*	$('#gift-catalog-'+type+'-search-label').html('Showing most relevant results for '+searchQuery+' (Total '+msg.total+' results)');
-				var tmpTemplates = "";
-				var catalogTemplate = $('.gift-catalog-template').html();
-				for(var i=0; i<msg.total; i++){
-					var tmpTemplate = catalogTemplate;
-					tmpTemplate = tmpTemplate.replace(/%templateDescription%/g, msg.result[i].destinationdescription);
-					tmpTemplate = tmpTemplate.replace(/%templateCode%/g, msg.result[i].destinationcode);
-					tmpTemplate = tmpTemplate.replace(/%templateSearchType%/g, type);
-					tmpTemplates += tmpTemplate;
+				if(msg.login){
+					for(var i=0; i<giftLists.length; i++){
+						$('<input>').attr({name: 'catalog-value-type[]', value: giftLists[i].type}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-mode[]', value: giftLists[i].mode}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-code[]', value: giftLists[i].code}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-description[]', value: giftLists[i].description}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-comment[]', value: giftLists[i].comment}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-anonymous[]', value: giftLists[i].anonymous}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-amount[]', value: giftLists[i].amount}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-recurring[]', value: giftLists[i].recurring}).appendTo('#submit-variable');
+					}
+
+					$('<input>').attr({name: 'submit-currency-code', value: $('.currency-code').html().substr(0, 3)}).appendTo('#submit-variable');
+					$('<input>').attr({name: 'submit-currency-symbol', value: $('.currency-symbol').html()}).appendTo('#submit-variable');
+					$('<input>').attr({name: 'login-mode', value: '1'}).appendTo('#submit-variable');
+ 					$('#gift-submit-form').attr('onsubmit', 'return true;');
+					$('#gift-submit-form').submit();
+				}else{
+					noty({text: msg.message, type: 'error'});
 				}
-				$('#gift-catalog-'+type+'-search-result').html(tmpTemplates);
-				rebind();*/
+			
 			}else{
 				noty({text: "Could not get data from server. Please try again.", type: 'error'});
 			}
@@ -673,6 +704,7 @@
 					for(var i=0; i<msg.total; i++){
 						var tmpTemplate = catalogTemplate;
 						tmpTemplate = tmpTemplate.replace(/%templateDescription%/g, msg.result[i].destinationdescription);
+						tmpTemplate = tmpTemplate.replace(/%templateDescriptionLabel%/g, msg.result[i].destinationdescription+' - '+msg.result[i].destinationgroup);
 						tmpTemplate = tmpTemplate.replace(/%templateCode%/g, msg.result[i].destinationcode);
 						tmpTemplate = tmpTemplate.replace(/%templateSearchType%/g, type);
 						tmpTemplates += tmpTemplate;
@@ -956,6 +988,14 @@
 				noty({text: "Please fill in card expiration.", type: 'error'});
 				return false;
 			}
+			if(Number($('#gift-cc-input-expiration').val().substr(0,2)) > 12){
+				noty({text: "Invalid card expiration.", type: 'error'});
+				$('#gift-cc-input-expiration').focus();
+				$('#gift-cc-input-expiration').parent().addClass("has-error");
+				return false;
+			}else{
+				$('#gift-cc-input-expiration').parent().removeClass("has-error");
+			}
 			if(!bootstrapValidateEmpty("gift-cc-input-cvv", "")){
 				noty({text: "Please fill in card cvv.", type: 'error'});
 				return false;
@@ -1180,12 +1220,17 @@
 		}
 	}
 
-	function toggleUSPayment(mode){
+	function toggleUSPayment(mode, obj){
 		if(mode == 'cc'){
 			if($('#gift-echeck-form').is(':visible')){
 				$('#gift-cc-form-process-fee').show();
-				$('#gift-cc-form-new').show();
-				$('#gift-cc-form-select').hide();
+				if($('#gift-cc-input-mode').val() == "select"){
+					$('#gift-cc-form-new').hide();
+					$('#gift-cc-form-select').show();
+				}else{
+					$('#gift-cc-form-new').show();
+					$('#gift-cc-form-select').hide();
+				}
 				$('#gift-echeck-form').hide();
 			}
 		}else{
@@ -1195,6 +1240,8 @@
 			$('#gift-echeck-form').show();
 		}
 		$('#payment-us-paymode').val(mode);
+		$('#btn-us-payment-check, #btn-us-payment-cc').removeClass('btn-ifes-active');
+		$(obj).addClass('btn-ifes-active');
 		calcGiftList();
 	}
 
