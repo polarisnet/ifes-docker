@@ -32,7 +32,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .form-control{
 	font-size: 16px;
-	padding: 6px 12px;
+	padding: 0px 12px; /*TEST: change from 6px to 0px */
 }
 .footer{
 	position: absolute;
@@ -199,9 +199,31 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	background-color: #464646 !important;
 }
 
+.btn-add-gift{
+	font-family: 'Muli',Helvetica;
+	background-color: #cdcecd;
+	color: #000000;
+}
+/*** Register Page - Start ***/
+.register-title{
+	font-family: 'Muli-Bold', Helvetica; text-align: left; font-size: 22px; font-weight: bold;
+}
+.label-register{
+	font-size: 12px;
+	color: grey;
+}
+/*** Register Page - End ***/
+
 /*** Giving Page - Start ***/
 .gift-upper-box{
 	width: 344px; padding: 20px; background-color: rgba(255, 255, 255, 0.8); position: absolute; right: 16px;
+
+}
+.btn-add-gift:hover, .btn-add-gift:focus{
+	background-color: #464646;
+}
+.btn-add-gift:active{
+	background-color: #000000 !important;
 }
 .gift-center-link{
 	text-align: center;

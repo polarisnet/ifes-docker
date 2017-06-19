@@ -1,8 +1,10 @@
 <?php 
 	$breadCrumbData = getBreadCrumbData(MODULE_UID, "/");
 	require DIR_MODULE.'/site/donor/donor.class.php';
+	require DIR_LIBS.'/user.class.php';
 	
 	$objDonor 			= new Donor($GLOBALS['myDB']);
+	$objUser = new User($GLOBALS['myDB']);
 	
 	$setting = array(
 		"title" 			=> SITE_NAME.$breadCrumbData['title'],
@@ -43,9 +45,9 @@
 					$decryptKey = getCookieValue('added_key');
 					if($decryptKey != ""){
 						$decryptKey = encryption(getCookieValue('added_key'), $_SESSION['salt'], false);
-						$data = $objDonor->getDonorNameById($decryptKey);
-						if($data != ""){
-							$message['content'] = "Donor ".$data." has been successfully created.";
+						$data = getUserSpecificField($decryptKey, "`username`");
+						if(!empty($data)){
+							$message['content'] = ucfirst($data['username'])." has been successfully created.";
 							deleteCookieValue('added_key');
 						}
 					}
@@ -58,16 +60,90 @@
 			$setting['left_uid'] = MODULE_PARENT_UID;
 			$setting['center_dir'] = DIR_ACTIVE_PUBLIC_THEME."/register/register.php";
 			
+			$formNameFirst = "";
+			$formNameLast = "";
+			$formNameSpouse = ""; 
+			$formAddress1 = "";
+			$formAddress2 = "";
+			$formCity = "";
+			$formState = "";
+			$formZIP = "";
+			$formCountry = "";
+			$formTelephoneMobile = "";
+			$formTelephoneDaytime = "";
+			$formTelephoneEvening = "";
+			$formEmail = "";
+			
+			$password_length = 8;
+			$listCountries = $objDonor->listCountries();
+			
 			if(!empty($_POST)){
 				$submitMode = checkParam('submit_mode');
 				
-				//TODO: check param values
 				$response = checkParam('g-recaptcha-response');
-				$formUsername = checkParam('username');
-				$formEmail = checkParam('email_address');
-				$formPassword = checkParam('password');
+				$formPassword = checkParam('register-input-password-new');
+				$formRetypePassword = checkParam('register-input-password-confirm');
+					
+				$formNameFirst = checkParam("register-input-firstname");
+				$formNameLast = checkParam("register-input-lastname");
+				$formNameSpouse = checkParam("register-input-spouse");
+				$formAddress1 = checkParam("register-input-address1");
+				$formAddress2 = checkParam("register-input-address2");
+				$formCity = checkParam("register-input-city");
+				$formState = checkParam("register-input-state");
+				$formZIP = checkParam("register-input-zipcode");
+				$formCountry = checkParam("register-input-country");
+				$formTelephoneMobile = checkParam("register-input-mobile");
+				$formTelephoneDaytime = checkParam("register-input-daytime");
+				$formTelephoneEvening = checkParam("register-input-evening");
+				$formEmail = checkParam("register-input-email");
+				$formEmail = trim($formEmail);
 				//Validation for Server Side
 				//TODO: add validation
+				
+				if($formPassword != $formRetypePassword){
+					$error['content'] = 'Password does not match with retype password. Please input match password.';
+					$error['autoclose'] = false;
+					break;
+				}
+
+				/*
+				Check for password strength, password should be at least 8 characters, 
+				contain at least one number, 
+				contain at least one lowercase letter, 
+				contain at least one uppercase letter, 
+				contain at least one special character. 
+				*/
+				
+				if(strlen($formPassword) < $password_length){
+					$error['content'] = 'Password length must be more than 8 characters';
+					$error['autoclose'] = false;
+					break;
+				}
+				
+				if(!preg_match("#[0-9]+#", $formPassword)){
+					$error['content'] = 'Password must have at least one number';
+					$error['autoclose'] = false;
+					break;
+				}
+				
+				if(!preg_match("#[a-z]+#", $formPassword)){
+					$error['content'] = 'Password must have at least one lowercase alphabet';
+					$error['autoclose'] = false;
+					break;
+				}
+				
+				if(!preg_match("#[A-Z]+#", $formPassword)){
+					$error['content'] = 'Password must have at least one uppercase alphabet';
+					$error['autoclose'] = false;
+					break;
+				}
+				
+				if(!preg_match("/[\'^£$%&*()}{@#~?><>,|=_+!-]/", $formPassword)){
+					$error['content'] = 'Password must have at least one special character';
+					$error['autoclose'] = false;
+					break;
+				}
 
 				if($error['content']){break;}
 				$response = $_POST["g-recaptcha-response"];
@@ -96,15 +172,31 @@
 				
 				$data = array();
 				
-				$data['username'] = $formUsername;
-				$data['salt'] = generateSalt(15);
-				$data['uid'] = $objDonor->generateUID();
-				$data['password'] = hashPassword($data['username'], $formPassword, $data['salt']);
-				$data['email'] = $formEmail;
+				$data['username'] 			= $formEmail;
+				$data['first_name'] 		= $formNameFirst;
+				$data['last_name'] 			= $formNameLast;
+				$data['spouse_name'] 		= $formNameSpouse;
+				$data['region'] 			= REGION;
+				$data['mailing_fullname'] 	= $formNameFirst." ".$formNameLast;
+				$data['mailing_address1'] 	= $formAddress1;
+				$data['mailing_address2'] 	= $formAddress2;
+				$data['mailing_city'] 		= $formCity;
+				$data['mailing_state'] 		= $formState;
+				$data['mailing_country'] 	= $formCountry;
+				$data['mailing_zipcode'] 	= $formZIP;
+				$data['mailing_email'] 		= $formEmail;
+				$data['phone'] 				= $formTelephoneMobile;
+				$data['phone_day'] 			= $formTelephoneDaytime;
+				$data['phone_night'] 		= $formTelephoneEvening;
+				$data['salt'] 				= generateSalt(15);
+				$data['uid'] 				= $objUser->generateUID();
+				$data['password'] 			= hashPassword($data['username'], $formPassword, $data['salt']);
+				$data['email'] 				= $formEmail;
 				
 				$data['created_date'] = date("Y-m-d H:i:s");
-				if($objDonor->saveDonor($data)){ 
-					$insertedId = $objDonor->getInsertedId();
+				
+				if($objUser->saveUser($data)){ 
+					$insertedId = $objUser->getInsertedId();
 					$encInsertedId = encryption($insertedId, $_SESSION['salt'], true);
 					setCookieValue($encInsertedId, 'added_key');
 					insertAuditTrails(MODULE_UID, 'insert', "", $data);
@@ -115,6 +207,7 @@
 				}else{
 					$error['content'] = "Cannot save donor profile. Please try again.";
 				}
+				
 			}
 		break;
 		default:
@@ -122,35 +215,6 @@
 				$output = array('success' => false, 'message' => 'Missing ajax operation. Please contact administrator.');
 				$opt = checkParam('opt');
 				switch($opt){
-									
-					case 'email_change_password':
-					
-						$intCustomerID = checkParam('id');
-						if($intCustomerID == ""){
-							$output['message'] = "Invalid customer Id. Please try again.";
-						} else {
-							
-							$arrCustomerDetails = $objCustomer->getCustomerData($intCustomerID);
-							if(count($arrCustomerDetails)>0) {
-								$strResetStatus = "9".str_pad($arrCustomerDetails['id'], 6, "0", STR_PAD_LEFT);
-								$arrCustomerDetails["cid"] = $strResetStatus;
-								//echo $strResetStatus;exit;
-								if(empty($arrCustomerDetails["email"])) {
-									$output['message'] = "Please provide email to send change password request.";
-								} else {
-									$changePasswordStatus = $objCatalogue->sendCustomerChangePasswordEmail($arrCustomerDetails);
-									if($changePasswordStatus){
-										$output['success'] = true;
-									} else {
-										$output['message'] = "Your account cannot be change password at this moment. Please try again.";
-									}
-								}
-								
-							} else {
-								$output['message'] = "We cannot find any account with this customer id.";
-							}
-						}
-					break;
 				}
 				echo json_encode($output);
 				exit;

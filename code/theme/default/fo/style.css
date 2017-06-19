@@ -76,7 +76,7 @@ input[type=number]::-webkit-outer-spin-button {
 	font-family: 'Muli-Bold',Helvetica;
 }
 .donor-content-regular{
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: normal;
 	font-family: 'Muli',Helvetica;
 }
@@ -104,6 +104,10 @@ input[type=number]::-webkit-outer-spin-button {
 .span-link{
 	text-decoration: underline;
 	cursor: pointer;
+}
+.bill-checkbox{
+	font-size: 14px !important;
+	color: black !important;
 }
 .navbar {
 	min-height: 40px;
@@ -170,7 +174,11 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .navbar{
 	margin-bottom: 0;
 }
-
+.bootstrap-select .btn {
+    font-size: 16px;
+	padding: 5px 12px;
+	color: grey !important;
+}
 .pg-title{
 	font-size: 36px; 
 	font-weight: bold; 
@@ -253,7 +261,7 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	border-bottom: 0px;
 }
 .table.donor-table-content > thead > tr > th {
-	border-bottom: 0px;
+	border-bottom: 0px !important;
 	padding: 0px 8px 8px 0px;
 	font-size: 16px;
 }
@@ -264,31 +272,74 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	padding: 0px 8px 8px 0px;
 	font-size: 16px;
 }
-.modal-content.donor-billing{
+.table > tbody > tr > td{
+	border-top: 0px;
+}
+.table > thead > tr > th {
+	font-family: 'OpenSans',Helvetica;
+	font-weight: normal;
+	border-bottom: 1px solid #dddddd;
+	border-top: 1px solid #dddddd !important;
+}
+.modal-content.donor-custom{
 	background-color: #f3f3f3;
 }
-.modal-header.donor-billing{
+.modal-header.donor-custom{
 	font-family: 'Muli-Bold',Helvetica;
 	text-align: center;
 	text-transform: none;
 	padding: 0px;
 }
-.modal-title.donor-billing{
+.modal-title.donor-custom{
 	font-family: 'Muli-Bold',Helvetica;
-	font-size: 16px;
+	font-size: 22px;
 	font-weight: 600;
 }
-.modal-subtitle{
-	font-size: 12px;
+.modal-subtitle {
+	font-size: 14px;
 	font-weight: 400;
 	text-align: left;
-	padding: 10px 0px 10px 0px;
+	padding-bottom: 10px;
+	font-family: 'Muli',Helvetica;
 }
-.modal-body.donor-billing{
+.modal-body.donor-custom{
 	padding: 0px;
 }
-.modal-footer.donor-billing{
+.modal-footer.donor-custom{
 	border-top: 0px;
+}
+p.subscription-modal{
+	font-family: 'Muli-Bold',Helvetica;
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0px;
+}
+.subscription-form{
+	font-family: 'Muli-bold';
+	font-size: 14px;
+	color: grey;
+}
+.currency-box{
+	font-family: 'Muli',Helvetica;
+}
+.currency-box .dropdown-toggle{
+	background-color: #eeeeee !important;
+	color: #6f6f6f !important;
+	border: 1px solid #cccccc !important;
+}
+@-moz-document url-prefix() {
+	.currency-box .dropdown-toggle{
+		padding-bottom: 7px;
+	}
+}
+.currency-box .dropdown-menu{
+	min-width: 60px;
+}
+.input-group-btn:last-child > .btn{
+	z-index: 0;
+}
+.input-group{
+	width: 100%;
 }
 .bootstrap-select .btn-default, .bootstrap-select .btn-default:hover, .bootstrap-select .btn-default:focus, .bootstrap-select.open > .dropdown-toggle.btn-default, .bootstrap-select.open > .dropdown-toggle.btn-default:hover{
 	background-color: #ffffff;
@@ -307,6 +358,10 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .btn-ifes:active{
 	background-color: #000000 !important;
 }
+.btn-ifes-active{
+	color: #ffffff !important;
+	background-color: #464646 !important;
+}
 .quick-links a{
 	font-family: 'Muli-Bold',Helvetica ;
 	color: black;
@@ -317,6 +372,33 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 }
 .row-eq-height { /*use with overflow: hide; on parent div */
   display:         flex;
+}
+.arrow-left {
+  width: 0; 
+  height: 0; 
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  border-right: 10px solid grey; 
+  float: left;
+  margin-right: 15px;
+}
+.arrow-right {
+  width: 0; 
+  height: 0; 
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  border-left: 10px solid grey; 
+  display: inline-block;
+  margin-left: 15px;
+  margin-top: -2px;
+}
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+	margin: 10px 0;
+	white-space: nowrap;
+}
+.vertical-align {
+    display: flex;
+    align-items: center;
 }
 .clearfix:after,.radio-option:after{visibility:hidden;display:block;font-size:0;content:'.';clear:both;height:0}
 * html .clearfix,* html .radio-option{zoom:1}
