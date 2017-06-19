@@ -315,6 +315,10 @@
 											<?php  if(REGION == 'uk'){ // START REGION == 'uk' ?>
 												<div class="row no-gutters">
 													<p style="font-size:14px;">I would like to received:</p>
+													<label class="donor-checkbox-support">
+													<input type="checkbox" name="supportPrime" id="donor-support-prime" value="1" 
+													<?php if(isset($supportPrime)){echo 'checked';}?> style="margin-top: 4px;">
+													Updates and oppurtunities to support IFES ministries</label>
 												</div>
 											<?php } // END REGION == 'uk'?>
 										</div>
