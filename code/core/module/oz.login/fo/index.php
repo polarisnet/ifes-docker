@@ -76,7 +76,7 @@
 					$message['content'] = "An email is successfully sent to your email address. Please check your mailbox for further process.";
 					$message['autoclose'] = true;
 					break;							
-				}  else if($getAction == 'expired'){					
+				} else if($getAction == 'expired'){					
 					//$message['title'] = $setting['title'];
 					$warning['title'] = "Session Expired";
 					$warning['content'] = "You have been logged out. Your session may have expired or you may have logged in via another browser/location.";
@@ -119,6 +119,18 @@
 					}
 				}
 				*/
+
+				if(empty($credentialData)){
+					$error['content'] = 'Invalid login details.';
+					array_push($markError, 'username', 'password');
+					break;
+				}else{
+					if($credentialData['status'] == '0'){
+						$error['content'] = "Your account has been blocked.";
+						array_push($markError, 'username');
+						break;
+					}
+				}
 										
 				$hashPassword = hashPassword(strtolower($username), $password, $credentialData['salt']);
 				if(!empty($credentialData) && $credentialData['password'] == $hashPassword){

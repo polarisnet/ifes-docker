@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/moment/min/moment.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/js/p-loading.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/robinherbots-inputmask/dist/jquery.inputmask.bundle.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/js/core.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 	</head>
 	<body>
@@ -68,7 +69,12 @@
 								<li><a href="https://www.ifesworld.org/en/regions/south-pacific">South Pacific</a></li>
 							</ul>
 						</li>
-						<li class="dropdown active"><a href="https://www.ifesworld.org/en/en/get-involved" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Get involved <span class="caret"></span></a></li>
+						<li class="dropdown active">
+							<a href="https://www.ifesworld.org/en/en/get-involved" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Get involved <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?php echo getModuleURL('giving'); ?>">Give</a></li>
+							</ul>
+						</li>
 						<li class="dropdown">
 							<a href="https://www.ifesworld.org/en/events" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -90,7 +96,17 @@
 						<li><a href="https://www.ifesworld.org/en/form/contact-us">Contact</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="../navbar/">Log in</a></li>
+						<?php if(matchCookieSession()){
+							echo '<li class="dropdown">';
+								echo '<a href="'.getModuleURL('donor').'" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">'.$_SESSION['user_fullname'].' <span class="caret"></span></a>';
+								echo '<ul class="dropdown-menu">';
+								echo	'<li><a href="'.HTTP_SERVER.HTTP_ROOT.SITE_FO_LOGIN.'?action=logout">Log Out</a></li>';
+								echo '</ul>';
+							echo '</li>';
+						}else{
+							echo '<li class="navbar-login"><a href="'.HTTP_SERVER.HTTP_ROOT.'/login">Log in</a></li>';
+						}
+						?>
 						<li><a href="../navbar/">Language</a></li>
 						<li><a href="../navbar/">Search</a></li>
 					</ul>
