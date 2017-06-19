@@ -1,13 +1,12 @@
-
 	<body>
 		<div class="container" style="position: relative;">
-			<form class="form-horizontal form-login" role="form" method="post" style="background: #ffffff; margin: 10% auto; width: 400px; text-align: center; border: 1px solid #dddddd;">
+			<form class="form-vertical form-login" role="form" method="post" style="background: #ffffff; margin: 10% auto; width: 400px; text-align: center; border: 1px solid #dddddd;">
 				<br>
 				<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png'; ?>" width=80>
 				<p style="position: relative; top: 8px;">Login and manage your donor account</p>
 				<div class="row" style="margin-left: 0; margin-right: 0;">
 					<div class="form-group form-hr" style="width: 360px; margin: auto; padding-bottom: 10px;"><hr></div>
-					<div class="form-group"><input type="text" class="form-control" id="username" name="username" placeholder="Username" value=""></div>
+					<div class="form-group"><input type="text" class="form-control" id="username" name="username" placeholder="Email Address" value=""></div>
 					<div class="form-group"><input type="password" class="form-control" id="password" name="password" placeholder="Password"></div>
 				</div>
 				<div class="row" style="margin-left: 0; margin-right: 0; text-align: center; padding-top: 12px; padding-bottom: 12px;">
