@@ -1161,3 +1161,42 @@ function number_format(number, decimals, dec_point, thousands_sep){
 	}
 	return s.join(dec);
 }
+
+function ucwords(str){
+    return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+        return $1.toUpperCase();
+    });
+}
+
+function bootstrapValidateEmpty(obj, txt){
+	if($("#"+obj).val() == null || $("#"+obj).val() == ""){
+		//noty({text: txt+" cannot be empty.", type: 'error'});
+		$('#'+obj).parent().addClass("has-error");
+		$("#"+obj).focus();
+		return false;
+	}else if($("#"+obj).val() != ""){
+		$('#'+obj).parent().removeClass("has-error");
+		return true;
+	}
+}
+
+function validateCCExpiration(expire){
+	result = true;
+	if(!expire.match(/(0[1-9]|1[0-2])[/][0-9]{2}/)){
+	  result = false;
+	}else{
+	  // get current year and month
+	  var d = new Date();
+	  var currentYear = d.getFullYear();
+	  var currentMonth = d.getMonth() + 1;
+	  // get parts of the expiration date
+	  var parts = expire.split('/');
+	  var year = parseInt(parts[1], 10) + 2000;
+	  var month = parseInt(parts[0], 10);
+	  // compare the dates
+	  if (year < currentYear || (year == currentYear && month < currentMonth)) {
+	    result = false;
+	  }
+	}
+	return result;
+}

@@ -70,6 +70,17 @@
 	/** Visual FoxPro - End **/
 	
 	/** Security - Start **/
+	function GUID(){
+	    if (function_exists('com_create_guid') === true){
+	        return trim(com_create_guid(), '{}');
+	    }
+	    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
+
+	function ccMasking($number, $maskingCharacter = 'X') {
+    	return substr($number, 0, 4) . str_repeat($maskingCharacter, strlen($number) - 8) . substr($number, -4);
+	}
+
 	function checkLogin($seoData, $cleanURL, $getURL){
 		session_name(SESSION_NAME); 
 		session_start();
@@ -1793,6 +1804,18 @@
 	function regionChecking(){
 		define('REGION_IP', strtolower(getISOcodeFromIP()));
 
+		if(isset($_SESSION['login'])){
+			global $myDB;
+			$sql = "SELECT `region` FROM sys_users WHERE id='".$_SESSION['user_id']."'";
+			$myDB->query($sql);
+			if($myDB->nextRecord()){
+				$result = $myDB->getRecord();
+				define('REGION', $result['region']);
+			}
+		}else{
+			define('REGION', REGION_IP);
+		}
+		/*
 		$url = $_SERVER['REQUEST_URI'];
 		//Remove root
 		if(HTTP_ROOT != ""){
@@ -1836,7 +1859,7 @@
 			$region = REGION_IP;
 		}
 		define('REGION', $region);
-		define('REGION_GET', $getURL);
+		define('REGION_GET', $getURL);*/
 	}
 	
 	function ordinal($number) {
