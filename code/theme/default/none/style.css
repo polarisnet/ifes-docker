@@ -32,7 +32,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .form-control{
 	font-size: 16px;
-	padding: 0px 12px; /*TEST: change from 6px to 0px */
+	padding: 0 12px;
 }
 .footer{
 	position: absolute;
@@ -43,6 +43,14 @@ input[type=number]::-webkit-outer-spin-button {
 	background-color: #251f4f;
 	color: #fff;
 	font-family: 'Montserrat',Helvetica;
+}
+@media(max-width:767px){
+	.footer{
+		height: 200px;
+	}
+	body {
+		margin-bottom: 200px;
+	}
 }
 .footer .container .title{
 	font-size: 22px;
@@ -92,6 +100,15 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .nav.navbar-nav.navbar-right > li > a{
 	margin-left: 5px;
+}
+.navbar-toggle{
+	padding: 0;
+	margin-top: 8px;
+	margin-right: 10px;
+	background-color: #1c244e;
+}
+.navbar-header{
+	background-color: #ffffff;
 }
 ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: block;    
@@ -283,6 +300,10 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .gift-catalog-default-search-result .result-container .result-form{
 	padding-right: 0;
 }
+.gift-catalog-search-desc{
+	font-size: 12px;
+	font-style: italic;
+}
 .gift-list-table{
 	background-color: #ebebeb; width: 100%; font-family: 'Muli', Helvetica; font-size: 16px;
 }
@@ -298,6 +319,24 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 }
 .gift-list-save-container{
 	padding-right: 0; text-align: right; clear:both; line-height: 2;
+}
+.gift-list-tooltip{
+	width: 15px;
+	top: -2px;
+	position: relative;
+}
+.gift-list-header-pagination{
+	float: right;
+}
+.gift-list-header-pagination a{
+	margin-left: 10px;
+	color: #000000 !important;
+}
+.gift-cvv-tooltip{
+	width: 15px;
+	top: 10px;
+	right: 25px;
+	position: absolute;
 }
 .gift-total{
 	padding: 5px 25px; font-family: 'Muli-Bold', Helvetica; text-align: right; font-size: 18px; font-weight: bold;
@@ -454,4 +493,51 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .bootstrap-select .btn{
 	font-size: 16px;
 	padding: 5px 12px;
+}
+
+/* Tooltip */
+.gift-cvv-tooltip + .tooltip > .tooltip-inner {
+  background-color: none; 
+  color: #FFFFFF; 
+  font-size: 10px;
+  font-family: 'Muli', Helvetica;
+  padding: 0;
+  opacity:1!important;
+}
+
+.tooltip > .tooltip-inner {
+  background-color: #505050; 
+  color: #FFFFFF; 
+  font-size: 10px;
+  font-family: 'Muli', Helvetica;
+  padding: 10px;
+  opacity:1!important;
+}
+.tooltip.in {
+  opacity: 1;
+  filter:alpha(opacity=100);
+}
+
+.bootstrap-dialog {
+	font-family: 'Muli', Helvetica;
+}
+.bootstrap-dialog .form-horizontal .form-group {
+	margin-right: 35px;
+	margin-left: 35px;
+}
+
+.bootstrap-dialog .modal-header{
+	border-radius: 0;
+}
+.bootstrap-dialog .bootstrap-dialog-title, .bootstrap-dialog .bootstrap-dialog-message{
+	font-size: 12px;
+}
+.bootstrap-dialog.type-primary .modal-header{
+	background-color: #251F4F;
+}
+.modal .close{
+	color: #ffffff;
+}
+.bootstrap-dialog-button-icon glyphicon{
+	top: 0;
 }

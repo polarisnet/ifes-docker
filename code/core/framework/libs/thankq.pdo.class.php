@@ -36,6 +36,10 @@
 			return $this->objPDO->selectAll("SELECT destinationcode, destinationdescription, destinationgroup FROM thankq_destinationcode WHERE ExcludeFromDropdown = '0' $condition", array());
 		}
 
+		function countDestinationCodes($condition){
+			return $this->objPDO->selectAll("SELECT COUNT(destinationcode) AS 'total' FROM thankq_destinationcode WHERE ExcludeFromDropdown = '0' $condition", array());
+		}
+
 		function customDestinationGroupOrder($mode){
 			$order = array(
 				0 => "Ministries-General",
