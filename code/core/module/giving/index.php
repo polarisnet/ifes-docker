@@ -80,7 +80,13 @@
 							}
 						}
 					break;
+					case "send_reset_password":
+						$resetEmail = checkParam('email');
+						// Tengwai put your code here for reset password
+						$output['success'] = true;
+					break;
 					case "search_gift_catalog":
+						$page = checkParam('page');
 						$searchType = checkParam('type');
 						$searchQuery = checkParam('query');
 						$currencyCode = checkParam('currency_code');
@@ -90,14 +96,16 @@
 							$condition .= " AND LOWER(destinationdescription) LIKE '%".strtolower($searchQuery)."%'";
 						}
 						if($searchType == "staff"){
-							$condition .= " ORDER BY FIELD (destinationgroup, 'IFES staff', 'Regional Staff', 'National Movement staff', 'Projects', 'IFES InterAction Volunteers')";
+							$condition .= " ORDER BY FIELD (destinationgroup, 'IFES staff', 'Regional Staff', 'National Movement staff', 'Projects', 'IFES InterAction Volunteers'), destinationdescription ASC";
 						}else if($searchType == "ministry"){
-							$condition .= " ORDER BY FIELD (destinationgroup, 'Regional Staff', 'National Movement staff', 'Projects', 'IFES staff', 'IFES InterAction Volunteers')";
+							$condition .= " ORDER BY FIELD (destinationgroup, 'Regional Staff', 'National Movement staff', 'Projects', 'IFES staff', 'IFES InterAction Volunteers'), destinationdescription ASC";
 						}else if($searchType == "movement"){
-							$condition .= " ORDER BY FIELD (destinationgroup, 'National Movement staff', 'Projects', 'IFES staff', 'IFES InterAction Volunteers', 'Regional Staff')";
+							$condition .= " ORDER BY FIELD (destinationgroup, 'National Movement staff', 'Projects', 'IFES staff', 'IFES InterAction Volunteers', 'Regional Staff'), destinationdescription ASC";
 						}
-						$searchResult = $objThankQPDO->listDestinationCodes($condition);
+						$searchResult = $objThankQPDO->listDestinationCodes($condition." LIMIT ".($page*50).", 50");
 						if(is_array($searchResult) && !empty($searchResult)){
+							$totalSearchResult = $objThankQPDO->countDestinationCodes($condition);
+							$output['total_all'] = intval($totalSearchResult[0]['total']);
 							$output['total'] = count($searchResult);
 						}else{
 							$output['total'] = 0;
@@ -407,7 +415,11 @@
 				}
 
 				if($formLoginMode == "1"){
-					$message['content'] = "Welcome back ".$_SESSION['user_fullname'];
+					if(isset($_SESSION['user_fullname'])){
+						$message['content'] = "Welcome back ".$_SESSION['user_fullname'];
+					}else{
+						$message['content'] = "Welcome back ";
+					}
 					break;
 				}
 

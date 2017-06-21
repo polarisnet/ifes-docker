@@ -12,13 +12,16 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/font/font.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/animate.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-3.3.6/css/bootstrap-custom.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap3-dialog/dist/css/bootstrap-dialog.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-select-1.10.0/dist/css/bootstrap-select.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/css/p-loading.min.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/style.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/jquery-1.10.1-min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/jquery.noty.packaged.min.js?ver=<?php echo HTTP_VERSION; ?>'></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/loading-overlay/loadingoverlay.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-3.3.6/js/bootstrap.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap3-dialog/dist/js/bootstrap-dialog.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-select-1.10.0/dist/js/bootstrap-select.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/moment/min/moment.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
@@ -39,6 +42,14 @@
 		</script>
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
+				<div class="navbar-header visible-xs">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		            	<img src="<?php echo HTTP_MEDIA.'/site-image/mobile-nav-icon.png'; ?>" width="35">
+		          	</button>
+		          	<a class="navbar-brand" href="#">
+		          		
+		          	</a>
+		        </div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li><a href="https://www.ifesworld.org/en">Home</a></li>

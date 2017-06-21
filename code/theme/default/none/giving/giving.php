@@ -1,4 +1,7 @@
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
+<style>
+	
+</style>
+<div id="myCarousel" class="carousel slide hidden-xs" data-ride="carousel">
 	<ol class="carousel-indicators">
 		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 		<li data-target="#myCarousel" data-slide-to="1"></li>
@@ -16,7 +19,7 @@
 		</div>
 	</div>
 </div>
-<div class="container paddingless">
+<div class="container paddingless hidden-xs">
 	<div class="col-xs-12 col-md-6">
 		<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png';?>" width="131" style="margin-top: -1px; margin-bottom: 28px;">
 		<p class="page-title">GIVING PAGE</p>
@@ -55,7 +58,7 @@
 			<?php } ?>
 		</tr>
 		<tr>
-			<td colspan="<?php if(REGION == 'us'){echo '4';}else{echo '3';} ?>" style="padding: 25px; height: 500px; vertical-align: top;">
+			<td id="gift-header-blank-space" colspan="<?php if(REGION == 'us'){echo '4';}else{echo '3';} ?>" style="padding: 25px; height: 500px; vertical-align: top;">
 				<div id="gift-catalog-ministry" style="display: none;">
 					<label class="radio-inline"><input type="radio" id="gift-catalog-ministry-search" name="radio-gift-catalog-ministry" checked onclick="toggleGiftCatalog('ministry', 'search');">Search</label>
 					<label class="radio-inline"><input type="radio" id="gift-catalog-ministry-manual" name="radio-gift-catalog-ministry" onclick="toggleGiftCatalog('ministry', 'manual');">Enter an IFES Ministry</label>
@@ -65,7 +68,7 @@
 						<div class="input-group" style="margin-top: 10px;">
 							<input type="text" id="gift-catalog-ministry-search-query" class="form-control" placeholder="Search for IFES ministry">
 							<span class="input-group-btn">
-								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('ministry');">SEARCH</button>
+								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('ministry', 0);">SEARCH</button>
 							</span>
 						</div>
 						<div id="gift-catalog-ministry-search-container" class="gift-catalog-default-search-container">
@@ -100,7 +103,7 @@
 						<div class="input-group" style="margin-top: 10px;">
 							<input type="text" id="gift-catalog-staff-search-query" class="form-control" placeholder="Search for staff by name and countyr or ministry">
 							<span class="input-group-btn">
-								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('staff');">SEARCH</button>
+								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('staff', 0);">SEARCH</button>
 							</span>
 						</div>
 						<div id="gift-catalog-staff-search-container" class="gift-catalog-default-search-container">
@@ -135,7 +138,7 @@
 						<div class="input-group" style="margin-top: 10px;">
 							<input type="text" id="gift-catalog-movement-search-query" class="form-control" placeholder="Search for a national movement">
 							<span class="input-group-btn">
-								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('movement');">SEARCH</button>
+								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('movement', 0);">SEARCH</button>
 							</span>
 						</div>
 						<div id="gift-catalog-movement-search-container" class="gift-catalog-default-search-container">
@@ -221,7 +224,7 @@
 					<div class="input-group-btn">
 						<button type="button" class="btn btn-default dropdown-toggle currency-code" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $formCurrencyCode; ?> <span class="caret"></span></button>
 						<?php echo $formCurrencyToogle; ?>
-						<button type="button" class="btn btn-default btn-ifes" style="margin-left: 10px;" onclick="addGift(this, '%templateSearchType%', 'search', '%templateDescription%', '%templateCode%')">ADD GIFT</button>
+						<button type="button" class="btn btn-default btn-ifes" style="margin-left: 10px;" onclick='addGift(this, "%templateSearchType%", "search", "%templateDescription%", "%templateCode%")'>ADD GIFT</button>
 					</div>
 				</div>
 			</div>
@@ -243,7 +246,7 @@
 							<div class="col-xs-8" style="padding-left: 0;">
 								<div style="padding: 6px 0;">%templateDescription%</div>
 								<div class="gift-list-view-comment">%templateCommentFormat%</div>
-								<div class="gift-list-view-anonymous" style="%templateAnonymousStyle%">Anonymous Gift</div>
+								<div class="gift-list-view-anonymous" style="%templateAnonymousStyle%">Anonymous Gift <img src="<?php echo HTTP_MEDIA; ?>/site-image/tooltip-info.png" class="gift-list-tooltip" data-toggle="tooltip" title="IFES will not reveal your identity to the gift recipient. However, IFES will save your contact details and issue you an official receipt."></div>
 							</div>
 							<div class="col-xs-4" style="padding-right: 0; text-align: right;">
 								<div style="padding: 6px 0;"><span class="currency-symbol"><?php echo $formCurrencySymbol; ?></span> <span class="currency-value">%templateAmountFormat%</span></div>
@@ -303,7 +306,7 @@
 						<input type="password" class="form-control" placeholder="Password" id="login-password">
 					</div>
 					<div class="col-xs-12" style="padding: 10px; padding-right: 0;">
-						<a style="font-size: 14px;">Forget your password?</a>
+						<a style="font-size: 14px;" onclick="resetPasswordDialog.open();">Forget your password?</a>
 					</div>
 					<div class="col-xs-12 paddingless">
 						<button type="button" class="btn btn-default btn-ifes" style="margin-right: 15px;" onclick="login();">LOG IN</button>
@@ -403,6 +406,7 @@
 						</div>
 						<div class="col-xs-6" style="padding-left: 5px;">
 							<input type="text" id="gift-cc-input-cvv" name="payment-cc-cvv" class="form-control" placeholder="CVV">
+							<img src="<?php echo HTTP_MEDIA; ?>/site-image/tooltip-info.png" class="gift-cvv-tooltip" data-toggle="tooltip" title="<img src='<?php echo HTTP_MEDIA; ?>/site-image/cvv-tooltip.png' width='140'>">
 						</div>
 						<?php if(!empty($listCreditCards)){ ?>
 						<div class="col-xs-12" style="text-align: right; padding-top: 10px;">
@@ -413,7 +417,7 @@
 				</tr>
 				<tr id="gift-cc-form-process-fee">
 					<td>
-						<label class="checkbox-inline"><input type="checkbox" id="gift-cc-input-process-fee" name="payment-cc-process-fee" onclick="calcGiftList();" <?php if($formPaymentCCProcessFee != ""){echo 'checked';} ?>>I’d like to increase my donation by <span class='currency-symbol'><?php echo $formCurrencySymbol; ?></span> 5.00 to help towards the cost of online transactions.</label>
+						<label class="checkbox-inline"><input type="checkbox" id="gift-cc-input-process-fee" name="payment-cc-process-fee" onclick="calcGiftList();" <?php if($formPaymentCCProcessFee != ""){echo 'checked';} ?>>I’d like to increase my donation by <span class='currency-symbol'><?php echo $formCurrencySymbol; ?></span> 5.00 to help towards the cost of online transactions. <img src="<?php echo HTTP_MEDIA; ?>/site-image/tooltip-info.png" class="gift-list-tooltip" data-toggle="tooltip" title="IFES pays a transaction cost on each donation we receive to cover the cost of processing. By ticking this box you will offset all or nearly all of these costs, allowing IFES to spend more of our income on student ministry. Thank you!"></label>
 					</td>
 				</tr>
 				<tr>
@@ -675,6 +679,11 @@
 		$('#gift-catalog-'+type).show();
 		toggleGiftCatalog(type, 'search');
 		$("#gift-catalog-"+type+"-search").prop("checked", true);
+		if(type == 'offering'){
+			$('#gift-header-blank-space').height(100);
+		}else{
+			$('#gift-header-blank-space').height(500);
+		}
 	}
 
 	function toggleGiftCatalog(type, mode){
@@ -683,7 +692,7 @@
 		$('#gift-catalog-'+type+'-'+mode+'-form').show();
 	}
 
-	function searchGiftCatalog(type){
+	function searchGiftCatalog(type, page){
 		var searchQuery = $('#gift-catalog-'+type+'-search-query').val();
 		if(searchQuery.length >= 3){
 			$('#gift-catalog-'+type+'-search-container').ploading({action: 'show'});
@@ -694,17 +703,31 @@
 				data:{
 					opt: 'search_gift_catalog',
 					type: type,
-					query: searchQuery
+					query: searchQuery,
+					page: page
 				}
 			}).done(function(msg){
 				if(msg.success){
-					$('#gift-catalog-'+type+'-search-label').html('Showing most relevant results for '+searchQuery+' (Total '+msg.total+' results)');
+					var searchStartOf = ((page+1)*50);
+					if(searchStartOf > msg.total_all){
+						searchStartOf = msg.total_all;
+					}
+					var searchHeaderResult = 'Showing most relevant results for '+searchQuery+' ('+searchStartOf+' of '+msg.total_all+' results)';
+					searchHeaderResult += '<div class="gift-list-header-pagination">';
+					if(page > 0){
+						searchHeaderResult += '<a onclick="searchGiftCatalog('+"'"+type+"'"+', '+(page-1)+');">PREVIOUS</a>';
+					}
+					if(((page+1)*50) < msg.total_all){
+						searchHeaderResult += '<a onclick="searchGiftCatalog('+"'"+type+"'"+', '+(page+1)+');">NEXT</a>';
+					}
+					searchHeaderResult += '</div>';
+					$('#gift-catalog-'+type+'-search-label').html(searchHeaderResult);
 					var tmpTemplates = "";
 					var catalogTemplate = $('.gift-catalog-template').html();
 					for(var i=0; i<msg.total; i++){
 						var tmpTemplate = catalogTemplate;
 						tmpTemplate = tmpTemplate.replace(/%templateDescription%/g, msg.result[i].destinationdescription);
-						tmpTemplate = tmpTemplate.replace(/%templateDescriptionLabel%/g, msg.result[i].destinationdescription+' - '+msg.result[i].destinationgroup);
+						tmpTemplate = tmpTemplate.replace(/%templateDescriptionLabel%/g, msg.result[i].destinationdescription+' <span class="gift-catalog-search-desc">'+msg.result[i].destinationgroup+'</span>');
 						tmpTemplate = tmpTemplate.replace(/%templateCode%/g, msg.result[i].destinationcode);
 						tmpTemplate = tmpTemplate.replace(/%templateSearchType%/g, type);
 						tmpTemplates += tmpTemplate;
@@ -732,7 +755,7 @@
 		var objCurrency = $(obj).parent().parent();
 		var giftValue = objCurrency.find('.gift-catalog-currency-value').val();
 		if(giftValue == "" || giftValue <= 0){
-			noty({text: "Please set amount for selected gift.", type: 'error'});
+			noty({text: "Please enter an amount of more than 0 for the selected gift.", type: 'error'});
 			giftObj.focus();
 		}else{
 			if(desc == ""){
@@ -769,6 +792,7 @@
 					noty({text: "Your gift list has been updated.", type: 'information'});
 					rebind();
 					calcGiftList();
+					$('.gift-list-tooltip').tooltip();
 				}
 			}
 		}
@@ -786,6 +810,7 @@
 			$('.gift-list-master').html('There is no any gift in your list yet.');
 		}
 		calcGiftList();
+		$('.gift-list-tooltip').tooltip();
 	}
 
 	function renderGiftLists(index){
@@ -844,7 +869,7 @@
 	function saveGiftList(index){
 		var inputCurrency = $('#gift-list-container-'+index).find('.gift-list-currency-value').val();
 		if(inputCurrency == "" || inputCurrency <= 0){
-			noty({text: "Please set amount for selected gift.", type: 'error'});
+			noty({text: "Please enter an amount of more than 0 for the selected gift.", type: 'error'});
 			return;
 		}else{
 			$('#gift-list-container-'+index).find('.currency-value').html(number_format(inputCurrency, 2, ".", ","));
@@ -885,6 +910,7 @@
 		}
 		calcGiftList();
 		noty({text: "Your gift list has been updated.", type: 'information'});
+		$('.gift-list-tooltip').tooltip();
 	}
 
 	function calcGiftList(){
@@ -923,7 +949,10 @@
 	}
 
 	$(document).ready(function(){
-		toggleGiftCatalogHeader('staff');
+		$('.gift-list-tooltip').tooltip();
+		$('.gift-cvv-tooltip').tooltip({html: 'true'});
+
+		toggleGiftCatalogHeader('ministry');
 		rebind();
 
 		$('.datetimepicker1').datetimepicker({
@@ -954,23 +983,27 @@
 		rebind();
 		calcGiftList();
 		<?php	} ?>
+
+		<?php if(isset($formLoginMode) && $formLoginMode == "1"){ ?>
+		$(document).scrollTop( $("#gift-submit-form").offset().top); 
+     	<?php } ?>
 	});
 
 	$("#gift-catalog-staff-search-query").on('keyup', function (e){
 		if(e.keyCode === 13){
-			searchGiftCatalog('staff');
+			searchGiftCatalog('staff', 0);
 		}
 	});
 
 	$("#gift-catalog-ministry-search-query").on('keyup', function (e){
 		if(e.keyCode === 13){
-			searchGiftCatalog('ministry');
+			searchGiftCatalog('ministry', 0);
 		}
 	});
 
 	$("#gift-catalog-movement-search-query").on('keyup', function (e){
 		if(e.keyCode === 13){
-			searchGiftCatalog('movement');
+			searchGiftCatalog('movement', 0);
 		}
 	});
 
@@ -989,7 +1022,7 @@
 				return false;
 			}
 			if(Number($('#gift-cc-input-expiration').val().substr(0,2)) > 12){
-				noty({text: "Invalid card expiration.", type: 'error'});
+				noty({text: "Invalid card expiration date.", type: 'error'});
 				$('#gift-cc-input-expiration').focus();
 				$('#gift-cc-input-expiration').parent().addClass("has-error");
 				return false;
@@ -1218,6 +1251,7 @@
 			$('#gift-cc-form-select').toggle();
 			$('#gift-cc-form-new').toggle();
 		}
+		$('.gift-cvv-tooltip').tooltip({html: 'true'});
 	}
 
 	function toggleUSPayment(mode, obj){
@@ -1258,5 +1292,60 @@
 			$('#gift-create-account-form-2').hide();
 			$('#gift-payment-save-details').hide();
 		}
+	}
+
+	$('#gift-cc-input-cvv, #gift-echeck-input-acc-no, #gift-echeck-input-route-no').keyup(function(e){
+		if (/\D/g.test(this.value)){
+			// Filter non-digits from input value.
+			this.value = this.value.replace(/\D/g, '');
+		}
+	});
+
+	var resetPasswordDialog = new BootstrapDialog({
+		title: 'Reset IFES Account Password',
+		message: '<form class="form-horizontal" method="post" onsubmit="return false;"><p style="text-align: center;">Forgot your password? Enter your email address below to begin the reset process.</p><hr style="margin: 15px 0;"><div class="row" style="padding-top: 5px;"><div class="form-group"><input type="text" class="form-control" id="reset_email" name="reset_email" placeholder="Email Address"><br></div></div><div class="row"><div class="col-xs-12 text-center"><button type="button" class="btn btn-default" onclick="javascript: resetPassword();">RESET MY PASSWORD</button><br><br></div></div></form>',
+		onshown: function(dlg){
+			$('#reset_email').focus();
+			$('#reset_email').keypress(function(event){
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+				if(keycode == 13){
+					resetPassword();
+				}
+			});
+		}
+	});
+
+	function resetPassword(){
+		if(!bootstrapValidateEmpty("reset_email", "")){
+			noty({text: "Please fill in reset email address.", type: 'error'});
+			return false;
+		}
+		var request = $.ajax({
+			url: HTTP_AJAX,
+			type: 'POST',
+			dataType: 'json',
+			data:{
+				opt: 'send_reset_password',
+				email: $('#reset_email').val()
+			},
+			beforeSend: function(){
+				$.LoadingOverlay("show");
+			}, 
+			complete: function(){
+				$.LoadingOverlay("hide");
+			}
+		}).done(function(msg){
+			if(msg.success){
+				resetPasswordDialog.close();
+				BootstrapDialog.show({
+					title: 'Reset IFES Account Password',
+					message: "We have sent an email to your email address. Click the link in the email to reset your password.<br>If you don't see the email, check other places it might be, like your junk, spam, social, or other folders."
+				});
+			}else{
+				noty({text: msg.message, type: "error"});
+			}
+		}).fail(function(jqXHR, textStatus){
+			noty({text: "Could not connect with server. Please refresh your browser and try again.", type: "error"});
+		});
 	}
 </script>
