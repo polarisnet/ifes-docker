@@ -27,8 +27,8 @@
 			if($isLogin){
 				$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION['username']);
 			}
-			$formCurrencySymbol = "&euro;";
-			$formCurrencyCode = "EUR";
+			$formCurrencySymbol = "&dollar;";
+			$formCurrencyCode = "USD";
 			$formCurrencyToogle = '<ul class="dropdown-menu">';
 			if(REGION == "uk"){
 				$formCurrencySymbol = "&pound;";

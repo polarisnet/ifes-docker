@@ -229,7 +229,7 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	margin: 10px;
 	cursor: pointer;
 }
-.donor-checkbox-subscriptions{
+.donor-checkbox{
 	display: block;
 	vertical-align: middle;
 	padding-left: 20px;
@@ -237,11 +237,11 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	font-size: 14px !important; 
 	color: black !important;
 }
-.donor-checkbox-subscriptions input[type="checkbox"] {
+.donor-checkbox input[type="checkbox"] {
     position: absolute;
     margin-left: -20px;
 }
-.donor-checkbox-language{
+.donor-radio-bold{
 	display: block;
 	vertical-align: middle;
 	padding-left: 20px;
@@ -250,9 +250,27 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	font-size: 16px !important; 
 	color: black !important;
 }
-.donor-checkbox-language input[type="checkbox"] {
+.donor-radio-bold input[type="checkbox"] {
     position: absolute;
     margin-left: -20px;
+}
+.donor-checkbox-inline{
+	display: inline-block;
+	vertical-align: middle;
+	padding-left: 20px;
+	margin-bottom: 0;
+	position: relative;
+	cursor: pointer;
+	font-size: 14px !important; 
+	color: black !important;
+}
+.donor-checkbox-inline input[type="checkbox"] {
+    position: absolute;
+    margin-left: -20px;
+}
+.donor-paragraph-support {
+	font-size: 14px;
+	margin: 0px;
 }
 .container.ifes-content{
 	padding-top: 30px;

@@ -294,19 +294,27 @@
 											<p class="donor-content-subtitle">My Subscriptions</p>
 											<div class="row no-gutters">
 												<div>
-													<label class="donor-checkbox-subscriptions">
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-1" value="praise_prayer" 
 													<?php if(isset($praise_prayer)){echo 'checked';}?> style="margin-top: 4px;">
 													Praise & Prayer: a bimonthly email with Daily Prayer Guide <span style="font-size:10px">(English only)</span></label>
-													<label class="donor-checkbox-subscriptions">
+													<div style="margin-left:30px;margin-bottom:10px;">
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-prayer-email" id="donor-support-email" value="1"> email
+														</label>
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-prayer-post" id="donor-support-post" value="1"> post
+														</label>
+													</div>
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-2" value="prayerline" 
 													<?php if(isset($prayerline)){echo 'checked';}?> style="margin-top: 4px;">
 													Prayerline: a weekly email snapshot of the IFES world to inspire your prayers</label>
-													<label class="donor-checkbox-subscriptions">
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-3" value="conexion" 
 													<?php if(isset($conexion)){echo 'checked';}?> style="margin-top: 4px;">
 													Conexión: a monthly online magazine connecting the IFES World</label>
-													<label class="donor-checkbox-subscriptions">
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-4" value="voix" 
 													<?php if(isset($voix)){echo 'checked';}?> style="margin-top: 4px;">
 													Voix: a weekly blog, by students and for students</label>
@@ -314,11 +322,24 @@
 											</div>
 											<?php  if(REGION == 'uk'){ // START REGION == 'uk' ?>
 												<div class="row no-gutters">
-													<p style="font-size:14px;">I would like to received:</p>
-													<label class="donor-checkbox-support">
-													<input type="checkbox" name="supportPrime" id="donor-support-prime" value="1" 
+													<div style="padding:2.5px;"></div>
+													<p class="donor-paragraph-support">I would like to received:</p>
+													<div style="padding:5px;"></div>
+													<label class="donor-checkbox">
+													<input type="checkbox" name="donor-support-prime" id="donor-support-prime" value="1" 
 													<?php if(isset($supportPrime)){echo 'checked';}?> style="margin-top: 4px;">
 													Updates and oppurtunities to support IFES ministries</label>
+													<div style="margin-left:30px;">
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-support-email" id="donor-support-email" value="1"> email
+														</label>
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-support-post" id="donor-support-post" value="1"> post
+														</label>
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-support-phone" id="donor-support-phone" value="1"> phone
+														</label>
+													</div>
 												</div>
 											<?php } // END REGION == 'uk'?>
 										</div>
@@ -326,15 +347,15 @@
 											<p class="donor-content-subtitle">Preferred Language</p>
 											<div>
 												<div class="radio">
-													<label class="donor-checkbox-language" ><input type="radio" name="radio-language" id="donor-language-english" value="english" 
+													<label class="donor-radio-bold" ><input type="radio" name="radio-language" id="donor-language-english" value="english" 
 													<?php if($formLanguage == 'english'){echo 'checked';}?> style="margin-top: 4px;">English</label>
 												</div>
 												<div class="radio">
-													<label class="donor-checkbox-language" ><input type="radio" name="radio-language" id="donor-language-france" value="france" 
+													<label class="donor-radio-bold" ><input type="radio" name="radio-language" id="donor-language-france" value="france" 
 													<?php if($formLanguage == 'france'){echo 'checked';}?> style="margin-top: 4px;">Français</label>
 												</div>
 												<div class="radio">
-													<label class="donor-checkbox-language" ><input type="radio" name="radio-language" id="donor-language-spanish" value="spanish" 
+													<label class="donor-radio-bold" ><input type="radio" name="radio-language" id="donor-language-spanish" value="spanish" 
 													<?php if($formLanguage == 'spanish'){echo 'checked';}?> style="margin-top: 4px;">Español</label>
 												</div>
 											</div>
@@ -966,7 +987,7 @@
 			givingGrid.ajax.reload();
 		});
 		
-		toggleDonorProfileHeader('giving'); //dashboard, settings, giving
+		toggleDonorProfileHeader('settings'); //dashboard, settings, giving
 		toggleTelephoneInput('mobile');
 	});
 	

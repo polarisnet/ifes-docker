@@ -25,8 +25,8 @@
 			$userData = $objUser->getUserData($_SESSION['user_id']);
 			$listCountries = $objDonor->listCountries();
 			
-			$formCurrencySymbol = "&euro;";
-			$formCurrencyCode = "EUR";
+			$formCurrencySymbol = "&dollar;";
+			$formCurrencyCode = "USD";
 			$formCurrencyToogle = '<ul class="dropdown-menu">';
 			if(REGION == "uk"){
 				$formCurrencySymbol = "&pound;";
@@ -66,7 +66,7 @@
 			$formNameFirst = $userData['first_name'];
 			$formNameLast = $userData['last_name'];
 			$donorName = $formNameFirst." ".$formNameLast;
-			$donorAccountNumbers = $userData['uid'];
+			$donorAccountNumbers = "-";
 			
 			$formAddress1 = $userData['mailing_address1'];
 			$formAddress2 = $userData['mailing_address2'];
@@ -76,7 +76,7 @@
 			$formCountryISO = $userData['mailing_country'];
 			
 			$key = array_search($formCountryISO, array_column($listCountries, 'iso'));
-			$formCountry = $listCountries[$key][name];
+			$formCountry = $listCountries[$key]['name'];
 			
 			$formTelephoneMobile = $userData['phone'];
 			$formTelephoneDaytime = $userData['phone_day'];
@@ -246,6 +246,8 @@
 					$newData['mailing_email'] 			= $formEmail;
 					$newData['email'] 					= $formEmail;
 					$newData['phone'] 					= $formTelephoneMobile;
+					$newData['mailing_phone'] 			= $formTelephoneMobile;
+					$newData['billing_phone'] 			= $formTelephoneMobile;
 					$newData['phone_day'] 				= $formTelephoneDaytime;
 					$newData['phone_night'] 			= $formTelephoneEvening;
 					$newData['modified_by'] 			= $_SESSION['user_id'];

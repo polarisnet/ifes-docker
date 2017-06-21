@@ -24,13 +24,13 @@
 		}
 		
 		function getFirstDateByUserID($id){
-			$output = array();
+			$output = "";
 			$sql = "SELECT `created_date` FROM `donations` WHERE `user_id`='".$id."' ORDER BY `created_date` ASC LIMIT 1 ";
 			$this->db->query($sql);
 			if($this->db->nextRecord()){
-				$output = $this->db->getRecord();
+				$result = $this->db->getRecord();
 			}
-			$output = date("d M Y", strtotime($output['created_date']));
+			$output = date("d M Y", strtotime($result['created_date']));
 			return $output;
 		}
 		

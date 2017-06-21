@@ -1,5 +1,5 @@
 <?php
-	define('HTTP_ROOT', '/ifes-docker/code');
+	define('HTTP_ROOT', ''); ///ifes-docker/code
 	define('HTTP_VERSION', '1');
 	define('SITE_NAME', 'IFES');
 	define('PUBLIC_SALT', 'JL2Y7nKpaimZjN');
