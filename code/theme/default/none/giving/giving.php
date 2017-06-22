@@ -1,6 +1,3 @@
-<style>
-	
-</style>
 <div id="myCarousel" class="carousel slide hidden-xs" data-ride="carousel">
 	<ol class="carousel-indicators">
 		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -44,6 +41,48 @@
 <div class="container gift-center-link">
 	<a>LEGACY GIVING</a> | <a>NON-CASH GIFTS</a> | <a>GIVE BY PHONE OR MAIL</a> | <a>FAQ</a> | <a>PAYMENT PAGE</a> | <a>HELP</a>
 </div>
+<?php if(REGION == "ca"){ ?>
+<form id="gift-submit-form" role="form" method="post" onsubmit="return validateForm();">
+	<div class="container">
+		<table class="gift-catalog-table gift-canada">
+			<tr>
+				<td style="padding: 20px; text-align: center;">
+					<span style="font-weight: bold;">Are you a resident of Canada? Do you need a tax receipt?</span>
+					<br><br>
+					<p style="text-align: justify; padding: 0 90px;">Gifts may be made to IFES ministry and staff throughout the world by giving through our member movement in Canada, <a href="https://www.ivcf.ca/">Inter-Varsity Christian Fellowship of Canada</a>. You can donate by mail, electronic funds transfer or using your credit card.</p>
+					<p style="text-align: justify; padding: 0 90px;">Inter-Varsity does not charge any overheads and are able to issue tax receipts where appropriate.</p>
+					<br><br>
+					Make your gift via Inter-Varsity Canada:
+					<br><br>
+					<button type="button" class="btn btn-default btn-ifes" onclick="window.location = 'https://www.ivcf.ca/donate/home';">IVCF.CA/DONATE</button>
+					<br><br>
+					Not a Canadian resident?
+					<br><br>
+					<div style="width: 250px; margin: auto;">
+						<select id="canada-select-region" name="canada-select-region" class="selectpicker" data-size="8" placeholder="I live/pay tax in...">
+							<option value="" data-hidden="true">I live/pay tax in...</option>
+							<option value="uk">UK</option>
+							<option value="us">USA</option>
+							<option value="row">ROW</option>
+						</select>
+					</div>
+					<br>
+					<button type="button" class="btn btn-default btn-ifes" onclick="$('#gift-submit-form').submit();">CONTINUE</button>
+				</td>
+			</tr>
+		</table>
+		<br><br>
+	</div>
+</form>
+<script type="text/javascript">
+	function validateForm(){
+		if($('#canada-select-region').val() == ''){
+			noty({text: "Please select a region where you are reside in.", type: 'error'});
+			return false;
+		}
+	}
+</script>
+<?php }else{ ?>
 <div class="container">
 	<br>
 	<p class="gift-title">IFES Gift Catalog</p>
@@ -174,7 +213,7 @@
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;">
 								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true" data-size="8" placeholder="The event I’m attending">
-									<option data-hidden="true">The event I’m attending</option>
+									<option value="" data-hidden="true">The event I’m attending</option>
 									<?php foreach($listOfferingEvents AS $eventData){ ?>
 									<option data-subtext="<?php echo $eventData['sourcecode']; ?>" value="<?php echo $eventData['sourcecode']; ?>"><?php echo $eventData['sourcedescription']; ?></option>
 									<?php } ?>
@@ -1350,3 +1389,4 @@
 		});
 	}
 </script>
+<?php } ?>

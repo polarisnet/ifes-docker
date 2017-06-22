@@ -313,6 +313,23 @@
 
 			$formGiftLists = array();
 			if(!empty($_POST)){
+				if(REGION == 'ca'){
+					$changeRegion = checkParam('canada-select-region');
+					if($changeRegion == ""){
+						$error['content'] = "Please select a region where you are reside in.";
+					}else{
+						$newUserData = array();
+						$newUserData['id'] = $_SESSION['user_id'];
+						$newUserData['region'] = $changeRegion;
+						$newUserData['modified_by'] = $_SESSION['user_id'];
+						$newUserData['modified_date'] = date("Y-m-d H:i:s");
+						$GLOBALS['myDB']->update('sys_users', $newUserData, "`id`='".$newUserData['id']."'");
+						header('Location: '.getModuleURL('giving'));
+						exit;
+					}
+					break;
+				}
+
 				$formLoginMode = checkParam('login-mode');
 
 				$formCurrencyCode = checkParam('submit-currency-code');
