@@ -304,6 +304,10 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	font-size: 12px;
 	font-style: italic;
 }
+.gift-catalog-title{
+	font-style: italic;
+	font-weight: bold;
+}
 .gift-list-table{
 	background-color: #ebebeb; width: 100%; font-family: 'Muli', Helvetica; font-size: 16px;
 }

@@ -64,9 +64,9 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-ministry-manual" name="radio-gift-catalog-ministry" onclick="toggleGiftCatalog('ministry', 'manual');">Enter an IFES Ministry</label>
 					<br><br>
 					<div id="gift-catalog-ministry-search-form" style="display: none;">
-						Your support will strengthen a specific ministry to students and national movements worldwide.
+						<span class="gift-catalog-title">Your partnership with IFES ministry shapes lives and develops Christian leaders who engage the university and impact the world.</span>
 						<div class="input-group" style="margin-top: 10px;">
-							<input type="text" id="gift-catalog-ministry-search-query" class="form-control" placeholder="Search for IFES ministry">
+							<input type="text" id="gift-catalog-ministry-search-query" class="form-control" placeholder="Search IFES programs and events">
 							<span class="input-group-btn">
 								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('ministry', 0);">SEARCH</button>
 							</span>
@@ -77,7 +77,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-ministry-manual-form" style="display: none;">
-						IFES ministry in sensitive locations may not appear in list. If the ministry is not listed please enter their name in the form below.
+						<span class="gift-catalog-title">Ministry program or event may not appear in search due to security or technical reasons. If desired designation is not listed, please enter name in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input type="text" id="gift-catalog-search-ministry-manual-input" class="form-control" placeholder="Enter ministry name"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -99,9 +99,9 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-staff-manual" name="radio-gift-catalog-staff" onclick="toggleGiftCatalog('staff', 'manual');">Enter Staff Name</label>
 					<br><br>
 					<div id="gift-catalog-staff-search-form" style="display: none;">
-						Your commitment to staff allows them to focus on their ministry and serving students.
+						<span class="gift-catalog-title">Your commitment to staff allows them to focus on serving students through their ministry.</span>
 						<div class="input-group" style="margin-top: 10px;">
-							<input type="text" id="gift-catalog-staff-search-query" class="form-control" placeholder="Search for staff by name and countyr or ministry">
+							<input type="text" id="gift-catalog-staff-search-query" class="form-control" placeholder="Staff name and country or ministry">
 							<span class="input-group-btn">
 								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('staff', 0);">SEARCH</button>
 							</span>
@@ -112,7 +112,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-staff-manual-form" style="display: none;">
-						Staff in sensitive locations may not appear in list. If the staff is not listed please enter their name and country of service in the form below.
+						<span class="gift-catalog-title">Staff in sensitive locations may not appear in search. If the staff is not listed, please enter their name and country of service in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input type="text" id="gift-catalog-search-manual-input" class="form-control" placeholder="Enter staff name"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -134,9 +134,9 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-movement-manual" name="radio-gift-catalog-movement" onclick="toggleGiftCatalog('movement', 'manual');">Enter a National Movement</label>
 					<br><br>
 					<div id="gift-catalog-movement-search-form" style="display: none;">
-						Your gift will equip students to share and live out the good news of Jesus Christ in their own culture and context.
+						<span class="gift-catalog-title">Your gift will equip students to share and live out the good news of Jesus Christ in their own culture and context.</span>
 						<div class="input-group" style="margin-top: 10px;">
-							<input type="text" id="gift-catalog-movement-search-query" class="form-control" placeholder="Search for a national movement">
+							<input type="text" id="gift-catalog-movement-search-query" class="form-control" placeholder="Student Ministry in...">
 							<span class="input-group-btn">
 								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('movement', 0);">SEARCH</button>
 							</span>
@@ -147,7 +147,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-movement-manual-form" style="display: none;">
-						Some national movement may not appear in list. If the national movement is not listed please enter in the form below.
+						<span class="gift-catalog-title">Sensitive countries may not appear in search. If national movement is not listed, please enter its name in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input type="text" id="gift-catalog-search-movement-manual-input" class="form-control" placeholder="Enter national movement"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -170,10 +170,11 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-offering-manual" name="radio-gift-catalog-offering" onclick="toggleGiftCatalog('offering', 'manual');">Enter an Offering</label>
 					<br><br>
 					<div id="gift-catalog-offering-search-form" style="display: none;">
-						Select the event you’re attending from the dropdown menu
+						<span class="gift-catalog-title">Select the event you’re attending from the dropdown menu.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;">
-								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true" data-size="8">
+								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true" data-size="8" placeholder="The event I’m attending">
+									<option data-hidden="true">The event I’m attending</option>
 									<?php foreach($listOfferingEvents AS $eventData){ ?>
 									<option data-subtext="<?php echo $eventData['sourcecode']; ?>" value="<?php echo $eventData['sourcecode']; ?>"><?php echo $eventData['sourcedescription']; ?></option>
 									<?php } ?>
@@ -193,7 +194,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-offering-manual-form" style="display: none;">
-						Can’t find your event? Please enter the name of the event you’re attending or the gift designation in the field below.
+						<span class="gift-catalog-title">Can’t find your event? Please enter the name of the event you’re attending or the gift designation in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input id="gift-catalog-offering-manual-input" type="text" class="form-control" placeholder="Enter event or designation name"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
