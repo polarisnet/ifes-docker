@@ -45,6 +45,16 @@
 			return $output;
 		}
 
+		function listCustomBanner(){
+			$output = array();
+			$sql = "SELECT * FROM `banner_custom` ORDER BY item_order ASC";
+			$this->db->query($sql);
+			while($this->db->nextRecord()){
+				array_push($output, $this->db->getRecord());
+			}
+			return $output;
+		}
+
 		function getDonorAccountData($username){
 			$output = array();
 			$sql = "SELECT * FROM `sys_users` WHERE `username`='$username'";

@@ -135,6 +135,7 @@
 				exit;
 			}
 
+			$listCustomBanner = $objGiving->listCustomBanner();
 			$listOfferingEvents = $objThankQPDO->listOfferingEvents();
 			$listCreditCards = array();
 			if($isLogin){

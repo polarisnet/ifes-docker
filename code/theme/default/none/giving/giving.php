@@ -1,43 +1,64 @@
-<div id="myCarousel" class="carousel slide hidden-xs" data-ride="carousel">
-	<ol class="carousel-indicators">
-		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-		<li data-target="#myCarousel" data-slide-to="1"></li>
-		<li data-target="#myCarousel" data-slide-to="2"></li>
-	</ol>
-	<div class="carousel-inner" role="listbox">
-		<div class="item active">
-			<img src="<?php echo HTTP_MEDIA;?>/site-image/banner/ifes-banner-1.jpg">
-		</div>
-		<div class="item">
-			<img src="<?php echo HTTP_MEDIA;?>/site-image/banner/ifes-banner-2.jpg">
-		</div>
-		<div class="item">
-			<img src="<?php echo HTTP_MEDIA;?>/site-image/banner/ifes-banner-3.jpeg">
-		</div>
-	</div>
-</div>
-<div class="container paddingless hidden-xs">
-	<div class="col-xs-12 col-md-6">
-		<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png';?>" width="131" style="margin-top: -1px; margin-bottom: 28px;">
-		<p class="page-title">GIVING PAGE</p>
-		<p class="page-title-content">Donate towards the various ministries and work of IFES worldwide.<br>To make a non-donation payment, please visit our Payment Page.</p>
-	</div>
-	<div class="col-xs-12 col-md-6" style="position: relative;">
-		<div class="gift-upper-box">
-			<p class="page-title-content">AFRICA STAFF TRAINING INSTITUTES</p>
-			<p class="page-title-content"><br><a>Learn more</a> about encouraging<br>and equiping staff in Africa.<br><br></p>
-			<div class="input-group currency-box">
-				<span class="input-group-addon currency-symbol"><?php echo $formCurrencySymbol; ?></span>
-				<input type="number" min="0" class="form-control gift-catalog-currency-value" aria-label="..." placeholder="0.00">
-				<div class="input-group-btn">
-					<button type="button" class="btn btn-default dropdown-toggle currency-code" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $formCurrencyCode; ?> <span class="caret"></span></button>
-					<?php echo $formCurrencyToogle; ?>
-					<button type="button" class="btn btn-default btn-ifes" onclick="addGift(this, 'staff', 'search', 'AFRICA STAFF TRAINING INSTITUTES', '');">ADD GIFT</button>
+<div class="custom-ferdie-carousel">
+	<?php foreach($listCustomBanner AS $bannerData){ ?>
+	<div class="form-container" style="background-image: url('<?php echo HTTP_MEDIA.'/site-image/custom-banner'.$bannerData['image'];?>'); background-size: cover;">
+		<div class="container" style="position: relative;">
+			<div class="page-title-content" style="position: relative; top: 230px;"><?php echo $bannerData['page_title']; ?></div>
+			<div class="gift-upper-box">
+				<p class="page-title-content"><?php echo $bannerData['box_title']; ?></p>
+				<p class="page-title-content"><?php echo $bannerData['box_title_1']; ?></p>
+				<div class="input-group currency-box">
+					<span class="input-group-addon currency-symbol"><?php echo $formCurrencySymbol; ?></span>
+					<input type="number" min="0" class="form-control gift-custom-banner-currency gift-catalog-currency-value" aria-label="..." placeholder="0.00" onfocus="flagTimerFerdieCarousel = false;" onblur="flagTimerFerdieCarousel = true;">
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-default dropdown-toggle currency-code" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $formCurrencyCode; ?> <span class="caret"></span></button>
+						<?php echo $formCurrencyToogle; ?>
+						<button type="button" class="btn btn-default btn-ifes" style="z-index: 99;" onclick='addGift(this, "<?php echo $bannerData['box_type']; ?>", "search", "<?php echo $bannerData['box_item_description']; ?>", "<?php echo $bannerData['box_item_code']; ?>");'>ADD GIFT</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<?php } ?>
 </div>
+<div class="container" style="position: relative; top: -60px; margin-top: -220px;">
+	<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png';?>" width="131" style="margin-bottom: 15px;">
+	<p class="page-title">GIVING PAGE</p>
+</div>
+<script type="text/javascript">
+	var flagFerdieCarousel = 0;
+	var flagTimerFerdieCarousel = true;
+	var flagTimerFerdieCarouselIncrement = 0;
+	function slideFerdieCarousel(){
+		if(flagFerdieCarousel <= $('.custom-ferdie-carousel .form-container').length - 2){
+			$('.custom-ferdie-carousel .form-container').each(function(index){
+				$(this).animate({
+					top: "-="+$('.custom-ferdie-carousel').height()
+				})
+			});
+			flagFerdieCarousel++;
+		}else{
+			$('.custom-ferdie-carousel .form-container').each(function(index){
+				$(this).animate({
+					top: 0
+				})
+			});
+			flagFerdieCarousel = 0;
+		}
+	}
+	function timerFerdieCarousel(){
+		if(flagTimerFerdieCarousel){
+			if(flagTimerFerdieCarouselIncrement >= 6){
+				slideFerdieCarousel();
+				flagTimerFerdieCarouselIncrement = 0;
+			}else{
+				flagTimerFerdieCarouselIncrement ++;
+			}
+		}
+	}
+	$(document).ready(function(){
+		window.setInterval(timerFerdieCarousel, 1000);
+	});
+</script>
 <div class="container gift-center-link">
 	<a>LEGACY GIVING</a> | <a>NON-CASH GIFTS</a> | <a>GIVE BY PHONE OR MAIL</a> | <a>FAQ</a> | <a>PAYMENT PAGE</a> | <a>HELP</a>
 </div>
@@ -796,7 +817,7 @@
 		var giftValue = objCurrency.find('.gift-catalog-currency-value').val();
 		if(giftValue == "" || giftValue <= 0){
 			noty({text: "Please enter an amount of more than 0 for the selected gift.", type: 'error'});
-			giftObj.focus();
+			obj.focus();
 		}else{
 			if(desc == ""){
 				noty({text: "Please set a description for selected gift.", type: 'error'});

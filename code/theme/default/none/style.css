@@ -444,6 +444,15 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	color: #000000;
 	text-decoration: underline;
 }
+.custom-ferdie-carousel{
+	background-color: #ffffff; height: 300px; width: 100%; position: relative; overflow: hidden;
+}
+.custom-ferdie-carousel .form-container{
+	height: 100%; width: 100%; display: inline-block; position: relative;
+}
+.custom-ferdie-carousel .gift-upper-box{
+	top: 20px;
+	}
 /*** Giving Page - End ***/
 
 .btn-search{
