@@ -304,6 +304,10 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	font-size: 12px;
 	font-style: italic;
 }
+.gift-catalog-title{
+	font-style: italic;
+	font-weight: bold;
+}
 .gift-list-table{
 	background-color: #ebebeb; width: 100%; font-family: 'Muli', Helvetica; font-size: 16px;
 }
@@ -436,6 +440,19 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 .currency-box .btn-ifes{
 	margin-left: 10px !important;
 }
+.gift-canada p a{
+	color: #000000;
+	text-decoration: underline;
+}
+.custom-ferdie-carousel{
+	background-color: #ffffff; height: 300px; width: 100%; position: relative; overflow: hidden;
+}
+.custom-ferdie-carousel .form-container{
+	height: 100%; width: 100%; display: inline-block; position: relative;
+}
+.custom-ferdie-carousel .gift-upper-box{
+	top: 20px;
+	}
 /*** Giving Page - End ***/
 
 .btn-search{

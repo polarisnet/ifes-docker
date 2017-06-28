@@ -1,49 +1,109 @@
-<style>
-	
-</style>
-<div id="myCarousel" class="carousel slide hidden-xs" data-ride="carousel">
-	<ol class="carousel-indicators">
-		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-		<li data-target="#myCarousel" data-slide-to="1"></li>
-		<li data-target="#myCarousel" data-slide-to="2"></li>
-	</ol>
-	<div class="carousel-inner" role="listbox">
-		<div class="item active">
-			<img src="<?php echo HTTP_MEDIA;?>/site-image/banner/ifes-banner-1.jpg">
-		</div>
-		<div class="item">
-			<img src="<?php echo HTTP_MEDIA;?>/site-image/banner/ifes-banner-2.jpg">
-		</div>
-		<div class="item">
-			<img src="<?php echo HTTP_MEDIA;?>/site-image/banner/ifes-banner-3.jpeg">
-		</div>
-	</div>
-</div>
-<div class="container paddingless hidden-xs">
-	<div class="col-xs-12 col-md-6">
-		<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png';?>" width="131" style="margin-top: -1px; margin-bottom: 28px;">
-		<p class="page-title">GIVING PAGE</p>
-		<p class="page-title-content">Donate towards the various ministries and work of IFES worldwide.<br>To make a non-donation payment, please visit our Payment Page.</p>
-	</div>
-	<div class="col-xs-12 col-md-6" style="position: relative;">
-		<div class="gift-upper-box">
-			<p class="page-title-content">AFRICA STAFF TRAINING INSTITUTES</p>
-			<p class="page-title-content"><br><a>Learn more</a> about encouraging<br>and equiping staff in Africa.<br><br></p>
-			<div class="input-group currency-box">
-				<span class="input-group-addon currency-symbol"><?php echo $formCurrencySymbol; ?></span>
-				<input type="number" min="0" class="form-control gift-catalog-currency-value" aria-label="..." placeholder="0.00">
-				<div class="input-group-btn">
-					<button type="button" class="btn btn-default dropdown-toggle currency-code" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $formCurrencyCode; ?> <span class="caret"></span></button>
-					<?php echo $formCurrencyToogle; ?>
-					<button type="button" class="btn btn-default btn-ifes" onclick="addGift(this, 'staff', 'search', 'AFRICA STAFF TRAINING INSTITUTES', '');">ADD GIFT</button>
+<div class="custom-ferdie-carousel">
+	<?php foreach($listCustomBanner AS $bannerData){ ?>
+	<div class="form-container" style="background-image: url('<?php echo HTTP_MEDIA.'/site-image/custom-banner'.$bannerData['image'];?>'); background-size: cover;">
+		<div class="container" style="position: relative;">
+			<div class="page-title-content" style="position: relative; top: 230px;"><?php echo $bannerData['page_title']; ?></div>
+			<div class="gift-upper-box">
+				<p class="page-title-content"><?php echo $bannerData['box_title']; ?></p>
+				<p class="page-title-content"><?php echo $bannerData['box_title_1']; ?></p>
+				<div class="input-group currency-box">
+					<span class="input-group-addon currency-symbol"><?php echo $formCurrencySymbol; ?></span>
+					<input type="number" min="0" class="form-control gift-custom-banner-currency gift-catalog-currency-value" aria-label="..." placeholder="0.00" onfocus="flagTimerFerdieCarousel = false;" onblur="flagTimerFerdieCarousel = true;">
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-default dropdown-toggle currency-code" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $formCurrencyCode; ?> <span class="caret"></span></button>
+						<?php echo $formCurrencyToogle; ?>
+						<button type="button" class="btn btn-default btn-ifes" style="z-index: 99;" onclick='addGift(this, "<?php echo $bannerData['box_type']; ?>", "search", "<?php echo $bannerData['box_item_description']; ?>", "<?php echo $bannerData['box_item_code']; ?>");'>ADD GIFT</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<?php } ?>
 </div>
+<div class="container" style="position: relative; top: -60px; margin-top: -220px;">
+	<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png';?>" width="131" style="margin-bottom: 15px;">
+	<p class="page-title">GIVING PAGE</p>
+</div>
+<script type="text/javascript">
+	var flagFerdieCarousel = 0;
+	var flagTimerFerdieCarousel = true;
+	var flagTimerFerdieCarouselIncrement = 0;
+	function slideFerdieCarousel(){
+		if(flagFerdieCarousel <= $('.custom-ferdie-carousel .form-container').length - 2){
+			$('.custom-ferdie-carousel .form-container').each(function(index){
+				$(this).animate({
+					top: "-="+$('.custom-ferdie-carousel').height()
+				})
+			});
+			flagFerdieCarousel++;
+		}else{
+			$('.custom-ferdie-carousel .form-container').each(function(index){
+				$(this).animate({
+					top: 0
+				})
+			});
+			flagFerdieCarousel = 0;
+		}
+	}
+	function timerFerdieCarousel(){
+		if(flagTimerFerdieCarousel){
+			if(flagTimerFerdieCarouselIncrement >= 6){
+				slideFerdieCarousel();
+				flagTimerFerdieCarouselIncrement = 0;
+			}else{
+				flagTimerFerdieCarouselIncrement ++;
+			}
+		}
+	}
+	$(document).ready(function(){
+		window.setInterval(timerFerdieCarousel, 1000);
+	});
+</script>
 <div class="container gift-center-link">
 	<a>LEGACY GIVING</a> | <a>NON-CASH GIFTS</a> | <a>GIVE BY PHONE OR MAIL</a> | <a>FAQ</a> | <a>PAYMENT PAGE</a> | <a>HELP</a>
 </div>
+<?php if(REGION == "ca"){ ?>
+<form id="gift-submit-form" role="form" method="post" onsubmit="return validateForm();">
+	<div class="container">
+		<table class="gift-catalog-table gift-canada">
+			<tr>
+				<td style="padding: 20px; text-align: center;">
+					<span style="font-weight: bold;">Are you a resident of Canada? Do you need a tax receipt?</span>
+					<br><br>
+					<p style="text-align: justify; padding: 0 90px;">Gifts may be made to IFES ministry and staff throughout the world by giving through our member movement in Canada, <a href="https://www.ivcf.ca/">Inter-Varsity Christian Fellowship of Canada</a>. You can donate by mail, electronic funds transfer or using your credit card.</p>
+					<p style="text-align: justify; padding: 0 90px;">Inter-Varsity does not charge any overheads and are able to issue tax receipts where appropriate.</p>
+					<br><br>
+					Make your gift via Inter-Varsity Canada:
+					<br><br>
+					<button type="button" class="btn btn-default btn-ifes" onclick="window.location = 'https://www.ivcf.ca/donate/home';">IVCF.CA/DONATE</button>
+					<br><br>
+					Not a Canadian resident?
+					<br><br>
+					<div style="width: 250px; margin: auto;">
+						<select id="canada-select-region" name="canada-select-region" class="selectpicker" data-size="8" placeholder="I live/pay tax in...">
+							<option value="" data-hidden="true">I live/pay tax in...</option>
+							<option value="uk">UK</option>
+							<option value="us">USA</option>
+							<option value="row">ROW</option>
+						</select>
+					</div>
+					<br>
+					<button type="button" class="btn btn-default btn-ifes" onclick="$('#gift-submit-form').submit();">CONTINUE</button>
+				</td>
+			</tr>
+		</table>
+		<br><br>
+	</div>
+</form>
+<script type="text/javascript">
+	function validateForm(){
+		if($('#canada-select-region').val() == ''){
+			noty({text: "Please select a region where you are reside in.", type: 'error'});
+			return false;
+		}
+	}
+</script>
+<?php }else{ ?>
 <div class="container">
 	<br>
 	<p class="gift-title">IFES Gift Catalog</p>
@@ -64,9 +124,9 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-ministry-manual" name="radio-gift-catalog-ministry" onclick="toggleGiftCatalog('ministry', 'manual');">Enter an IFES Ministry</label>
 					<br><br>
 					<div id="gift-catalog-ministry-search-form" style="display: none;">
-						Your support will strengthen a specific ministry to students and national movements worldwide.
+						<span class="gift-catalog-title">Your partnership with IFES ministry shapes lives and develops Christian leaders who engage the university and impact the world.</span>
 						<div class="input-group" style="margin-top: 10px;">
-							<input type="text" id="gift-catalog-ministry-search-query" class="form-control" placeholder="Search for IFES ministry">
+							<input type="text" id="gift-catalog-ministry-search-query" class="form-control" placeholder="Search IFES programs and events">
 							<span class="input-group-btn">
 								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('ministry', 0);">SEARCH</button>
 							</span>
@@ -77,7 +137,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-ministry-manual-form" style="display: none;">
-						IFES ministry in sensitive locations may not appear in list. If the ministry is not listed please enter their name in the form below.
+						<span class="gift-catalog-title">Ministry program or event may not appear in search due to security or technical reasons. If desired designation is not listed, please enter name in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input type="text" id="gift-catalog-search-ministry-manual-input" class="form-control" placeholder="Enter ministry name"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -99,9 +159,9 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-staff-manual" name="radio-gift-catalog-staff" onclick="toggleGiftCatalog('staff', 'manual');">Enter Staff Name</label>
 					<br><br>
 					<div id="gift-catalog-staff-search-form" style="display: none;">
-						Your commitment to staff allows them to focus on their ministry and serving students.
+						<span class="gift-catalog-title">Your commitment to staff allows them to focus on serving students through their ministry.</span>
 						<div class="input-group" style="margin-top: 10px;">
-							<input type="text" id="gift-catalog-staff-search-query" class="form-control" placeholder="Search for staff by name and countyr or ministry">
+							<input type="text" id="gift-catalog-staff-search-query" class="form-control" placeholder="Staff name and country or ministry">
 							<span class="input-group-btn">
 								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('staff', 0);">SEARCH</button>
 							</span>
@@ -112,7 +172,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-staff-manual-form" style="display: none;">
-						Staff in sensitive locations may not appear in list. If the staff is not listed please enter their name and country of service in the form below.
+						<span class="gift-catalog-title">Staff in sensitive locations may not appear in search. If the staff is not listed, please enter their name and country of service in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input type="text" id="gift-catalog-search-manual-input" class="form-control" placeholder="Enter staff name"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -134,9 +194,9 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-movement-manual" name="radio-gift-catalog-movement" onclick="toggleGiftCatalog('movement', 'manual');">Enter a National Movement</label>
 					<br><br>
 					<div id="gift-catalog-movement-search-form" style="display: none;">
-						Your gift will equip students to share and live out the good news of Jesus Christ in their own culture and context.
+						<span class="gift-catalog-title">Your gift will equip students to share and live out the good news of Jesus Christ in their own culture and context.</span>
 						<div class="input-group" style="margin-top: 10px;">
-							<input type="text" id="gift-catalog-movement-search-query" class="form-control" placeholder="Search for a national movement">
+							<input type="text" id="gift-catalog-movement-search-query" class="form-control" placeholder="Student Ministry in...">
 							<span class="input-group-btn">
 								<button class="btn btn-default btn-search" type="button" onclick="searchGiftCatalog('movement', 0);">SEARCH</button>
 							</span>
@@ -147,7 +207,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-movement-manual-form" style="display: none;">
-						Some national movement may not appear in list. If the national movement is not listed please enter in the form below.
+						<span class="gift-catalog-title">Sensitive countries may not appear in search. If national movement is not listed, please enter its name in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input type="text" id="gift-catalog-search-movement-manual-input" class="form-control" placeholder="Enter national movement"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -170,10 +230,11 @@
 					<label class="radio-inline"><input type="radio" id="gift-catalog-offering-manual" name="radio-gift-catalog-offering" onclick="toggleGiftCatalog('offering', 'manual');">Enter an Offering</label>
 					<br><br>
 					<div id="gift-catalog-offering-search-form" style="display: none;">
-						Select the event you’re attending from the dropdown menu
+						<span class="gift-catalog-title">Select the event you’re attending from the dropdown menu.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;">
-								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true" data-size="8">
+								<select id="gift-catalog-offering-select" class="selectpicker" data-live-search="true" data-size="8" placeholder="The event I’m attending">
+									<option value="" data-hidden="true">The event I’m attending</option>
 									<?php foreach($listOfferingEvents AS $eventData){ ?>
 									<option data-subtext="<?php echo $eventData['sourcecode']; ?>" value="<?php echo $eventData['sourcecode']; ?>"><?php echo $eventData['sourcedescription']; ?></option>
 									<?php } ?>
@@ -193,7 +254,7 @@
 						</div>
 					</div>
 					<div id="gift-catalog-offering-manual-form" style="display: none;">
-						Can’t find your event? Please enter the name of the event you’re attending or the gift designation in the field below.
+						<span class="gift-catalog-title">Can’t find your event? Please enter the name of the event you’re attending or the gift designation in the field below.</span>
 						<div style="margin-top: 10px;">
 							<div class="col-xs-8" style="padding-left: 0;"><input id="gift-catalog-offering-manual-input" type="text" class="form-control" placeholder="Enter event or designation name"></div>
 							<div class="col-xs-4" style="padding-right: 0;">
@@ -756,7 +817,7 @@
 		var giftValue = objCurrency.find('.gift-catalog-currency-value').val();
 		if(giftValue == "" || giftValue <= 0){
 			noty({text: "Please enter an amount of more than 0 for the selected gift.", type: 'error'});
-			giftObj.focus();
+			obj.focus();
 		}else{
 			if(desc == ""){
 				noty({text: "Please set a description for selected gift.", type: 'error'});
@@ -1349,3 +1410,4 @@
 		});
 	}
 </script>
+<?php } ?>
