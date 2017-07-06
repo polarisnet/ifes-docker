@@ -96,11 +96,11 @@
 							$condition .= " AND LOWER(destinationdescription) LIKE '%".strtolower($searchQuery)."%'";
 						}
 						if($searchType == "staff"){
-							$condition .= " ORDER BY FIELD (destinationgroup, 'IFES staff', 'Regional Staff', 'National Movement staff', 'Projects', 'IFES InterAction Volunteers'), destinationdescription ASC";
+							$condition .= " ORDER BY FIELD (destinationgroup, 'Staff-Global Ministries', 'Staff-International Services', 'Staff-National Movement', 'Staff-Region', 'Ministries-General', 'Ministries-Global', 'Ministries-International Services', 'Ministries-Region', 'National Movement'), destinationdescription ASC";
 						}else if($searchType == "ministry"){
-							$condition .= " ORDER BY FIELD (destinationgroup, 'Regional Staff', 'National Movement staff', 'Projects', 'IFES staff', 'IFES InterAction Volunteers'), destinationdescription ASC";
+							$condition .= " ORDER BY FIELD (destinationgroup, 'Ministries-General', 'Ministries-Global', 'Ministries-International Services', 'Ministries-Region', 'National Movement', 'Staff-Global Ministries', 'Staff-International Services', 'Staff-National Movement', 'Staff-Region'), destinationdescription ASC";
 						}else if($searchType == "movement"){
-							$condition .= " ORDER BY FIELD (destinationgroup, 'National Movement staff', 'Projects', 'IFES staff', 'IFES InterAction Volunteers', 'Regional Staff'), destinationdescription ASC";
+							$condition .= " ORDER BY FIELD (destinationgroup, 'National Movement', 'Ministries-General', 'Ministries-Global', 'Ministries-International Services', 'Ministries-Region', 'Staff-Global Ministries', 'Staff-International Services', 'Staff-National Movement', 'Staff-Region'), destinationdescription ASC";
 						}
 						$searchResult = $objThankQPDO->listDestinationCodes($condition." LIMIT ".($page*50).", 50");
 						if(is_array($searchResult) && !empty($searchResult)){

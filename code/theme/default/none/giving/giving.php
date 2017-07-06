@@ -20,6 +20,7 @@
 	</div>
 	<?php } ?>
 </div>
+<div>
 <div class="container" style="position: relative; top: -60px; margin-top: -220px;">
 	<img src="<?php echo HTTP_MEDIA.'/site-image/ifes-logo.png';?>" width="131" style="margin-bottom: 15px;">
 	<p class="page-title">GIVING PAGE</p>
@@ -28,7 +29,28 @@
 	var flagFerdieCarousel = 0;
 	var flagTimerFerdieCarousel = true;
 	var flagTimerFerdieCarouselIncrement = 0;
+	function changeFerdieCarousel(index){
+		flagFerdieCarousel = index;
+		flagTimerFerdieCarouselIncrement = 0;
+		$('.custom-ferdie-carousel .form-container').each(function(index){
+			$(this).css({
+				top: 0
+			})
+		});
+		if(index != 0){
+			for(var i=0; i<index; i++){
+				$('.custom-ferdie-carousel .form-container').each(function(index){
+					$(this).css({
+						top: "-="+$('.custom-ferdie-carousel').height()
+					})
+				});
+			}
+		}
+		$('.custom-ferdie-carousel-dot div').removeClass('active');
+		$($('.custom-ferdie-carousel-dot div')[index]).addClass('active');
+	}
 	function slideFerdieCarousel(){
+		$('.custom-ferdie-carousel-dot div').removeClass('active');
 		if(flagFerdieCarousel <= $('.custom-ferdie-carousel .form-container').length - 2){
 			$('.custom-ferdie-carousel .form-container').each(function(index){
 				$(this).animate({
@@ -44,6 +66,7 @@
 			});
 			flagFerdieCarousel = 0;
 		}
+		$($('.custom-ferdie-carousel-dot div')[flagFerdieCarousel]).addClass('active');
 	}
 	function timerFerdieCarousel(){
 		if(flagTimerFerdieCarousel){
@@ -62,6 +85,28 @@
 <div class="container gift-center-link">
 	<a>LEGACY GIVING</a> | <a>NON-CASH GIFTS</a> | <a>GIVE BY PHONE OR MAIL</a> | <a>FAQ</a> | <a>PAYMENT PAGE</a> | <a>HELP</a>
 </div>
+<div class="container custom-ferdie-carousel-dot">
+	<?php foreach($listCustomBanner AS $bannerKey => $bannerData){ ?>
+	<div <?php if($bannerKey == 0){ ?>class="active"<?php } ?> onclick="changeFerdieCarousel(<?php echo $bannerKey; ?>);">&nbsp;</div>
+	<?php } ?>
+</div>
+<style>
+	.custom-ferdie-carousel-dot{
+		z-index: 9999999;
+		text-align: center;
+		position: relative;
+		top: -55px;
+		margin-bottom: -40px;
+	}
+
+	.custom-ferdie-carousel-dot div{
+		width: 12px; height: 12px; border-radius: 12px; background-color: #cdcecd; display: inline-block; cursor: pointer;
+	}
+
+	.custom-ferdie-carousel-dot div.active{
+		background-color: #ffffff;
+	}
+</style>
 <?php if(REGION == "ca"){ ?>
 <form id="gift-submit-form" role="form" method="post" onsubmit="return validateForm();">
 	<div class="container">
@@ -311,8 +356,17 @@
 							</div>
 							<div class="col-xs-4" style="padding-right: 0; text-align: right;">
 								<div style="padding: 6px 0;"><span class="currency-symbol"><?php echo $formCurrencySymbol; ?></span> <span class="currency-value">%templateAmountFormat%</span></div>
-								<div class="gift-list-view-recurring">%templateRecurringFormat%</div>
-								<div style="padding: 6px 0;">
+								<div style="padding: 5px 0; clear: both;">
+									<div class="input-group date datetimepicker gift-list-datepicker">
+										<input type="text" class="form-control gift-list-input-recurring gift-list-input-recurring-view" value="%templateRecurring%" onchange="changeRecurringDate('%templateId%', this.value);" />
+										<span class="input-group-addon" style="padding-bottom: 7px;">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+									<div class="gift-list-label-recurring">Monthly Gift on the</div>
+									<input type="checkbox" class="gift-list-input-recurring-check-view" onclick="toggleRecurring('%templateId%', this);" style="position: relative; top: 5px;">
+								</div>
+								<div style="padding: 6px 0; float: right;">
 									<div><a onclick="modifiyGiftList('%templateId%');">Modify</a> | <a onclick="removeGiftList('%templateId%');">Remove</a></div>
 								</div>
 							</div>
@@ -321,7 +375,7 @@
 							<div class="col-xs-8" style="padding-left: 0;">
 								<div style="padding: 6px 0;">%templateDescription%</div>
 								<div style="padding: 5px 0;"><input type="text" class="form-control gift-list-input-comment" placeholder="Add comment or instructions for the finance office." value="%templateComment%"></div>
-								<div><label class="checkbox-inline" style="font-size: 16px;"><input type="checkbox" class="gift-list-input-anonymous" %templateAnonymous%>Anonymous Gift</label></div>	
+								<div><label class="checkbox-inline" style="font-size: 16px;"><input type="checkbox" class="gift-list-input-anonymous" %templateAnonymous%>Anonymous Gift</label><img src="<?php echo HTTP_MEDIA; ?>/site-image/tooltip-info.png" style="top: 0;" class="gift-list-tooltip" data-toggle="tooltip" title="IFES will not reveal your identity to the gift recipient. However, IFES will save your contact details and issue you an official receipt."></div>	
 							</div>
 							<div class="col-xs-4" style="padding-right: 0; text-align: right;">
 								<div class="input-group currency-box" style="float:right; width: 260px;">
@@ -334,12 +388,13 @@
 								</div>
 								<div style="padding: 5px 0; clear: both;">
 									<div class="input-group date datetimepicker gift-list-datepicker">
-										<input type="text" class="form-control gift-list-input-recurring" value="%templateRecurring%" />
+										<input type="text" class="form-control gift-list-input-recurring gift-list-input-recurring-edit" value="%templateRecurring%" onchange="changeRecurringDate('%templateId%', this.value);"/>
 										<span class="input-group-addon" style="padding-bottom: 7px;">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 									<div class="gift-list-label-recurring">Monthly Gift on the</div>
+									<input type="checkbox" class="gift-list-input-recurring-check-edit" onclick="toggleRecurring('%templateId%', this);" style="position: relative; top: 5px;">
 								</div>
 								<div class="gift-list-save-container">
 									<div><a class="gift-list-input-save" onclick="saveGiftList('%templateId%');">Save</a> | <a onclick="cancelGiftList('%templateId%');">Cancel</a></div>
@@ -704,6 +759,7 @@
 						$('<input>').attr({name: 'catalog-value-anonymous[]', value: giftLists[i].anonymous}).appendTo('#submit-variable');
 						$('<input>').attr({name: 'catalog-value-amount[]', value: giftLists[i].amount}).appendTo('#submit-variable');
 						$('<input>').attr({name: 'catalog-value-recurring[]', value: giftLists[i].recurring}).appendTo('#submit-variable');
+						$('<input>').attr({name: 'catalog-value-recurring-check[]', value: giftLists[i].recurring_check}).appendTo('#submit-variable');
 					}
 
 					$('<input>').attr({name: 'submit-currency-code', value: $('.currency-code').html().substr(0, 3)}).appendTo('#submit-variable');
@@ -773,7 +829,11 @@
 					if(searchStartOf > msg.total_all){
 						searchStartOf = msg.total_all;
 					}
-					var searchHeaderResult = 'Showing most relevant results for '+searchQuery+' ('+searchStartOf+' of '+msg.total_all+' results)';
+					if(msg.total_all === undefined){
+						var searchHeaderResult = 'Showing most relevant results for '+searchQuery+' (0 of 0 results)';
+					}else{
+						var searchHeaderResult = 'Showing most relevant results for '+searchQuery+' ('+searchStartOf+' of '+msg.total_all+' results)';
+					}
 					searchHeaderResult += '<div class="gift-list-header-pagination">';
 					if(page > 0){
 						searchHeaderResult += '<a onclick="searchGiftCatalog('+"'"+type+"'"+', '+(page-1)+');">PREVIOUS</a>';
@@ -847,6 +907,7 @@
 					giftList.amount = Number(giftValue);
 					giftList.anonymous = false;
 					giftList.recurring = '';
+					giftList.recurring_check = false;
 					giftLists.push(giftList);
 
 					renderGiftLists(giftLists.length-1);
@@ -872,6 +933,32 @@
 		}
 		calcGiftList();
 		$('.gift-list-tooltip').tooltip();
+	}
+
+	function toggleRecurring(index, obj){
+		for(var i=0; i<giftLists.length; i++){
+			if(giftLists[i].id == index){
+				if($(obj).prop('checked')){
+					giftLists[i].recurring_check = true;
+				}else{
+					giftLists[i].recurring_check = false;
+				}
+				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', giftLists[i].recurring_check);
+				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', giftLists[i].recurring_check);
+				break;
+			}
+		}
+		calcGiftList();
+	}
+
+	function changeRecurringDate(index, val){
+		for(var i=0; i<giftLists.length; i++){
+			if(giftLists[i].id == index){
+				giftLists[i].recurring = val;
+				break;
+			}
+		}
+		calcGiftList();
 	}
 
 	function renderGiftLists(index){
@@ -914,6 +1001,7 @@
 				$('#gift-list-container-'+index).find('.gift-list-currency-value').val(giftLists[i].amount);
 				$('#gift-list-container-'+index).find('.gift-list-input-anonymous').prop('checked', giftLists[i].anonymous);
 				$('#gift-list-container-'+index).find('.gift-list-input-comment').val(giftLists[i].comment);
+				giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val();
 				$('#gift-list-container-'+index).find('.gift-list-input-recurring').val(giftLists[i].recurring);
 				break;
 			}
@@ -950,12 +1038,9 @@
 			$('#gift-list-container-'+index).find('.gift-list-view-comment').html(inputComment);
 		}
 
-		var inputRecurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring').val();
-		if(inputRecurring == ""){
-			$('#gift-list-container-'+index).find('.gift-list-view-recurring').html('One-time gift');
-		}else{
-			$('#gift-list-container-'+index).find('.gift-list-view-recurring').html('Monthly Gift on the '+inputRecurring);
-		}
+		var inputRecurringCheck = $('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').val();
+		var inputRecurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-edit').val();
+		$('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(inputRecurring);
 
 		$('#gift-list-container-'+index).children('.gift-list-container-view').show();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').hide();
@@ -964,6 +1049,7 @@
 			if(giftLists[i].id == index){
 				giftLists[i].amount = Number(inputCurrency);
 				giftLists[i].recurring = inputRecurring;
+				giftLists[i].recurring_check = inputRecurringCheck;
 				giftLists[i].comment = inputComment;
 				giftLists[i].anonymous = inputAnonymous.prop('checked');
 				break;
@@ -978,7 +1064,7 @@
 		var tmpRecurring = 0;
 		var tmpOnetime = 0;
 		for(var i=0; i<giftLists.length; i++){
-			if(giftLists[i].recurring == ''){
+			if(giftLists[i].recurring == '' && !giftLists[i].recurring_check){
 				tmpOnetime += giftLists[i].amount;
 			}else{
 				tmpRecurring += giftLists[i].amount;
@@ -1079,7 +1165,7 @@
 				return false;
 			}
 			if(!bootstrapValidateEmpty("gift-cc-input-expiration", "")){
-				noty({text: "Please fill in card expiration.", type: 'error'});
+				noty({text: "Please fill in card expiration date.", type: 'error'});
 				return false;
 			}
 			if(Number($('#gift-cc-input-expiration').val().substr(0,2)) > 12){
