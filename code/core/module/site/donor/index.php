@@ -9,7 +9,7 @@
 		"title" => SITE_NAME.$breadCrumbData['title'],
 		"meta_keyword" => "",
 		"meta_description" => "",
-		"center_dir" => DIR_ACTIVE_THEME."/donor/view_donor.php"
+		"center_dir" => DIR_ACTIVE_THEME."/donor/donor.php"
 	);
 
 	$actionData = $GLOBALS['seo']->getActionURL();
@@ -51,9 +51,12 @@
 			$formState = "";
 			$formZIP = "";
 			$formCountry = "";
+			$formCountryCode = "";
 			$formTelephoneMobile = "";
 			$formTelephoneDaytime = "";
 			$formTelephoneEvening = "";
+			$formTelephoneDaytimeExtension = "";
+			$formTelephoneEveningExtension = "";
 			$formEmail = "";
 			
 			$formBillAddress1 = "";
@@ -78,9 +81,17 @@
 			$key = array_search($formCountryISO, array_column($listCountries, 'iso'));
 			$formCountry = $listCountries[$key]['name'];
 			
+			if($userData['phone_country'] !== ""){
+				$formCountryCode = $userData['phone_country'];
+			}else{
+				$formCountryCode = $userData['mailing_country'];
+			}
+			
 			$formTelephoneMobile = $userData['phone'];
 			$formTelephoneDaytime = $userData['phone_day'];
 			$formTelephoneEvening = $userData['phone_night'];
+			$formTelephoneDaytimeExtension = $userData['phone_day_extension'];
+			$formTelephoneEveningExtension = $userData['phone_night_extension'];
 			
 			$formBillAddress1 =  $userData['billing_address1'];
 			$formBillAddress2 =  $userData['billing_address2'];
@@ -223,9 +234,12 @@
 					$formState = checkParam("donor-profile-input-state");
 					$formZIP = checkParam("donor-profile-input-zipcode");
 					$formCountry = checkParam("donor-profile-input-country");
+					$formCountryCode = checkParam("donor-profile-input-countrycode");
 					$formTelephoneMobile = checkParam("donor-profile-input-mobile");
 					$formTelephoneDaytime = checkParam("donor-profile-input-daytime");
 					$formTelephoneEvening = checkParam("donor-profile-input-evening");
+					$formTelephoneDaytimeExtension = checkParam("donor-profile-input-extension-daytime");
+					$formTelephoneEveningExtension = checkParam("donor-profile-input-extension-evening");
 					$formEmail = checkParam("donor-profile-input-email");
 					
 					//TODO: Validation
@@ -248,8 +262,11 @@
 					$newData['phone'] 					= $formTelephoneMobile;
 					$newData['mailing_phone'] 			= $formTelephoneMobile;
 					$newData['billing_phone'] 			= $formTelephoneMobile;
+					$newData['phone_country'] 			= $formCountryCode;
 					$newData['phone_day'] 				= $formTelephoneDaytime;
 					$newData['phone_night'] 			= $formTelephoneEvening;
+					$newData['phone_day_extension'] 	= $formTelephoneDaytimeExtension;
+					$newData['phone_night_extension'] 	= $formTelephoneEveningExtension;
 					$newData['modified_by'] 			= $_SESSION['user_id'];
 					$newData['modified_date'] 			= date("Y-m-d H:i:s");
 					

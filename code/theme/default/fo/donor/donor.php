@@ -174,26 +174,44 @@
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-xs-12" style="padding-bottom: 10px;">
+												<div class="col-xs-10" id="div-phone-main" style="padding-bottom: 10px;">
 													<label for="donor-profile-input-telephone">TELEPHONE*</label>
 													<div class="row">
-														<div class="col-xs-12 col-xs-3" style="padding-right: 0px;">
+														<div class="col-xs-12 col-md-3" style="padding-right: 0px;">
 															<select id="donor-profile-input-telephone" name="donor-profile-input-telephone" class="selectpicker" 
 															data-size="8" data-none-selected-text="Telephone" onchange="toggleTelephoneInput(this.value)">
-																	<option value="mobile" >Mobile</option>
 																	<option value="daytime" >Daytime</option>
+																	<option value="mobile" >Mobile</option>
 																	<option value="evening" >Evening</option>
 															</select>
 														</div>
-														<div class="col-xs-12 col-xs-9" style="padding-left: 0px;">
+														<div class="col-xs-12 col-md-2 no-gutters" >
+															<select id="donor-profile-input-countrycode" name="donor-profile-input-countrycode" class="selectpicker" 
+															data-size="8" data-none-selected-text="Country Code" >
+																<?php foreach($listCountries AS $countryData){ ?>
+																	<option data-display="<?php echo "+".$countryData['country_code']; ?>" 
+																	data-value="<?php echo $countryData['name']." (+".$countryData['country_code'].")"; ?>" 
+																	value="<?php echo $countryData['iso']; ?>" <?php if($countryData['iso'] == $formCountryCode){echo 'selected';}?>>
+																	<?php echo " (+".$countryData['country_code'].")"; ?></option>
+																<?php } ?>
+															</select>
+														</div>
+														<div class="col-xs-12 col-md-7" style="padding-left: 0px;">
+														<input type="text" id="donor-profile-input-daytime" name="donor-profile-input-daytime" style="height: 34.4px;"
+															class="form-control" value="<?php echo $formTelephoneDaytime; ?>">
 															<input type="text" id="donor-profile-input-mobile" name="donor-profile-input-mobile" style="height: 34.4px;"
-															class="form-control" placeholder="+(555) 555-5555" value="<?php echo $formTelephoneMobile; ?>">
-															<input type="text" id="donor-profile-input-daytime" name="donor-profile-input-daytime" style="height: 34.4px;"
-															class="form-control" placeholder="+(555) 123-5555" value="<?php echo $formTelephoneDaytime; ?>">
+															class="form-control" value="<?php echo $formTelephoneMobile; ?>">															
 															<input type="text" id="donor-profile-input-evening" name="donor-profile-input-evening" style="height: 34.4px;"
-															class="form-control" placeholder="+(555) 456-5555" value="<?php echo $formTelephoneEvening; ?>">
+															class="form-control" value="<?php echo $formTelephoneEvening; ?>">
 														</div>
 													</div>
+												</div>
+												<div class="col-xs-12 col-md-2" id="div-phone-extension" style="padding-left: 0px;">
+													<label for="donor-profile-input-telephone">EXTENSION</label>
+													<input type="text" id="donor-profile-input-extension-daytime" name="donor-profile-input-extension-daytime" style="height: 34.4px;"
+													class="form-control" value="<?php echo $formTelephoneDaytimeExtension; ?>">
+													<input type="text" id="donor-profile-input-extension-evening" name="donor-profile-input-extension-evening" style="height: 34.4px;"
+													class="form-control" value="<?php echo $formTelephoneEveningExtension; ?>">
 												</div>
 											</div>
 											<div class="row">
@@ -546,7 +564,7 @@
 									<input type="text" name="payment-cc-name" id="payment-cc-name" class="form-control" placeholder="Name on Card">
 								</div>
 								<div class="col-xs-6" style="padding-right: 5px;">
-									<label for="payment-cc-expiratio">EXPIRATION DATE MM/YY</label>
+									<label for="payment-cc-expiration">EXPIRATION DATE MM/YY</label>
 									<input type="text" name="payment-cc-expiration" id="payment-cc-expiration" class="form-control" placeholder="Expiration MM/YY">
 								</div>
 								<div class="col-xs-6" style="padding-left: 5px;">
@@ -688,6 +706,53 @@
 </div>
 
 <script type="text/javascript">
+	//var regionData = "<?php echo REGION; ?>";
+	
+	function changePhoneMask(region = 'row'){
+		//for us
+		if(region == 'us'){ 
+			$("#donor-profile-input-mobile").inputmask("9{1,3} 9{1,3} 9{1,4}");
+			$("#donor-profile-input-daytime").inputmask("9{1,3} 9{1,3} 9{1,4}");
+			$("#donor-profile-input-evening").inputmask("9{1,3} 9{1,3} 9{1,4}");
+		//for uk
+		}else if(region == 'uk'){ 
+			$("#donor-profile-input-mobile").inputmask("9{1,5} 9{1,8}");
+			$("#donor-profile-input-daytime").inputmask("9{1,5} 9{1,8}");
+			$("#donor-profile-input-evening").inputmask("9{1,5} 9{1,8}");
+		//for row
+		}else{ 
+			$("#donor-profile-input-mobile").inputmask("9{1,4} 9{1,9}");
+			$("#donor-profile-input-daytime").inputmask("9{1,4} 9{1,9}");
+			$("#donor-profile-input-evening").inputmask("9{1,4} 9{1,9}");
+		}
+	}
+	
+	function showDisplayValue() {
+		var options = $("#donor-profile-input-countrycode")['0'].options,
+			option = $("#donor-profile-input-countrycode")['0'].selectedOptions[0],
+			i;
+		var option_value = option.getAttribute('value');
+		// reset options
+		for (i = 0; i < options.length; ++i) {
+			options[i].innerText = options[i].getAttribute('data-value');
+		}
+	  
+		// change the selected option's text to its `data-display` attribute value
+		option.innerText = option.getAttribute('data-display');
+		//refresh select picker
+		$('.selectpicker').selectpicker('refresh');
+
+		//change input mask
+		if(option_value == 'us'){
+			changePhoneMask('us');
+		}else if(option_value == 'gb'){
+			changePhoneMask('uk');
+		}else{
+			changePhoneMask('row');
+		}
+
+	}
+
 	function toggleDonorProfileHeader(type){
 		$('#toggle-profile-header-dashboard, #toggle-profile-header-settings, #toggle-profile-header-giving').removeClass('active');
 		$('#toggle-profile-header-'+type).addClass('active');
@@ -702,6 +767,20 @@
 	
 	function toggleTelephoneInput(type){
 		$('#donor-profile-input-mobile, #donor-profile-input-daytime, #donor-profile-input-evening').hide();
+		$('#donor-profile-input-extension-daytime, #donor-profile-input-extension-evening').hide();
+		$('#div-phone-extension').hide();
+		
+		if(type !== 'mobile'){
+			$('#donor-profile-input-extension-'+type).show();
+			$('#div-phone-extension').show();
+			
+			$('#div-phone-main').removeClass('col-xs-12');
+			$('#div-phone-main').addClass('col-xs-10');
+		}else{
+			$('#div-phone-main').addClass('col-xs-12');
+			$('#div-phone-main').removeClass('col-xs-10');
+		}
+		
 		$('#donor-profile-input-'+type).show();
 	}
 	
@@ -831,6 +910,46 @@
 			return false;
 		}
 		
+		if(!bootstrapValidateEmpty("donor-profile-input-daytime", "") && !bootstrapValidateEmpty("donor-profile-input-mobile", "") && !bootstrapValidateEmpty("donor-profile-input-evening", "")){
+			noty({text: "Please fill in atleast one Phone numbers.", type: 'error'});
+			return false;
+		}
+		
+		//phone digits minimum 7, maximum 15
+		var tempTotal = 0;
+		var dayDigits = $("#donor-profile-input-daytime").val().replace(/_|(?!\w)./g, '').length;
+		var mobileDigits = $("#donor-profile-input-mobile").val().replace(/_|(?!\w)./g, '').length;
+		var nightDigits = $("#donor-profile-input-evening").val().replace(/_|(?!\w)./g, '').length;
+
+		var countryDigits = Number($("#donor-profile-input-countrycode")['0'].selectedOptions[0].getAttribute('data-display').replace(/(?!\w|\s)./g, '').length);
+
+		if(dayDigits !== 0){
+			tempTotal = 0;
+			tempTotal = dayDigits+countryDigits;
+			//console.log('day is '+tempTotal); //debug
+			if(tempTotal < 7 || tempTotal > 15){
+				noty({text: "Invalid phone numbers. Please fill in the correct numbers.", type: 'error'});
+				return false;
+			}
+		}
+		if(mobileDigits !== 0){
+			tempTotal = 0;
+			tempTotal = mobileDigits+countryDigits;
+			//console.log('mobile is '+tempTotal); //debug
+			if(tempTotal < 7 || tempTotal > 15){
+				noty({text: "Invalid phone numbers. Please fill in the correct numbers.", type: 'error'});
+				return false;
+			}
+		}
+		if(nightDigits !== 0){
+			tempTotal = 0;
+			tempTotal = nightDigits+countryDigits;
+			//console.log('night is '+tempTotal); //debug
+			if(tempTotal < 7 || tempTotal > 15){
+				noty({text: "Invalid phone numbers. Please fill in the correct numbers.", type: 'error'});
+				return false;
+			}
+		}
 	}
 	
 	function appendInput(){
@@ -887,6 +1006,13 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#donor-profile-input-email").inputmask("email");
+		$("#payment-cc-expiration").inputmask("99/99", {placeholder: 'MM/YY', "clearIncomplete": true});
+		$("#donor-profile-input-extension-daytime").inputmask("9{1,5}", {placeholder: ''});
+		$("#donor-profile-input-extension-evening").inputmask("9{1,5}", {placeholder: ''});
+
+		document.getElementById('donor-profile-input-countrycode').addEventListener('change', showDisplayValue, false);
+		showDisplayValue();
+		//changePhoneMask(regionData);
 		
 		$.fn.dataTable.ext.errMode = 'none';
 		var givingGridAjaxURL = HTTP_AJAX+"?opt=list_giving";
@@ -988,7 +1114,7 @@
 		});
 		
 		toggleDonorProfileHeader('settings'); //dashboard, settings, giving
-		toggleTelephoneInput('mobile');
+		toggleTelephoneInput('daytime');
 	});
 	
 	

@@ -29,8 +29,9 @@
 			$this->db->query($sql);
 			if($this->db->nextRecord()){
 				$result = $this->db->getRecord();
+				$output = date("d M Y", strtotime($result['created_date']));
 			}
-			$output = date("d M Y", strtotime($result['created_date']));
+			
 			return $output;
 		}
 		
@@ -61,9 +62,8 @@
 		function listGivingHistory($condition, $recent = false){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
-			$sql = "SELECT p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
-			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
-			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
+			$sql = "SELECT d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
+			$sql .= "FROM `donations` d INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
 			$sql .= "WHERE 1=1";
 			if($condition != ""){
 				$sql .= $condition;
@@ -214,7 +214,7 @@
 		function listPaymentMethods($condition){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
-			$sql = "SELECT * FROM `payments` WHERE 1=1";
+			$sql = "SELECT * FROM `payments` WHERE 1=1 AND `display_info` =1";
 			if($condition != ""){
 				$sql .= $condition;
 			}
