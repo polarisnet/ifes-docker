@@ -17,6 +17,7 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/css/p-loading.min.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/style.css?ver=<?php echo HTTP_VERSION; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/header.css?ver=<?php echo HTTP_VERSION; ?>" />
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/jquery-1.10.1-min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty-vjob/jquery.noty.packaged.min.js?ver=<?php echo HTTP_VERSION; ?>'></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/loading-overlay/loadingoverlay.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
@@ -28,6 +29,7 @@
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/p-loading-master/dist/js/p-loading.min.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/robinherbots-inputmask/dist/jquery.inputmask.bundle.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 		<script type="text/javascript" src="<?php echo HTTP_CDN_PLUGIN; ?>/js/core.js?ver=<?php echo HTTP_VERSION; ?>"></script>
+		<script type="text/javascript" src="<?php echo HTTP_ACTIVE_PUBLIC_THEME; ?>/header.js?ver=<?php echo HTTP_VERSION; ?>"></script>
 	</head>
 	<body>
 		<script type="text/javascript">
