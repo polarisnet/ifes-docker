@@ -319,7 +319,7 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	height: auto; min-height: 250px; font-family: 'Muli', Helvetica; font-size: 16px; padding: 5px 24px;
 }
 .gift-list-label-recurring{
-	float: right; line-height: 2.2; padding-right: 10px;
+	float: right; line-height: 2.2; padding-right: 10px; padding-left: 10px;
 }
 .gift-list-save-container{
 	padding-right: 0; text-align: right; clear:both; line-height: 2;
@@ -452,7 +452,47 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 }
 .custom-ferdie-carousel .gift-upper-box{
 	top: 20px;
-	}
+}
+
+/*** Stripe Elements - Start ***/
+.StripeElement {
+  background-color: white;
+  padding: 4px 12px;
+  border: 1px solid #cccccc;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.stripe-info {
+	display: block;
+	text-align: left;
+	font-size: 14px;
+	font-family: 'Muli', Helvetica;
+}
+
+.stripe-error {
+	text-align: left;
+    height: 20px;
+    padding: 4px 0;
+    color: #fa755a;
+	font-family: 'Muli', Helvetica;
+	font-size: 16px;
+}
+
+/*** Stripe Elements - End ***/
 /*** Giving Page - End ***/
 
 .btn-search{

@@ -1,3 +1,4 @@
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 <style type="text/css">
 	.social-header a.social-link.fb {
 		background-image: url(<?php echo HTTP_MEDIA.'/site-image/fb-icon.png'; ?>);
@@ -174,26 +175,44 @@
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-xs-12" style="padding-bottom: 10px;">
+												<div class="col-xs-10" id="div-phone-main" style="padding-bottom: 10px;">
 													<label for="donor-profile-input-telephone">TELEPHONE*</label>
 													<div class="row">
-														<div class="col-xs-12 col-xs-3" style="padding-right: 0px;">
+														<div class="col-xs-12 col-md-3" style="padding-right: 0px;">
 															<select id="donor-profile-input-telephone" name="donor-profile-input-telephone" class="selectpicker" 
 															data-size="8" data-none-selected-text="Telephone" onchange="toggleTelephoneInput(this.value)">
-																	<option value="mobile" >Mobile</option>
 																	<option value="daytime" >Daytime</option>
+																	<option value="mobile" >Mobile</option>
 																	<option value="evening" >Evening</option>
 															</select>
 														</div>
-														<div class="col-xs-12 col-xs-9" style="padding-left: 0px;">
+														<div class="col-xs-12 col-md-2 no-gutters" >
+															<select id="donor-profile-input-countrycode" name="donor-profile-input-countrycode" class="selectpicker" 
+															data-size="8" data-none-selected-text="Country Code" >
+																<?php foreach($listCountries AS $countryData){ ?>
+																	<option data-display="<?php echo "+".$countryData['country_code']; ?>" 
+																	data-value="<?php echo $countryData['name']." (+".$countryData['country_code'].")"; ?>" 
+																	value="<?php echo $countryData['iso']; ?>" <?php if($countryData['iso'] == $formCountryCode){echo 'selected';}?>>
+																	<?php echo " (+".$countryData['country_code'].")"; ?></option>
+																<?php } ?>
+															</select>
+														</div>
+														<div class="col-xs-12 col-md-7" style="padding-left: 0px;">
+														<input type="text" id="donor-profile-input-daytime" name="donor-profile-input-daytime" style="height: 34.4px;"
+															class="form-control" value="<?php echo $formTelephoneDaytime; ?>">
 															<input type="text" id="donor-profile-input-mobile" name="donor-profile-input-mobile" style="height: 34.4px;"
-															class="form-control" placeholder="+(555) 555-5555" value="<?php echo $formTelephoneMobile; ?>">
-															<input type="text" id="donor-profile-input-daytime" name="donor-profile-input-daytime" style="height: 34.4px;"
-															class="form-control" placeholder="+(555) 123-5555" value="<?php echo $formTelephoneDaytime; ?>">
+															class="form-control" value="<?php echo $formTelephoneMobile; ?>">															
 															<input type="text" id="donor-profile-input-evening" name="donor-profile-input-evening" style="height: 34.4px;"
-															class="form-control" placeholder="+(555) 456-5555" value="<?php echo $formTelephoneEvening; ?>">
+															class="form-control" value="<?php echo $formTelephoneEvening; ?>">
 														</div>
 													</div>
+												</div>
+												<div class="col-xs-12 col-md-2" id="div-phone-extension" style="padding-left: 0px;">
+													<label for="donor-profile-input-telephone">EXTENSION</label>
+													<input type="text" id="donor-profile-input-extension-daytime" name="donor-profile-input-extension-daytime" style="height: 34.4px;"
+													class="form-control" value="<?php echo $formTelephoneDaytimeExtension; ?>">
+													<input type="text" id="donor-profile-input-extension-evening" name="donor-profile-input-extension-evening" style="height: 34.4px;"
+													class="form-control" value="<?php echo $formTelephoneEveningExtension; ?>">
 												</div>
 											</div>
 											<div class="row">
@@ -294,19 +313,27 @@
 											<p class="donor-content-subtitle">My Subscriptions</p>
 											<div class="row no-gutters">
 												<div>
-													<label class="donor-checkbox-subscriptions">
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-1" value="praise_prayer" 
 													<?php if(isset($praise_prayer)){echo 'checked';}?> style="margin-top: 4px;">
 													Praise & Prayer: a bimonthly email with Daily Prayer Guide <span style="font-size:10px">(English only)</span></label>
-													<label class="donor-checkbox-subscriptions">
+													<div style="margin-left:30px;margin-bottom:10px;">
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-prayer-email" id="donor-support-email" value="1"> email
+														</label>
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-prayer-post" id="donor-support-post" value="1"> post
+														</label>
+													</div>
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-2" value="prayerline" 
 													<?php if(isset($prayerline)){echo 'checked';}?> style="margin-top: 4px;">
 													Prayerline: a weekly email snapshot of the IFES world to inspire your prayers</label>
-													<label class="donor-checkbox-subscriptions">
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-3" value="conexion" 
 													<?php if(isset($conexion)){echo 'checked';}?> style="margin-top: 4px;">
 													Conexión: a monthly online magazine connecting the IFES World</label>
-													<label class="donor-checkbox-subscriptions">
+													<label class="donor-checkbox">
 													<input type="checkbox" name="subscriptions[]" id="donor-subscriptions-4" value="voix" 
 													<?php if(isset($voix)){echo 'checked';}?> style="margin-top: 4px;">
 													Voix: a weekly blog, by students and for students</label>
@@ -314,7 +341,24 @@
 											</div>
 											<?php  if(REGION == 'uk'){ // START REGION == 'uk' ?>
 												<div class="row no-gutters">
-													<p style="font-size:14px;">I would like to received:</p>
+													<div style="padding:2.5px;"></div>
+													<p class="donor-paragraph-support">I would like to received:</p>
+													<div style="padding:5px;"></div>
+													<label class="donor-checkbox">
+													<input type="checkbox" name="donor-support-prime" id="donor-support-prime" value="1" 
+													<?php if(isset($supportPrime)){echo 'checked';}?> style="margin-top: 4px;">
+													Updates and oppurtunities to support IFES ministries</label>
+													<div style="margin-left:30px;">
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-support-email" id="donor-support-email" value="1"> email
+														</label>
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-support-post" id="donor-support-post" value="1"> post
+														</label>
+														<label class="donor-checkbox-inline">
+														  <input type="checkbox" style="margin-top: 4px;" name="donor-support-phone" id="donor-support-phone" value="1"> phone
+														</label>
+													</div>
 												</div>
 											<?php } // END REGION == 'uk'?>
 										</div>
@@ -322,15 +366,15 @@
 											<p class="donor-content-subtitle">Preferred Language</p>
 											<div>
 												<div class="radio">
-													<label class="donor-checkbox-language" ><input type="radio" name="radio-language" id="donor-language-english" value="english" 
+													<label class="donor-radio-bold" ><input type="radio" name="radio-language" id="donor-language-english" value="english" 
 													<?php if($formLanguage == 'english'){echo 'checked';}?> style="margin-top: 4px;">English</label>
 												</div>
 												<div class="radio">
-													<label class="donor-checkbox-language" ><input type="radio" name="radio-language" id="donor-language-france" value="france" 
+													<label class="donor-radio-bold" ><input type="radio" name="radio-language" id="donor-language-france" value="france" 
 													<?php if($formLanguage == 'france'){echo 'checked';}?> style="margin-top: 4px;">Français</label>
 												</div>
 												<div class="radio">
-													<label class="donor-checkbox-language" ><input type="radio" name="radio-language" id="donor-language-spanish" value="spanish" 
+													<label class="donor-radio-bold" ><input type="radio" name="radio-language" id="donor-language-spanish" value="spanish" 
 													<?php if($formLanguage == 'spanish'){echo 'checked';}?> style="margin-top: 4px;">Español</label>
 												</div>
 											</div>
@@ -387,6 +431,7 @@
 									<table id="giving-grid" class="table table-hover dt-responsive" cellspacing="0" width="100%">
 										<thead>
 											<tr>
+												<th>ID</th>
 												<th>DESIGNATION</th>
 												<th>AMOUNT</th>
 												<th>DONATION DATE</th>
@@ -487,41 +532,52 @@
 					<div style="padding:10px;"></div>
 				</div>
 				<div style="padding-bottom:10px;"></div>
-				<?php if(REGION == 'us'){ ?>
-					<div class="row" name="modal-payment-new" style="padding:10px;">
-						<div class="col-xs-6">
-							<button type="button" id="btn-us-payment-cc" class="btn btn-default btn-ifes <?php if($formPaymentUSPaymode == "cc"){echo 'btn-ifes-active';} ?>" style="margin-right: 15px;width: 100%;" onclick="toggleUSPayment('cc', this);">ADD CREDIT OR DEBIT CARD</button>
-						</div>
-						<div class="col-xs-6">
-							<button type="button" id="btn-us-payment-check" class="btn btn-default btn-ifes <?php if($formPaymentUSPaymode == "check"){echo 'btn-ifes-active';} ?>" style="width: 100%;" onclick="toggleUSPayment('check', this);">ADD eCHECK</button>
-						</div>
-						<input type="hidden" id="payment-us-paymode" name="payment-us-paymode" value="<?php echo $formPaymentUSPaymode; ?>">
-					</div>
-				<?php } ?>
 				<div class="modal-subtitle" name="modal-payment-new">
 					<p style="display: inline-block;">We accept major cards:</p>
 					<img src="<?php echo HTTP_MEDIA.'/site-image/cards.png';?>" style="margin-left: 5px;">
 				</div>
-				
+				<input type="hidden" name="payment-modal-type" id="payment-modal-type" />
 				<form id="donor-payment-modal" class="form-vertical" role="form" method="post">
 					<input type="hidden" name="payment-cc-id" value=""> 
 					<div class="modal-body donor-custom">
 						<div class="container-fluid no-gutters payment-form">
-							<div class="row" id="payment-form-cc">
+							<div class="row" id="payment-form-cc-new" name="modal-payment-new">
+								<div class="col-xs-12" style="padding-bottom: 20px;">
+									<label for="payment-cc-customname">CUSTOM NAME</label>
+									<input type="text" name="payment-cc-customname" id="payment-cc-customname" class="form-control" placeholder="Custom Name">
+								</div>
+								
+								<div class="col-xs-12" > <!-- style="padding-bottom: 10px;" -->
+									<label class="stripe-info" for="card-element">
+									  CREDIT OR DEBIT CARD
+									</label>
+									<div id="card-element">
+									  <!-- a Stripe Element will be inserted here. -->
+									</div>
+
+									<!-- Used to display Element errors -->
+									<div class="stripe-error" id="card-errors" role="alert"></div>
+								</div>
+								<div class="col-xs-12" style="padding-bottom: 20px;">
+									<label for="payment-cc-name">NAME ON CARD</label>
+									<input type="text" name="payment-cc-name" id="payment-cc-name" class="form-control" placeholder="Name on Card">
+								</div>
+							</div>
+							<div class="row" id="payment-form-cc-update" name="modal-payment-update">
 								<div class="col-xs-12" style="padding-bottom: 10px;">
 									<label for="payment-cc-customname">CUSTOM NAME</label>
 									<input type="text" name="payment-cc-customname" id="payment-cc-customname" class="form-control" placeholder="Custom Name">
 								</div>
 								<div class="col-xs-12" style="padding-bottom: 10px;">
 									<label for="payment-cc-number">CARD NUMBER</label>
-									<input type="text" name="payment-cc-number" id="payment-cc-number" class="form-control" placeholder="Card Number">
+									<input type="text" name="payment-cc-number" id="payment-cc-number" class="form-control" placeholder="Card Number"  disabled>
 								</div>
 								<div class="col-xs-12" style="padding-bottom: 10px;">
 									<label for="payment-cc-name">NAME ON CARD</label>
 									<input type="text" name="payment-cc-name" id="payment-cc-name" class="form-control" placeholder="Name on Card">
 								</div>
 								<div class="col-xs-6" style="padding-right: 5px;">
-									<label for="payment-cc-expiratio">EXPIRATION DATE MM/YY</label>
+									<label for="payment-cc-expiration">EXPIRATION DATE MM/YY</label>
 									<input type="text" name="payment-cc-expiration" id="payment-cc-expiration" class="form-control" placeholder="Expiration MM/YY">
 								</div>
 								<div class="col-xs-6" style="padding-left: 5px;">
@@ -663,6 +719,145 @@
 </div>
 
 <script type="text/javascript">
+	//var regionData = "<?php echo REGION; ?>";
+	var stripe = Stripe('<?php echo STRIPE_PUBLIC_KEY; ?>');
+	var elements = stripe.elements();
+	
+	// Custom styling can be passed to options when creating an Element.
+	var style = {
+		base: {
+			color: '#32325d',
+			lineHeight: '24px',
+			fontSmoothing: 'antialiased',
+			fontSize: '16px',
+			'::placeholder': {
+				color: '#aab7c4'
+			}
+		},
+		invalid: {
+			color: '#fa755a',
+			iconColor: '#fa755a'
+		}
+	};
+	
+	// Create an instance of the card Element
+	var card = elements.create('card', {style: style});
+
+	// Add an instance of the card Element into the `card-element` <div>
+	card.mount('#card-element');
+	
+	card.addEventListener('change', function(event) {
+	  var displayError = document.getElementById('card-errors');
+	  if (event.error) {
+		displayError.textContent = event.error.message;
+	  } else {
+		displayError.textContent = '';
+	  }
+	});
+	
+	var cardform = document.getElementById('donor-payment-modal');
+	cardform.addEventListener('submit', function(event) {
+		event.preventDefault();
+		
+		var submit_type = $("#payment-modal-type").val();
+
+		if(submit_type == 'new'){
+			var extraDetails = {
+				name: $('#payment-cc-name').val(),
+			};
+				
+			stripe.createToken(card, extraDetails).then(function(result) {
+			if (result.error) {
+			  // Inform the user if there was an error
+			  var errorElement = document.getElementById('card-errors');
+			  errorElement.textContent = result.error.message;
+			} else {
+			  // Send the token to your server
+			  stripeTokenHandler(result.token);
+			}
+		});
+		}else{
+			if(!bootstrapValidateEmpty("payment-cc-cvv", "")){
+				noty({text: "Please fill in CVV.", type: 'error'});
+				return false;
+			}
+			
+			var cardform = document.getElementById('donor-payment-modal');
+			var submitMode = document.createElement('input');
+			submitMode.setAttribute('type', 'hidden');
+			submitMode.setAttribute('name', 'submit_mode');
+			submitMode.setAttribute('value', 'payment_update');
+			cardform.appendChild(submitMode);
+
+			cardform.submit();
+		}
+		
+	});
+	
+	function stripeTokenHandler(token) {
+	  // Insert the token ID into the form so it gets submitted to the server
+	  var cardform = document.getElementById('donor-payment-modal');
+	  var hiddenInput = document.createElement('input');
+	  hiddenInput.setAttribute('type', 'hidden');
+	  hiddenInput.setAttribute('name', 'stripeToken');
+	  hiddenInput.setAttribute('value', token.id);
+	  cardform.appendChild(hiddenInput);
+	  
+	  var submitMode = document.createElement('input');
+	  submitMode.setAttribute('type', 'hidden');
+	  submitMode.setAttribute('name', 'submit_mode');
+	  submitMode.setAttribute('value', 'payment_new');
+	  cardform.appendChild(submitMode);
+
+	  // Submit the form
+	  cardform.submit();
+	}
+	
+	function changePhoneMask(region = 'row'){
+		//for us
+		if(region == 'us'){ 
+			$("#donor-profile-input-mobile").inputmask("9{1,3} 9{1,3} 9{1,4}");
+			$("#donor-profile-input-daytime").inputmask("9{1,3} 9{1,3} 9{1,4}");
+			$("#donor-profile-input-evening").inputmask("9{1,3} 9{1,3} 9{1,4}");
+		//for uk
+		}else if(region == 'uk'){ 
+			$("#donor-profile-input-mobile").inputmask("9{1,5} 9{1,8}");
+			$("#donor-profile-input-daytime").inputmask("9{1,5} 9{1,8}");
+			$("#donor-profile-input-evening").inputmask("9{1,5} 9{1,8}");
+		//for row
+		}else{ 
+			$("#donor-profile-input-mobile").inputmask("9{1,4} 9{1,9}");
+			$("#donor-profile-input-daytime").inputmask("9{1,4} 9{1,9}");
+			$("#donor-profile-input-evening").inputmask("9{1,4} 9{1,9}");
+		}
+	}
+	
+	function showDisplayValue() {
+		var options = $("#donor-profile-input-countrycode")['0'].options,
+			option = $("#donor-profile-input-countrycode")['0'].selectedOptions[0],
+			i;
+		var option_value = option.getAttribute('value');
+		// reset options
+		for (i = 0; i < options.length; ++i) {
+			options[i].innerText = options[i].getAttribute('data-value');
+		}
+	  
+		// change the selected option's text to its `data-display` attribute value
+		option.innerText = option.getAttribute('data-display');
+		//refresh select picker
+		$('.selectpicker').selectpicker('refresh');
+
+		//change input mask
+		if(option_value == 'us'){
+			changePhoneMask('us');
+		}else if(option_value == 'gb'){
+			changePhoneMask('uk');
+		}else{
+			changePhoneMask('row');
+		}
+
+	}
+
 	function toggleDonorProfileHeader(type){
 		$('#toggle-profile-header-dashboard, #toggle-profile-header-settings, #toggle-profile-header-giving').removeClass('active');
 		$('#toggle-profile-header-'+type).addClass('active');
@@ -677,6 +872,20 @@
 	
 	function toggleTelephoneInput(type){
 		$('#donor-profile-input-mobile, #donor-profile-input-daytime, #donor-profile-input-evening').hide();
+		$('#donor-profile-input-extension-daytime, #donor-profile-input-extension-evening').hide();
+		$('#div-phone-extension').hide();
+		
+		if(type !== 'mobile'){
+			$('#donor-profile-input-extension-'+type).show();
+			$('#div-phone-extension').show();
+			
+			$('#div-phone-main').removeClass('col-xs-12');
+			$('#div-phone-main').addClass('col-xs-10');
+		}else{
+			$('#div-phone-main').addClass('col-xs-12');
+			$('#div-phone-main').removeClass('col-xs-10');
+		}
+		
 		$('#donor-profile-input-'+type).show();
 	}
 	
@@ -689,10 +898,10 @@
 	
 	function toggleUSPayment(mode, obj){
 		if(mode == 'cc'){
-			$('#payment-form-cc').show();
+			$('#payment-form-cc-new').show();
 			$('#payment-form-echeck').hide();
 		}else{
-			$('#payment-form-cc').hide();
+			$('#payment-form-cc-new').hide();
 			$('#payment-form-echeck').show();
 		}
 		$('#payment-us-paymode').val(mode);
@@ -732,6 +941,8 @@
 						.find('[name="payment-cc-expiration"]').val('').end()
 						.find('[name="payment-cc-cvv"]').val('').end();
 				$('[name="modal-payment-new"]').show();
+				
+				$("#payment-modal-type").val('new');
 			break;	
 			case 'update':
 				$.ajax({
@@ -748,10 +959,11 @@
 						.find('[name="payment-cc-customname"]').val(response.data['custom_name']).end()
 						.find('[name="payment-cc-number"]').val(response.data['number']).end()
 						.find('[name="payment-cc-name"]').val(response.data['name']).end()
-						.find('[name="payment-cc-expiration"]').val(response.data['name_1']).end()
-						.find('[name="payment-cc-cvv"]').val(response.data['number_1']).end();
+						.find('[name="payment-cc-expiration"]').val(response.data['name_1']).end();
 					$('[name="modal-payment-update"]').show();
-					$("#payment-modal").modal();				
+					$("#payment-modal").modal();
+
+					$("#payment-modal-type").val('update');					
 				});
 			break;
 		}
@@ -806,6 +1018,46 @@
 			return false;
 		}
 		
+		if(!bootstrapValidateEmpty("donor-profile-input-daytime", "") && !bootstrapValidateEmpty("donor-profile-input-mobile", "") && !bootstrapValidateEmpty("donor-profile-input-evening", "")){
+			noty({text: "Please fill in atleast one Phone numbers.", type: 'error'});
+			return false;
+		}
+		
+		//phone digits minimum 7, maximum 15
+		var tempTotal = 0;
+		var dayDigits = $("#donor-profile-input-daytime").val().replace(/_|(?!\w)./g, '').length;
+		var mobileDigits = $("#donor-profile-input-mobile").val().replace(/_|(?!\w)./g, '').length;
+		var nightDigits = $("#donor-profile-input-evening").val().replace(/_|(?!\w)./g, '').length;
+
+		var countryDigits = Number($("#donor-profile-input-countrycode")['0'].selectedOptions[0].getAttribute('data-display').replace(/(?!\w|\s)./g, '').length);
+
+		if(dayDigits !== 0){
+			tempTotal = 0;
+			tempTotal = dayDigits+countryDigits;
+			//console.log('day is '+tempTotal); //debug
+			if(tempTotal < 7 || tempTotal > 15){
+				noty({text: "Invalid phone numbers. Please fill in the correct numbers.", type: 'error'});
+				return false;
+			}
+		}
+		if(mobileDigits !== 0){
+			tempTotal = 0;
+			tempTotal = mobileDigits+countryDigits;
+			//console.log('mobile is '+tempTotal); //debug
+			if(tempTotal < 7 || tempTotal > 15){
+				noty({text: "Invalid phone numbers. Please fill in the correct numbers.", type: 'error'});
+				return false;
+			}
+		}
+		if(nightDigits !== 0){
+			tempTotal = 0;
+			tempTotal = nightDigits+countryDigits;
+			//console.log('night is '+tempTotal); //debug
+			if(tempTotal < 7 || tempTotal > 15){
+				noty({text: "Invalid phone numbers. Please fill in the correct numbers.", type: 'error'});
+				return false;
+			}
+		}
 	}
 	
 	function appendInput(){
@@ -862,6 +1114,13 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#donor-profile-input-email").inputmask("email");
+		$("#payment-cc-expiration").inputmask("99/99", {placeholder: 'MM/YY', "clearIncomplete": true});
+		$("#donor-profile-input-extension-daytime").inputmask("9{1,5}", {placeholder: ''});
+		$("#donor-profile-input-extension-evening").inputmask("9{1,5}", {placeholder: ''});
+
+		document.getElementById('donor-profile-input-countrycode').addEventListener('change', showDisplayValue, false);
+		showDisplayValue();
+		//changePhoneMask(regionData);
 		
 		$.fn.dataTable.ext.errMode = 'none';
 		var givingGridAjaxURL = HTTP_AJAX+"?opt=list_giving";
@@ -963,7 +1222,7 @@
 		});
 		
 		toggleDonorProfileHeader('giving'); //dashboard, settings, giving
-		toggleTelephoneInput('mobile');
+		toggleTelephoneInput('daytime');
 	});
 	
 	

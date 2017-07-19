@@ -229,7 +229,7 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	margin: 10px;
 	cursor: pointer;
 }
-.donor-checkbox-subscriptions{
+.donor-checkbox{
 	display: block;
 	vertical-align: middle;
 	padding-left: 20px;
@@ -237,11 +237,11 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	font-size: 14px !important; 
 	color: black !important;
 }
-.donor-checkbox-subscriptions input[type="checkbox"] {
+.donor-checkbox input[type="checkbox"] {
     position: absolute;
     margin-left: -20px;
 }
-.donor-checkbox-language{
+.donor-radio-bold{
 	display: block;
 	vertical-align: middle;
 	padding-left: 20px;
@@ -250,9 +250,27 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	font-size: 16px !important; 
 	color: black !important;
 }
-.donor-checkbox-language input[type="checkbox"] {
+.donor-radio-bold input[type="checkbox"] {
     position: absolute;
     margin-left: -20px;
+}
+.donor-checkbox-inline{
+	display: inline-block;
+	vertical-align: middle;
+	padding-left: 20px;
+	margin-bottom: 0;
+	position: relative;
+	cursor: pointer;
+	font-size: 14px !important; 
+	color: black !important;
+}
+.donor-checkbox-inline input[type="checkbox"] {
+    position: absolute;
+    margin-left: -20px;
+}
+.donor-paragraph-support {
+	font-size: 14px;
+	margin: 0px;
 }
 .container.ifes-content{
 	padding-top: 30px;
@@ -370,6 +388,44 @@ p.subscription-modal{
 	font-size: 12px;
 	color: grey;
 }
+/*** Stripe Elements - Start ***/
+.StripeElement {
+  background-color: white;
+  padding: 4px 12px;
+  border: 1px solid #cccccc;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.stripe-info {
+	display: block;
+	font-weight: 400;
+	text-align: left;
+	font-size: 14px;
+}
+
+.stripe-error {
+	text-align: left;
+    height: 20px;
+    color: #fa755a;
+	font-family: 'Muli', Helvetica;
+	font-size: 16px;
+}
+
+/*** Stripe Elements - End ***/
 .row-eq-height { /*use with overflow: hide; on parent div */
   display:         flex;
 }

@@ -1,5 +1,5 @@
 <?php
-	define('HTTP_ROOT', '/ifes-docker/code');
+	define('HTTP_ROOT', ''); ///ifes-docker/code
 	define('HTTP_VERSION', '1');
 	define('SITE_NAME', 'IFES');
 	define('PUBLIC_SALT', 'JL2Y7nKpaimZjN');
@@ -27,6 +27,9 @@
 	
 	define('DIR_UBS_SOFTWARE_DATA', 'C:\UBSSTK90\Sample');
 	define('DIR_UBS_SOFTWARE_DATA_A', 'C:\UBSSTK90\Sample');
+	
+	define('STRIPE_PUBLIC_KEY', 'pk_test_dyLANJjgegRJ1uHgPNGSXKZ2');
+	define('STRIPE_PRIVATE_KEY', 'sk_test_ChfV2xHC0WAUiDODIIOm57Ek');
 	
 	require_once 'port.config.php';
 ?>

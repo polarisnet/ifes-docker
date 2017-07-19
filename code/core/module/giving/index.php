@@ -4,6 +4,9 @@
 
 	require_once 'giving.class.php';
 	$objGiving = new Giving($GLOBALS['myDB']);
+	
+	require_once DIR_LIBS.'/stripe-php/init.php';
+	\Stripe\Stripe::setApiKey(STRIPE_PRIVATE_KEY);
 
 	$breadCrumbData = getBreadCrumbData(MODULE_UID, "/");
 	$setting = array(
@@ -22,13 +25,14 @@
 	$message2 	= array('type' => 'message', 'title' => 'Message', 'content' => '', 'position' => 'right', 'autoclose' => false);
 
 	switch(MODULE_UID){
-		default:
+		default:			
 			$isLogin = matchCookieSession();
 			if($isLogin){
 				$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION['username']);
+				$stripe_customer = \Stripe\Customer::retrieve($formDonorAccountData['stripe_cust_id']);
 			}
-			$formCurrencySymbol = "&euro;";
-			$formCurrencyCode = "EUR";
+			$formCurrencySymbol = "&dollar;";
+			$formCurrencyCode = "USD";
 			$formCurrencyToogle = '<ul class="dropdown-menu">';
 			if(REGION == "uk"){
 				$formCurrencySymbol = "&pound;";
@@ -82,7 +86,7 @@
 					break;
 					case "send_reset_password":
 						$resetEmail = checkParam('email');
-						// Tengwai put your code here for reset password
+						//TODO: code here for reset password
 						$output['success'] = true;
 					break;
 					case "search_gift_catalog":
@@ -169,8 +173,11 @@
 				$formPaymentBillingState = $formDonorAccountData['billing_state'];
 				$formPaymentBillingZipcode = $formDonorAccountData['billing_zipcode'];
 				$formPaymentBillingCountry = $formDonorAccountData['billing_country'];
-				$formPaymentBillingEmail = $formDonorAccountData['billing_email'];
-				$formPaymentBillingPhone = $formDonorAccountData['billing_phone'];
+				$formPaymentBillingEmail = $formDonorAccountData['email'];
+				$formPaymentBillingPhone = $formDonorAccountData['phone_day'];
+				$formPaymentBillingCountryCode = $formDonorAccountData['phone_country'];
+				$formPaymentBillingPhoneExtension = $formDonorAccountData['phone_day_extension'];
+				$stripeCustomerID = $formDonorAccountData['stripe_cust_id'];
 			}else{
 				$formPaymentBillingName = "";
 				$formPaymentBillingAddress1 = "";
@@ -187,6 +194,8 @@
 				}
 				$formPaymentBillingEmail = "";
 				$formPaymentBillingPhone = "";
+				$formPaymentBillingCountryCode = "";
+				$formPaymentBillingPhoneExtension = "";
 			}
 
 			$formPaymentAddMailing = "";
@@ -198,8 +207,11 @@
 				$formPaymentMailingState = $formDonorAccountData['mailing_state'];
 				$formPaymentMailingZipcode = $formDonorAccountData['mailing_zipcode'];
 				$formPaymentMailingCountry = $formDonorAccountData['mailing_country'];
-				$formPaymentMailingEmail = $formDonorAccountData['mailing_email'];
-				$formPaymentMailingPhone = $formDonorAccountData['mailing_phone'];
+				/*
+				//DISABLE: Remove phone & email for mailing address, billing & mailing will share the same email and phone
+				//$formPaymentMailingEmail = $formDonorAccountData['mailing_email'];
+				//$formPaymentMailingPhone = $formDonorAccountData['mailing_phone'];
+				*/
 			}else{
 				$formPaymentMailingName = "";
 				$formPaymentMailingAddress1 = "";
@@ -332,7 +344,8 @@
 				}
 
 				$formLoginMode = checkParam('login-mode');
-
+				$formStripeToken = checkParam('stripeToken');
+				
 				$formCurrencyCode = checkParam('submit-currency-code');
 				$formCurrencySymbol = checkParam('submit-currency-symbol');
 
@@ -365,6 +378,8 @@
 					$formPaymentBillingCountry = checkParam('payment-billing-country');
 					$formPaymentBillingEmail = checkParam('payment-billing-email');
 					$formPaymentBillingPhone = checkParam('payment-billing-phone');
+					$formPaymentBillingCountryCode = checkParam('payment-billing-countrycode');
+					$formPaymentBillingPhoneExtension = checkParam('payment-billing-extension');
 
 					$formPaymentAddMailing = checkParam('payment-add-mailing-address');
 					$formPaymentMailingName = checkParam('payment-mailing-name');
@@ -374,8 +389,12 @@
 					$formPaymentMailingState = checkParam('payment-mailing-state');
 					$formPaymentMailingZipcode = checkParam('payment-mailing-zipcode');
 					$formPaymentMailingCountry = checkParam('payment-mailing-country');
+					
+					/*
+					//DISABLE: Remove phone & email for mailing address, billing & mailing will share the same email and phone
 					$formPaymentMailingEmail = checkParam('payment-mailing-email');
 					$formPaymentMailingPhone = checkParam('payment-mailing-phone');
+					*/
 				}
 
 				$formPaymentCreateAccount = checkParam('payment-create-account');
@@ -416,8 +435,9 @@
 				
 				$formTotalOneTime = 0.00;
 				$formTotalRecurring = 0.00;
+				$stripeDescription = "";
 				foreach($formGiftCatalogType AS $typeKey => $typeVal){
-					$formGiftLists[$typeKey]['type'] = $typeVal;
+					$formGiftLists[$typeKey]['type'] = $formGiftCatalogType[$typeKey];
 					$formGiftLists[$typeKey]['mode'] = $formGiftCatalogMode[$typeKey];
 					$formGiftLists[$typeKey]['code'] = $formGiftCatalogCode[$typeKey];
 					$formGiftLists[$typeKey]['description'] = $formGiftCatalogDescription[$typeKey];
@@ -429,6 +449,11 @@
 						$formTotalOneTime += $formGiftCatalogAmount[$typeKey];
 					}else{
 						$formTotalRecurring += $formGiftCatalogAmount[$typeKey];
+					}
+					if($stripeDescription == ""){
+						$stripeDescription = $formGiftLists[$typeKey]['description']." - ".$formGiftLists[$typeKey]['amount'];
+					}else{
+						$stripeDescription .= ", ".$formGiftLists[$typeKey]['description']." - ".$formGiftLists[$typeKey]['amount'];
 					}
 				}
 
@@ -449,12 +474,13 @@
 					$formDonorId = $_SESSION['user_id'];
 				}else{
 					$formDonorAccountData = $objGiving->getDonorAccountData($formPaymentBillingEmail);
-					if(!empty($formDonorAccountData) && $formPaymentCreateAccount != ""){
+					if(!empty($formDonorAccountData) && $formPaymentCreateAccount != "" && $formDonorAccountData['status'] == '1'){
 						$GLOBALS['myDB']->rollbackTrans();
 						$error['content'] = "Email address has been registered with a donor. Please login as a donor to proceed.";
 						break;
 					}
-
+					
+					//create new donor/customer in database/stripe if no existing data
 					if(empty($formDonorAccountData)){
 						$formDonorAccountData['username'] = $formPaymentBillingEmail;
 						$formDonorAccountData['email'] = $formDonorAccountData['username'];
@@ -469,20 +495,130 @@
 						}else{
 							$formDonorAccountData['status'] = 0;
 						}
+						
+						/** Stripe Customer - Start **/
+							try{
+								$stripe_customer = \Stripe\Customer::create(array(
+									'email' => $formPaymentBillingEmail
+								));
+							} catch (\Stripe\Error\RateLimit $e) {
+								// Too many requests made to the API too quickly
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\InvalidRequest $e) {
+								// Invalid parameters were supplied to Stripe's API
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Authentication $e) {
+								// Authentication with Stripe's API failed
+								// (maybe you changed API keys recently)
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\ApiConnection $e) {
+							  // Network communication with Stripe failed
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Base $e) {
+							  // Display a very generic error to the user, and maybe send
+							  // yourself an email
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (Exception $e) {
+							  // Something else happened, completely unrelated to Stripe
+								$error['content'] = $e->getMessage();
+								break;
+							}
+						/** Stripe Customer - End **/
+						$formDonorAccountData['stripe_cust_id'] = $stripe_customer->id;
 
 						if($GLOBALS['myDB']->insert('sys_users', $formDonorAccountData)){
 							$formDonorId = $GLOBALS['myDB']->getInsertedId();
 						}
 					}else{
 						$formDonorId = $formDonorAccountData['id'];
+						$stripe_customer = \Stripe\Customer::retrieve($formDonorAccountData['stripe_cust_id']);
 					}
 				}
 
-				$formPaymentCreateAccount = "";
-
 				$formPaymentId = "";
+				//echo "token is ".$formStripeToken; //debug
+				//exit();//debug
+				
+				if($formPaymentCCMode === "select"){ //$formPaymentCCMode == "edit" ||  //debug
+					$paymentData = array();
+					$paymentData = $objGiving->getPaymentData($formPaymentCCSelect);
+
+					if(empty($paymentData)){
+						$GLOBALS['myDB']->rollbackTrans();
+						$error['content'] = "Could not retrieve your payment card details. Please try again.";
+						break;
+					}else{
+						$formPaymentId = $paymentData['id'];
+						$stripe_source = $paymentData['stripe_source_id'];
+						/*
+						//disable
+						if($formPaymentCCMode == "edit"){
+							$paymentData['user_id'] = $formDonorId;
+							$paymentData['type'] = "card";
+							$paymentData['type_1'] = "";
+							$paymentData['number'] = $formPaymentCCNumber;
+							$paymentData['number_1'] = $formPaymentCCCVV;
+							$paymentData['name_1'] = $formPaymentCCExpiration;
+							$paymentData['name'] = $formPaymentCCName;
+							$paymentData['display_info'] = "1";
+							$paymentData['modified_by'] = $formDonorId;
+							$paymentData['modified_date'] = date("Y-m-d H:i:s");
+							if(!$GLOBALS['myDB']->update('payments', $paymentData, "`id`='$formPaymentId'")){
+								$GLOBALS['myDB']->rollbackTrans();
+								$error['content'] = "Could not update your payment card details. Please try again.";
+								break;
+							}
+						}
+						*/
+					}
+				}
+				
 				if($formPaymentSaveInformation == ""){
-					$formPaymentId = "-1";
+					$formPaymentId  = "-1";
+					
+					if($formPaymentCCMode === "new"){
+					
+						/** Stripe Card - Start **/							
+						try{
+							$stripe_card = $stripe_customer->sources->create(array(
+								"source" => $formStripeToken
+							));
+						} catch (\Stripe\Error\RateLimit $e) {
+							// Too many requests made to the API too quickly
+							$error['content'] = $e->getMessage();
+							break;
+						} catch (\Stripe\Error\InvalidRequest $e) {
+							// Invalid parameters were supplied to Stripe's API
+							$error['content'] = $e->getMessage();
+							break;
+						} catch (\Stripe\Error\Authentication $e) {
+							// Authentication with Stripe's API failed
+							// (maybe you changed API keys recently)
+							$error['content'] = $e->getMessage();
+							break;
+						} catch (\Stripe\Error\ApiConnection $e) {
+						  // Network communication with Stripe failed
+							$error['content'] = $e->getMessage();
+							break;
+						} catch (\Stripe\Error\Base $e) {
+						  // Display a very generic error to the user, and maybe send
+						  // yourself an email
+							$error['content'] = $e->getMessage();
+							break;
+						} catch (Exception $e) {
+						  // Something else happened, completely unrelated to Stripe
+							$error['content'] = $e->getMessage();
+							break;
+						}
+						
+						$stripe_source = $stripe_card->id;
+						/** Stripe Card - End **/
+					}
 				}else{
 					if(REGION == "US" && $formPaymentUSPaymode == "check"){
 						$paymentData = array();
@@ -498,63 +634,128 @@
 						if($GLOBALS['myDB']->insert('payments', $paymentData)){
 							$formPaymentId = $GLOBALS['myDB']->getInsertedId();
 						}
-					}else{
-						if($formPaymentCCMode == "new"){
+					}else{				
+						if($formPaymentCCMode == "new"){	
+							/** Stripe Card - Start **/							
+							try{
+								$stripe_card = $stripe_customer->sources->create(array(
+									"source" => $formStripeToken
+								));
+							} catch (\Stripe\Error\RateLimit $e) {
+								// Too many requests made to the API too quickly
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\InvalidRequest $e) {
+								// Invalid parameters were supplied to Stripe's API
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Authentication $e) {
+								// Authentication with Stripe's API failed
+								// (maybe you changed API keys recently)
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\ApiConnection $e) {
+							  // Network communication with Stripe failed
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Base $e) {
+							  // Display a very generic error to the user, and maybe send
+							  // yourself an email
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (Exception $e) {
+							  // Something else happened, completely unrelated to Stripe
+								$error['content'] = $e->getMessage();
+								break;
+							}
+							
+							$stripe_source = $stripe_card->id;
+							/** Stripe Card - End **/
+							
 							$paymentData = array();
 							$paymentData['user_id'] = $formDonorId;
+							$paymentData['stripe_source_id'] = $stripe_card->id;
 							$paymentData['type'] = "card";
 							$paymentData['type_1'] = "";
 							$paymentData['display_info'] = "1";
-							$paymentData['number'] = $formPaymentCCNumber;
-							$paymentData['number_1'] = $formPaymentCCCVV;
-							$paymentData['name_1'] = $formPaymentCCExpiration;
-							$paymentData['name'] = $formPaymentCCName;
+							$paymentData['number'] = $stripe_card->last4; //last 4 only
+							//$paymentData['number_1'] = $formPaymentCCCVV;
+							$paymentData['name_1'] = str_pad($stripe_card->exp_month, 2, "0", STR_PAD_LEFT)."/".substr($stripe_card->exp_year, -2);
+							//$paymentData['name'] = $formPaymentCCName;
 							$paymentData['created_by'] = $formDonorId;
 							$paymentData['created_date'] = date("Y-m-d H:i:s");
-							if($formPaymentSaveInformation != ""){
-								$paymentData['display_info'] = "1";
+							if($formPaymentSaveInformation == ""){
+								$paymentData['display_info'] = "0";
 							}
 							if($GLOBALS['myDB']->insert('payments', $paymentData)){
 								$formPaymentId = $GLOBALS['myDB']->getInsertedId();
 							}
-						}else if($formPaymentCCMode == "edit" || $formPaymentCCMode == "select"){
-							$paymentData = $objGiving->getPaymentData($formPaymentCCSelect);
-							if(empty($paymentData)){
-								$GLOBALS['myDB']->rollbackTrans();
-								$error['content'] = "Could not retrieve your payment card details. Please try again.";
-								break;
-							}else{
-								$formPaymentId = $paymentData['id'];
-								if($formPaymentCCMode == "edit"){
-									$paymentData['user_id'] = $formDonorId;
-									$paymentData['type'] = "card";
-									$paymentData['type_1'] = "";
-									$paymentData['number'] = $formPaymentCCNumber;
-									$paymentData['number_1'] = $formPaymentCCCVV;
-									$paymentData['name_1'] = $formPaymentCCExpiration;
-									$paymentData['name'] = $formPaymentCCName;
-									$paymentData['display_info'] = "1";
-									$paymentData['modified_by'] = $formDonorId;
-									$paymentData['modified_date'] = date("Y-m-d H:i:s");
-									if(!$GLOBALS['myDB']->update('payments', $paymentData, "`id`='$formPaymentId'")){
-										$GLOBALS['myDB']->rollbackTrans();
-										$error['content'] = "Could not update your payment card details. Please try again.";
-										break;
-									}
-								}
-							}
+							
 						}
+						
 					}
 				}
 
 				if($formPaymentId != "" && $formDonorId != ""){
-					$stripeStatus = true;
-					/** Stripe Payment - Start **/
-						// Do strip payment here, retrive payment data from array $paymentData 
-					/** Stripe Payment - End **/
+					$stripeStatus = false;
+					$errorStatus = "";
 
-					if($stripeStatus){
+					if($formTotalOneTime != ''){
+						/** Stripe Payment - Start **/
+							
+							// Charge the user's card:
+							try{
+								$charge = \Stripe\Charge::create(array(
+									"amount" => $formTotalOneTime*100, //convert amount to cents
+									"currency" => strtolower($formCurrencyCode),
+									"description" => $stripeDescription,
+									"source" => $stripe_source,
+									"customer" => $stripe_customer->id
+								));
+
+							}catch(\Stripe\Error\Card $e) {
+								// The card has been declined
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\RateLimit $e) {
+								// Too many requests made to the API too quickly
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\InvalidRequest $e) {
+								// Invalid parameters were supplied to Stripe's API
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Authentication $e) {
+								// Authentication with Stripe's API failed
+								// (maybe you changed API keys recently)
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\ApiConnection $e) {
+							  // Network communication with Stripe failed
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Base $e) {
+							  // Display a very generic error to the user, and maybe send
+							  // yourself an email
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (Exception $e) {
+							  // Something else happened, completely unrelated to Stripe
+								$error['content'] = $e->getMessage();
+								break;
+							}
+							
+						/** Stripe Payment - End **/
+					}
+					
+					
+					if($errorStatus == '' || ($formTotalOneTime == '' && $formTotalRecurring != '')){
+						$stripeStatus = true;
+					}
+
+					if($stripeStatus){ //$stripeStatus //debug
 						$headerData = array();
+						$headerData['stripe_charge_id'] = $charge->id;
 						$headerData['total_onetime'] = $formTotalOneTime;
 						$headerData['total_recurring'] = $formTotalRecurring;
 						$headerData['billing_fullname'] = $formPaymentBillingName;
@@ -574,8 +775,8 @@
 							$headerData['mailing_state'] = $formPaymentMailingState;
 							$headerData['mailing_zipcode'] = $formPaymentMailingZipcode;
 							$headerData['mailing_country'] = $formPaymentMailingCountry;
-							$headerData['mailing_email'] = $formPaymentMailingEmail;
-							$headerData['mailing_phone'] = $formPaymentMailingPhone;
+							//$headerData['mailing_email'] = $formPaymentMailingEmail;
+							//$headerData['mailing_phone'] = $formPaymentMailingPhone;
 						}
 						$headerData['payment_id'] = $formPaymentId;
 						$headerData['user_id'] = $formDonorId;
@@ -597,6 +798,11 @@
 						if(REGION != "US" && $formPaymentUSPaymode != "check" && $formPaymentCCProcessFee != ""){
 							$headerData['add_transaction_fee'] = "1";
 							$headerData['transaction_fee'] = "15";
+						}
+						if(REGION == "US" && $formPaymentUSPaymode == "check"){
+							$headerData['type'] = "check";
+						}else{
+							$headerData['type'] = "card";
 						}
 
 						$headerData['transaction_date'] = date("Y-m-d H:i:s");
@@ -623,6 +829,32 @@
 									$error['content'] = "Could not save your donation details. Please try again.";
 									break;
 								}
+								
+								/** Recurring Gift - Start **/
+								if($detailsData['recurring'] != ''){
+									$subscriptionData = array();
+									$subscriptionData['user_id'] = $formDonorId;
+									$subscriptionData['stripe_source_id'] = $stripe_source;
+									$subscriptionData['description'] = $detailsData['description'];
+									$subscriptionData['currency_code'] = $formCurrencyCode;
+									$subscriptionData['amount'] = $detailsData['amount'];
+									if($formPaymentUSPaymode == 'check'){
+										$subscriptionData['type'] = 'check';
+									}else{
+										$subscriptionData['type'] = 'card';
+									}
+									$subscriptionData['billing_interval'] = 'month';
+									$subscriptionData['billing_date'] =  substr($detailsData['recurring'], 0, -2);
+									$subscriptionData['created_by'] = $formDonorId;
+									$subscriptionData['created_date'] = date("Y-m-d H:i:s");
+									
+								}
+								if(!$GLOBALS['myDB']->insert('subscriptions', $subscriptionData)){
+									$GLOBALS['myDB']->rollbackTrans();
+									$error['content'] = "Could not save your donation details. Please try again.";
+									break;
+								}
+								/** Recurring Gift - End **/
 							}
 
 							if($formPaymentSaveInformation != ""){
@@ -633,8 +865,10 @@
 								$formDonorAccountData['billing_state'] = $formPaymentBillingState;
 								$formDonorAccountData['billing_zipcode'] = $formPaymentBillingZipcode;
 								$formDonorAccountData['billing_country'] = $formPaymentBillingCountry;
-								$formDonorAccountData['billing_email'] = $formPaymentBillingEmail;
-								$formDonorAccountData['billing_phone'] = $formPaymentBillingPhone;
+								$formDonorAccountData['email'] = $formPaymentBillingEmail;
+								$formDonorAccountData['phone_day'] = $formPaymentBillingPhone;
+								$formDonorAccountData['phone_day_extension'] = $formPaymentBillingPhoneExtension;
+								$formDonorAccountData['phone_country'] = $formPaymentBillingCountryCode;
 								if($formPaymentAddMailing != ""){
 									$formDonorAccountData['mailing_fullname'] = $formPaymentMailingName;
 									$formDonorAccountData['mailing_address1'] = $formPaymentMailingAddress1;
@@ -718,13 +952,19 @@
 									$formDonorAccountData['newsletter_row_phone'] = "0";
 								}
 							}
+							
+							//update existing donor if already donate before and now decided to register for a profile
+							if($formPaymentCreateAccount != "" && $formDonorAccountData['status'] == '0'){
+								$formDonorAccountData['status'] = 1;
+								$formDonorAccountData['password'] = hashPassword($formDonorAccountData['username'], $formPaymentAccountPassword, $formDonorAccountData['salt']);
+							}
 
 							if(!$GLOBALS['myDB']->update('sys_users', $formDonorAccountData, "`id`='$formDonorId'")){
 								$GLOBALS['myDB']->rollbackTrans();
 								$error['content'] = "Could not update your donor account. Please try again.";
 								break;
-							}
-
+							}							
+							
 							$GLOBALS['myDB']->commitTrans();
 
 							$newHeaderData = array("id" => $headerId);
