@@ -12,7 +12,6 @@
 		"title" => SITE_NAME.$breadCrumbData['title'],
 		"meta_keyword" => "",
 		"meta_description" => "",
-		"center_dir" => DIR_ACTIVE_THEME."/donor/view_donor.php"
 		"center_dir" => DIR_ACTIVE_THEME."/donor/donor.php"
 	);
 
