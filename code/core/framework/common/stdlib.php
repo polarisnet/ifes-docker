@@ -1513,7 +1513,18 @@
 			switch($value['data']['type']){
 				case 'string':
 					if(in_array($value['field'], $exception)){break;}
-					$condition .= " AND LOWER(".$value['field'].") LIKE '%".strtolower($value['data']['value'])."%' ";
+					if($value['field']=="created_by_format" || $value['field']=="modified_by_format") {
+						$arrIDs = getVariousIdsByConditions("id", "sys_users", " AND (first_name LIKE '%".$value['data']['value']."%' OR last_name LIKE '%".$value['data']['value']."%' OR email LIKE '%".$value['data']['value']."%')");
+						if(is_array($arrIDs) && count($arrIDs)>0) {
+							if($value['field']=="created_by_format") {
+								$condition .= " AND LOWER(created_by) IN ('".implode("','",$arrIDs)."') ";
+							} else if($value['field']=="modified_by_format") {
+								$condition .= " AND LOWER(modified_by) IN ('".implode("','",$arrIDs)."') ";
+							}							
+						}
+					} else {
+						$condition .= " AND LOWER(".$value['field'].") LIKE '%".strtolower($value['data']['value'])."%' ";
+					}
 				break;
 				case 'boolean' : 
 					if(in_array($value['field'], $exception)){break;}

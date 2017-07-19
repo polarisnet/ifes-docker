@@ -25,7 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/oz-noty/noty.css" />
 		<script type='text/javascript' defer src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/tooltip/bootstrap-tooltip.js'></script>
 		<script type='text/javascript' defer src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/tooltip/script.js'></script>
-                <script type='text/javascript' defer src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/caret/dist/jquery.caret.min.js'></script>
+		<script type='text/javascript' defer src='<?php echo HTTP_CDN_PLUGIN; ?>/jQuery/thirdparty/caret/dist/jquery.caret.min.js'></script>
 		<?php if($setting['extjs'] == '1'){ ?>			
 			<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/extjs4.2.1/resources/css/ext-all-neptune.css">
 			<link rel="stylesheet" type="text/css" href="<?php echo HTTP_CDN_PLUGIN; ?>/extjs4.2.1/examples/ux/grid/css/GridFilters.css">
@@ -49,6 +49,11 @@
 	    <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/yamm.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/font.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_PLUGIN; ?>/css/breadcrumbs/crumbs.css">
+        
+        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/custom_style.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/fo/font/font.css?ver=1" />
+        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_PLUGIN; ?>/bootstrap-3.3.6/css/bootstrap-custom.css?ver=1" />
+        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/fo/style.css?ver=1" />
 	</head>
 	<?php $winReady = ""; ?>
 	<body>

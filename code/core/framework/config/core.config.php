@@ -14,7 +14,7 @@
 		define('HTTP_SERVER', PROTOCOL.$_SERVER['HTTP_HOST']);
 	}else{
 		if(isset($_SERVER['SERVER_NAME']) && isset($_SERVER['SERVER_PORT'])){
-			define('HTTP_SERVER', PROTOCOL.$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT']);
+			define('HTTP_SERVER', PROTOCOL.$_SERVER['HTTP_HOST']);
 		}else{
 			define('HTTP_SERVER', '');
 		}

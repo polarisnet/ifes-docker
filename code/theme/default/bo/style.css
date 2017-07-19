@@ -7,7 +7,7 @@ html, #full-page-container{
 	overflow: hidden;
 }
 body{
-	font-family: 'Open Sans' !important, Arial;
+	/*font-family: 'Open Sans' !important, Arial;*/
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
@@ -22,7 +22,7 @@ body{
 	vertical-align: top;
 }
 .site-left{
-	font-family: 'Open Sans' !important, Arial;
+	/*font-family: 'Open Sans' !important, Arial;*/
 	background-color: #f3f3f3;
 	padding: 0;
 }
@@ -51,24 +51,24 @@ body{
 /** Overide ExtJS 4.2.1 - Start **/
 
 .x-body, .x-window-header-text-container-default, .x-field{
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
 }
 .x-form-item, .x-form-field, .x-datepicker-date{
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
 }
 .x-body{
 	font-size: 12px !important;
 }
 .x-btn-default-toolbar-small .x-btn-inner{
 	font-weight: normal !important;
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
 }
 .x-column-header, .x-grid-cell, .x-toolbar-text, .x-progress-default .x-progress-text, .x-form-trigger-wrap, .x-form-item-label{
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
 }
 .x-docked{
 	z-index: 0;
@@ -94,7 +94,7 @@ body{
 	border: 1px solid #bfbfbf;
 }
 .x-form-display-field{
-	font:normal 12px 'Open Sans';
+	/*font:normal 12px 'Open Sans';*/
 	color:black;
 	margin-top:4px;
 }
@@ -215,7 +215,7 @@ body{
 .flat-textarea{
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	min-width: 200px;
 	min-height: 50px;
 	resize: none;
@@ -227,7 +227,7 @@ body{
 .aa-bs .flat-textarea{
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	min-width: 208px;
 	min-height: 58px;
 	resize: none;
@@ -245,10 +245,11 @@ body{
 	min-height: 18px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
+	margin: 2px 0 2px 0;
 }
 
 .aa-bs .flat-input{
@@ -256,7 +257,7 @@ body{
 	min-height: 26px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -270,7 +271,7 @@ body{
 	min-width: 137px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	padding: 3px;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
@@ -282,7 +283,7 @@ body{
 	min-width: 137px;
 	border: 1px solid #bfbfbf;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	padding: 3px;
 	margin-left: 3px;
 	-webkit-appearance: none;
@@ -292,13 +293,14 @@ body{
 	border: 1px solid #73CAEA;
 }
 .flat-selectbox{
-	min-width: 208px;
-        width: 208px;
+	min-width: 200px;
+	width: 200px;
+	min-height: 30px;
 	border: 1px solid #bfbfbf;
-	padding: 3px;
+	padding: 4px;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
-	margin-left: 2px;
+	/*font-family: 'Open Sans', Arial;*/
+	margin: 2px 0 2px 2px;
 	-webkit-border-radius: 0;
 }
 
@@ -310,7 +312,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 3px;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;
+	/*font-family: 'Open Sans', Arial;*/
 	-webkit-border-radius: 0;
         line-height: 16px;
 }
@@ -320,7 +322,7 @@ body{
 	border: 1px solid #bfbfbf;
 	padding: 2px;
 	font-size: 12px;
-	font-family: 'Open Sans', Arial;	
+	/*font-family: 'Open Sans', Arial;*/	
 	-webkit-border-radius: 0;
 }
 .flat-checkbox{
@@ -347,7 +349,7 @@ body{
 .flat-button-default{
 	color: #ffffff;
 	background-color: #251F4F;
-        font-family: 'Open Sans';
+    /*font-family: 'Open Sans';*/
 	border: 0;
 	padding: 3px 5px 3px 5px;
 	cursor: pointer;
@@ -756,7 +758,7 @@ body{
       padding: 10px;
       font-size: 12px !important;
 	  font-weight: normal !important;
-	  font-family: 'Open Sans';
+	  /*font-family: 'Open Sans';*/
       text-align: center;
       color: rgb(113, 157, 171);
       background: rgb(255, 255, 255);
@@ -840,7 +842,7 @@ body{
 	color:#fff;
 	font-size: 12px !important;
 	font-weight: normal !important;
-	font-family: 'Open Sans';
+	/*font-family: 'Open Sans';*/
 	text-align:center;
 	text-decoration:none;
 	background-color:#808080;

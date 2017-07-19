@@ -1,4 +1,4 @@
-.crumbs {display: block; margin-left: -27px; position: relative; top: -10px;font-family: DIN-Medium;}  
+.crumbs {display: block; margin-left: -27px; position: relative;/*top: -10px;font-family: DIN-Medium;*/}  
 .crumbs li {  display: inline;}  
 .crumbs li.first { padding-left: 2px; }  
 .crumbs li a,  

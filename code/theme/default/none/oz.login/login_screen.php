@@ -19,7 +19,7 @@
     <?php } ?>
 </div>
 <div id="login-form" class="col-sm-6 col-xs-12" style="height:95vh;">
-    <div class="row" style="height:33%;"><div class="col-xs-12 v-align" ><img id="login-logo" class="img-responsive logo" src="<?php echo HTTP_MEDIA;?>/site-image/polarisnet.jpg"></div></div>
+    <div class="row" style="height:33%;"><div class="col-xs-12 v-align" ><img id="login-logo" class="img-responsive logo" src="<?php echo HTTP_MEDIA;?>/site-image/ifes.jpg"></div></div>
     <div class="row" style="height:67%">
         <div class="col-xs-12" style="top:16%;transform:translateY(-33%)" >
         <form id="form-login" name="form-login" enctype="multipart/form-data" method="post" class="form-signin">

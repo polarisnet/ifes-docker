@@ -2,7 +2,7 @@
 	<div class="navbar yamm navbar-default navbar-fixed-top" >
       <div>
         <div class="navbar-header" style="height:50px;">
-          <img class="visible-xs" style="max-height: 50px;float:right" src="<?php echo getDefaultPicture($_SESSION['uid']); ?>"><button type="button" data-toggle="collapse" data-target="#navbar-collapse-1" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="<?php echo HTTP_SERVER.HTTP_ROOT; ?>"><img src="<?php echo HTTP_MEDIA;?>/site-image/polarisnet2.jpg"></a>
+          <img class="visible-xs" style="max-height: 50px;float:right" src="<?php echo getDefaultPicture($_SESSION['uid']); ?>"><button type="button" data-toggle="collapse" data-target="#navbar-collapse-1" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="<?php echo HTTP_SERVER.HTTP_ROOT; ?>"><img src="<?php echo HTTP_MEDIA;?>/site-image/ifes.jpg"></a>
           
         </div>
         <div id="navbar-collapse-1" class="navbar-collapse collapse yamm-aw">
@@ -11,7 +11,7 @@
             <?php echo loadHeaderTemplate('mega-menu-1', ''); ?>
               <?php //echo loadSpecificHeaderTemplate('...'); ?>
           </ul>
-            <ul class="nav navbar-nav navbar-right hidden-xs" style="margin-right: -15px;">
+            <ul class="nav navbar-nav navbar-right hidden-xs" style="margin-right: 0;">
                 <li>
             <img style="max-height: 50px;" src="<?php echo getDefaultPicture($_SESSION['uid']); ?>">
                 </li>

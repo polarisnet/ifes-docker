@@ -2089,7 +2089,7 @@ fieldset[disabled] .tw-bs .btn-default.active {
 }
 .tw-bs .btn-primary {
   color: #ffffff;
-  background-color: #004983;
+  background-color: #251F4F;
   border: 0;
     padding: 3px 5px 3px 5px;
     cursor: pointer;
@@ -3070,7 +3070,7 @@ fieldset[disabled] .tw-bs .btn-link:focus {
 .tw-bs .dropdown-menu > li > a:focus {
   text-decoration: none;
   color: #fff;
-  background-color: #004983;
+  background-color: #251F4F;
 }
 
 .tw-bs .dropdown-menu > .active > a,
@@ -3501,7 +3501,7 @@ select[multiple].tw-bs .input-group-sm > .input-group-btn > .btn {
 .tw-bs .nav .open > a:hover,
 .tw-bs .nav .open > a:focus {
 /*  color: black;
-  background-color: #004983;
+  background-color: #251F4F;
   border-color: #428bca;*/
 }
 .tw-bs .nav .nav-divider {
@@ -3965,7 +3965,7 @@ select[multiple].tw-bs .input-group-sm > .input-group-btn > .btn {
   }
 }
 .tw-bs .navbar-default {
-  background-color: #004983;
+  background-color: #251F4F;
   border-color: #e7e7e7;
 }
 .tw-bs .navbar-default .navbar-brand {
@@ -4028,7 +4028,7 @@ select[multiple].tw-bs .input-group-sm > .input-group-btn > .btn {
   .tw-bs .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
   .tw-bs .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: white;
-    background-color: #004983;
+    background-color: #251F4F;
   }
   
   .tw-bs .navbar-default .navbar-nav .open .dropdown-menu > .active > a,

@@ -75,7 +75,7 @@
 			$formState = $userData['mailing_state'];
 			$formCountryISO = $userData['mailing_country'];
 			
-			$key = array_search($formCountryISO, array_column($listCountries, 'iso'));
+			$key = "";//array_search($formCountryISO, array_column($listCountries, 'iso'));
 			$formCountry = $listCountries[$key][name];
 			
 			$formTelephoneMobile = $userData['phone'];
