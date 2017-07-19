@@ -17,3 +17,4 @@ When develop make sure Dockerfile comment following:
 Then run this command through powershell
 docker build -t ifes-docker .
 docker run -p 80:80 -v D:/ifes-docker/code:/var/www/html -d ifes-docker
+docker run -p 80:80 -v C:\UniServerZ\www\IFES\ifes-docker\code:/var/www/html -d ifes-docker

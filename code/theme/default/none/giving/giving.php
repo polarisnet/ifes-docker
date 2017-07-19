@@ -1,3 +1,4 @@
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 <div class="custom-ferdie-carousel">
 	<?php foreach($listCustomBanner AS $bannerData){ ?>
 	<div class="form-container" style="background-image: url('<?php echo HTTP_MEDIA.'/site-image/custom-banner'.$bannerData['image'];?>'); background-size: cover;">
@@ -357,14 +358,14 @@
 							<div class="col-xs-4" style="padding-right: 0; text-align: right;">
 								<div style="padding: 6px 0;"><span class="currency-symbol"><?php echo $formCurrencySymbol; ?></span> <span class="currency-value">%templateAmountFormat%</span></div>
 								<div style="padding: 5px 0; clear: both;">
-									<div class="input-group date datetimepicker gift-list-datepicker">
+									<div class="input-group date datetimepicker gift-list-datepicker" id="gift-recurring-date-edit">
 										<input type="text" class="form-control gift-list-input-recurring gift-list-input-recurring-view" value="%templateRecurring%" onchange="changeRecurringDate('%templateId%', this.value);" />
 										<span class="input-group-addon" style="padding-bottom: 7px;">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 									<div class="gift-list-label-recurring">Monthly Gift on the</div>
-									<input type="checkbox" class="gift-list-input-recurring-check-view" onclick="toggleRecurring('%templateId%', this);" style="position: relative; top: 5px;">
+									<input type="checkbox" class="gift-list-input-recurring-check-view" onclick="modifiyGiftList('%templateId%', this);" style="position: relative; top: 5px;"> <!-- toggleRecurring('%templateId%', this) -->
 								</div>
 								<div style="padding: 6px 0; float: right;">
 									<div><a onclick="modifiyGiftList('%templateId%');">Modify</a> | <a onclick="removeGiftList('%templateId%');">Remove</a></div>
@@ -394,7 +395,7 @@
 										</span>
 									</div>
 									<div class="gift-list-label-recurring">Monthly Gift on the</div>
-									<input type="checkbox" class="gift-list-input-recurring-check-edit" onclick="toggleRecurring('%templateId%', this);" style="position: relative; top: 5px;">
+									<input type="checkbox" class="gift-list-input-recurring-check-edit"  style="position: relative; top: 5px;"> <!-- onclick="toggleRecurring('%templateId%', this);" -->
 								</div>
 								<div class="gift-list-save-container">
 									<div><a class="gift-list-input-save" onclick="saveGiftList('%templateId%');">Save</a> | <a onclick="cancelGiftList('%templateId%');">Cancel</a></div>
@@ -435,7 +436,7 @@
 		<tr><td style="padding-bottom: 20px;"></td></tr>
 	</table>
 </div>
-<form id="gift-submit-form" role="form" method="post" onsubmit="return validateForm();">
+<form id="gift-submit-form" role="form" method="post" >
 	<div class="gift-payment" style="<?php if(empty($_POST)){echo "display: none;";} ?>">
 		<div class="container">
 			<table class="gift-payment-table">
@@ -497,12 +498,12 @@
 						<div class="col-xs-12">
 							<select id="gift-cc-select" class="selectpicker" data-size="8" name="payment-cc-select" data-none-selected-text="Please select a credit card">
 								<?php foreach($listCreditCards AS $creditCardData){ ?>
-								<option value="<?php echo $creditCardData['id']; ?>"><?php echo ccMasking($creditCardData['number']); ?></option>
+								<option value="<?php echo $creditCardData['id']; ?>"><?php echo 'XXXX-XXXX-XXXX-'.$creditCardData['number']; ?></option>
 								<?php } ?>	
 							</select>
 						</div>
 						<div class="col-xs-12" style="text-align: right; padding-top: 10px;">
-							<?php if(!empty($listCreditCards)){ ?><button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment('edit');" style="margin-right: 15px;">EDIT CARD</button><?php } ?>
+							<?php if(false){ //!empty($listCreditCards) //debug?><button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment('edit');" style="margin-right: 15px;">EDIT CARD</button><?php } ?>
 							<button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment('new');">NEW CARD</button>
 						</div>
 					</td>
@@ -510,8 +511,9 @@
 				<?php } ?>
 				<tr id="gift-cc-form-new" style="<?php if(!empty($listCreditCards)){echo "display: none;";} ?>">
 					<td>
+					<?php /*?>
 						<div class="col-xs-12" style="padding-bottom: 10px;">
-							<input type="hidden" id="gift-cc-input-mode" name="payment-cc-mode" value="<?php if(empty($listCreditCards)){echo "new";}else{echo "select";} ?>">
+							
 							<input type="text" id="gift-cc-input-number" name="payment-cc-number" class="form-control" placeholder="Card Number" value="<?php echo $formPaymentCCNumber; ?>">
 						</div>
 						<div class="col-xs-12" style="padding-bottom: 10px;">
@@ -524,6 +526,21 @@
 							<input type="text" id="gift-cc-input-cvv" name="payment-cc-cvv" class="form-control" placeholder="CVV">
 							<img src="<?php echo HTTP_MEDIA; ?>/site-image/tooltip-info.png" class="gift-cvv-tooltip" data-toggle="tooltip" title="<img src='<?php echo HTTP_MEDIA; ?>/site-image/cvv-tooltip.png' width='140'>">
 						</div>
+					<?php */?>
+					<input type="hidden" id="gift-cc-input-mode" name="payment-cc-mode" value="<?php if(empty($listCreditCards)){echo "new";}else{echo "select";} ?>">
+					<div class="col-xs-12">
+						<label class="stripe-info" for="card-element">
+						  Credit or debit card
+						</label>
+						<div id="card-element">
+						  <!-- a Stripe Element will be inserted here. -->
+						</div>
+
+						<!-- Used to display Element errors -->
+						<div class="stripe-error" id="card-errors" role="alert"></div>
+						<div class="stripe-error" id="bank-errors" role="alert"></div>
+					</div>
+
 						<?php if(!empty($listCreditCards)){ ?>
 						<div class="col-xs-12" style="text-align: right; padding-top: 10px;">
 							<button type="button" class="btn btn-default btn-ifes" onclick="toggleCardPayment('select');">CANCEL</button>
@@ -572,11 +589,25 @@
 								<?php } ?>
 							</select>
 						</div>
-						<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
+						<div class="col-xs-12" style="padding-bottom: 10px;">
 							<input type="text" id="gift-billing-input-email" name="payment-billing-email" class="form-control" placeholder="Email" value="<?php echo $formPaymentBillingEmail; ?>">
 						</div>
-						<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
+						<div class="col-xs-3" style="padding-bottom: 10px; padding-right: 0px;">
+							<select id="gift-billing-input-countrycode" name="payment-billing-countrycode" style="overflow-x:hidden;" class="selectpicker" 
+							data-size="8" data-none-selected-text="Country Code" >
+								<?php foreach($listCountries AS $countryData){ ?>
+									<option data-display="<?php echo "+".$countryData['country_code']; ?>" 
+									data-value="<?php echo $countryData['name']." (+".$countryData['country_code'].")"; ?>" 
+									value="<?php echo $countryData['iso']; ?>" <?php if($countryData['iso'] == $formPaymentBillingCountryCode){echo 'selected';}?>>
+									<?php echo " (+".$countryData['country_code'].")"; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 0px; padding-right: 5px;">
 							<input type="text" id="gift-billing-input-phone" name="payment-billing-phone" class="form-control" placeholder="Phone" value="<?php echo $formPaymentBillingPhone; ?>">
+						</div>
+						<div class="col-xs-3" style="padding-bottom: 10px; padding-left: 5px;">
+							<input type="text" id="gift-billing-input-extension" name="payment-billing-extension" class="form-control" placeholder="Extension" value="<?php echo $formPaymentBillingPhoneExtension; ?>">
 						</div>
 					</td>
 				</tr>
@@ -612,12 +643,15 @@
 								<?php } ?>
 							</select>
 						</div>
+						<!--
+						//DISABLE: Remove phone & email for mailing address, billing & mailing will share the same email and phone
 						<div class="col-xs-6" style="padding-bottom: 10px; padding-right: 5px;">
-							<input type="text" id="gift-mailing-input-email" name="payment-mailing-email" class="form-control" placeholder="Email" value="<?php echo $formPaymentMailingEmail; ?>">
+							<input type="text" id="gift-mailing-input-email" name="payment-mailing-email" class="form-control" placeholder="Email" value="<?php //echo $formPaymentMailingEmail; ?>">
 						</div>
 						<div class="col-xs-6" style="padding-bottom: 10px; padding-left: 5px;">
-							<input type="text" id="gift-mailing-input-phone" name="payment-mailing-phone" class="form-control" placeholder="Phone" value="<?php echo $formPaymentMailingPhone; ?>">
+							<input type="text" id="gift-mailing-input-phone" name="payment-mailing-phone" class="form-control" placeholder="Phone" value="<?php //echo $formPaymentMailingPhone; ?>">
 						</div>
+						-->
 					</td>
 				</tr>
 				<?php if(!$isLogin){ ?>
@@ -637,7 +671,7 @@
 					</td>
 				</tr>
 				<?php } ?>
-				<tr id="gift-payment-save-details" style="<?php if(!$isLogin){ ?>display: none;<?php } ?>">
+				<tr id="gift-payment-save-details" style="<?php if(!$isLogin || !empty($listCreditCards)){ ?>display: none;<?php } ?>">
 					<td>
 						<label class="checkbox-inline"><input type="checkbox" id="gift-save-payment" name="payment-save-information" <?php if($formPaymentSaveInformation != ""){echo 'checked';} ?>>Save payment method information on my account</label>
 					</td>
@@ -685,7 +719,7 @@
 							Thank you for your gift!
 						</div>
 						<div class="col-xs-6" style="text-align: right; padding-right: 0;">
-							<button type="button" class="btn btn-default btn-ifes" onclick="$('#gift-submit-form').submit();">GIVE NOW</button>
+							<button type="submit" class="btn btn-default btn-ifes" >GIVE NOW</button>
 						</div>
 					</td>
 				</tr>
@@ -712,6 +746,112 @@
 	var giftLists = [];
 	var giftCurrencySymbol = '<?php echo $formCurrencySymbol; ?>';
 	var giftCurrencyCode = '<?php echo $formCurrencyCode; ?>';
+	var stripe = Stripe('<?php echo STRIPE_PUBLIC_KEY; ?>');
+	var elements = stripe.elements();
+	
+	// Custom styling can be passed to options when creating an Element.
+	var style = {
+		base: {
+			color: '#32325d',
+			lineHeight: '24px',
+			fontSmoothing: 'antialiased',
+			fontSize: '16px',
+			'::placeholder': {
+				color: '#aab7c4'
+			}
+		},
+		invalid: {
+			color: '#fa755a',
+			iconColor: '#fa755a'
+		}
+	};
+
+	// Create an instance of the card Element
+	var card = elements.create('card', {style: style});
+
+	// Add an instance of the card Element into the `card-element` <div>
+	card.mount('#card-element');
+	
+	card.addEventListener('change', function(event) {
+	  var displayError = document.getElementById('card-errors');
+	  if (event.error) {
+		displayError.textContent = event.error.message;
+	  } else {
+		displayError.textContent = '';
+	  }
+	});
+	
+	var form = document.getElementById('gift-submit-form');
+	form.addEventListener('submit', function(event) {
+		event.preventDefault();
+		
+		if(!validateForm()){
+			return false;
+		}
+		
+		//console.log(giftLists); //debug
+		//return false;  //debug
+
+		if($('#gift-cc-input-mode').val() == "new"){ //TODO: ASK country & account_holder_type
+			if($('#payment-us-paymode').val() == 'check'){
+				stripe.createToken('bank_account', {
+				country: $("#gift-billing-input-countrycode").val(),
+				currency: $('.currency-code').html().substr(0, 3),
+				routing_number: $("gift-echeck-input-route-no").val(),
+				account_number: $("gift-echeck-input-acc-no").val(),
+				account_holder_name: $("gift-echeck-input-name").val(),
+				account_holder_type: 'individual',
+				}).then(function(result) {
+				// handle result.error or result.token
+					if (result.error) {
+					  // Inform the user if there was an error
+					  var errorElement = document.getElementById('bank-errors');
+					  errorElement.textContent = result.error.message;
+					} else {
+					  // Send the token to your server
+					  stripeTokenHandler(result.token);
+					}
+					
+				});
+			}else{
+				var extraDetails = {
+					name: $('#gift-billing-input-name').val(),
+				};
+  
+				stripe.createToken(card, extraDetails).then(function(result) {
+					if (result.error) {
+					  // Inform the user if there was an error
+					  var errorElement = document.getElementById('card-errors');
+					  errorElement.textContent = result.error.message;
+					} else {
+					  // Send the token to your server
+					  stripeTokenHandler(result.token);
+					}
+				});
+			}
+			
+		}else{
+			$("#gift-save-payment").val('on');
+			var form = document.getElementById('gift-submit-form');
+			form.submit();
+		}
+		
+		
+		
+	});
+	
+	function stripeTokenHandler(token) {
+	  // Insert the token ID into the form so it gets submitted to the server
+	  var form = document.getElementById('gift-submit-form');
+	  var hiddenInput = document.createElement('input');
+	  hiddenInput.setAttribute('type', 'hidden');
+	  hiddenInput.setAttribute('name', 'stripeToken');
+	  hiddenInput.setAttribute('value', token.id);
+	  form.appendChild(hiddenInput);
+
+	  // Submit the form
+	  form.submit();
+	}
 
 	<?php if(!$isLogin){ ?>
 	$("#login-username").on('keyup', function (e){
@@ -934,31 +1074,31 @@
 		calcGiftList();
 		$('.gift-list-tooltip').tooltip();
 	}
-
+	
+	/* //disable //mark for delete
 	function toggleRecurring(index, obj){
 		for(var i=0; i<giftLists.length; i++){
 			if(giftLists[i].id == index){
 				if($(obj).prop('checked')){
-					giftLists[i].recurring_check = true;
+					giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-edit').prop('checked');
 				}else{
-					giftLists[i].recurring_check = false;
+					giftLists[i].recurring = '';
 				}
-				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', giftLists[i].recurring_check);
-				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', giftLists[i].recurring_check);
 				break;
 			}
 		}
-		calcGiftList();
 	}
-
+	*/
 	function changeRecurringDate(index, val){
 		for(var i=0; i<giftLists.length; i++){
 			if(giftLists[i].id == index){
 				giftLists[i].recurring = val;
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-view').val(val);
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-edit').val(val);
 				break;
 			}
 		}
-		calcGiftList();
+		//calcGiftList(); //test
 	}
 
 	function renderGiftLists(index){
@@ -995,24 +1135,47 @@
 		}
 	}
 
-	function modifiyGiftList(index){
+	function modifiyGiftList(index, obj = 0){
 		for(var i=0; i<giftLists.length; i++){
 			if(giftLists[i].id == index){
+				if(obj != 0){
+					if($(obj).prop('checked')){
+						$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', true);
+						//giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(); //test
+					}else{
+						$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', false);
+						//giftLists[i].recurring = ''; //test
+					}
+				}
+			
 				$('#gift-list-container-'+index).find('.gift-list-currency-value').val(giftLists[i].amount);
 				$('#gift-list-container-'+index).find('.gift-list-input-anonymous').prop('checked', giftLists[i].anonymous);
 				$('#gift-list-container-'+index).find('.gift-list-input-comment').val(giftLists[i].comment);
-				giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val();
-				$('#gift-list-container-'+index).find('.gift-list-input-recurring').val(giftLists[i].recurring);
+				//giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(); //test
+				//$('#gift-list-container-'+index).find('.gift-list-input-recurring').val(giftLists[i].recurring); //test
+				
+				
 				break;
 			}
 		}
 		$('#gift-list-container-'+index).children('.gift-list-container-view').hide();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').show();
+		
+		calcGiftList();
 	}
 
 	function cancelGiftList(index){
 		$('#gift-list-container-'+index).children('.gift-list-container-view').show();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').hide();
+		
+		for(var i=0; i<giftLists.length; i++){
+			if(giftLists[i].id == index){
+				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', giftLists[i].recurring_check);
+				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', giftLists[i].recurring_check);
+			}
+		}
+		
+		calcGiftList();
 	}
 
 	function saveGiftList(index){
@@ -1038,9 +1201,10 @@
 			$('#gift-list-container-'+index).find('.gift-list-view-comment').html(inputComment);
 		}
 
-		var inputRecurringCheck = $('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').val();
+		var inputRecurringCheck = $('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked');
 		var inputRecurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-edit').val();
 		$('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(inputRecurring);
+		$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', inputRecurringCheck);
 
 		$('#gift-list-container-'+index).children('.gift-list-container-view').show();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').hide();
@@ -1063,8 +1227,9 @@
 	function calcGiftList(){
 		var tmpRecurring = 0;
 		var tmpOnetime = 0;
+		
 		for(var i=0; i<giftLists.length; i++){
-			if(giftLists[i].recurring == '' && !giftLists[i].recurring_check){
+			if(giftLists[i].recurring_check == false){
 				tmpOnetime += giftLists[i].amount;
 			}else{
 				tmpRecurring += giftLists[i].amount;
@@ -1094,8 +1259,64 @@
 		$('.total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
 		$('.total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
 	}
+	
+	function assignDate(){
+		for(var i=0; i<giftLists.length; i++){
+			if($('#gift-list-container-'+giftLists[i].id).children('.gift-list-container-view').is(':visible')){
+				var inputRecurring = $('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-view').val();
+				giftLists[i].recurring = inputRecurring;
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-edit').val(inputRecurring);
+			}else{
+				var inputRecurring = $('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-edit').val();
+				giftLists[i].recurring = inputRecurring;
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-view').val(inputRecurring);
+			}		
+		}
+	}
+	
+	function changePhoneMask(region = 'row'){
+		//for us
+		if(region == 'us'){ 
+			$("#gift-billing-input-phone").inputmask("9{1,3} 9{1,3} 9{1,4}");
+		//for uk
+		}else if(region == 'uk'){ 
+			$("#gift-billing-input-phone").inputmask("9{1,5} 9{1,8}");
+		//for row
+		}else{ 
+			$("#gift-billing-input-phone").inputmask("9{1,4} 9{1,9}");
+		}
+	}
+	
+	function showDisplayValue() {
+		var options = $("#gift-billing-input-countrycode")['0'].options,
+			option = $("#gift-billing-input-countrycode")['0'].selectedOptions[0],
+			i;
+		var option_value = option.getAttribute('value');
+		// reset options
+		for (i = 0; i < options.length; ++i) {
+			options[i].innerText = options[i].getAttribute('data-value');
+		}
+	  
+		// change the selected option's text to its `data-display` attribute value
+		option.innerText = option.getAttribute('data-display');
+		//refresh select picker
+		$('.selectpicker').selectpicker('refresh');
+		
+		
+		//change input mask
+		if(option_value == 'us'){
+			changePhoneMask('us');
+		}else if(option_value == 'gb'){
+			changePhoneMask('uk');
+		}else{
+			changePhoneMask('row');
+		}
+	}
 
 	$(document).ready(function(){
+		document.getElementById('gift-billing-input-countrycode').addEventListener('change', showDisplayValue, false);
+		showDisplayValue()
+		
 		$('.gift-list-tooltip').tooltip();
 		$('.gift-cvv-tooltip').tooltip({html: 'true'});
 
@@ -1109,6 +1330,7 @@
 
 		$("#gift-cc-input-expiration").inputmask("99/99", {placeholder: 'MM/YY', "clearIncomplete": true});
 		$("#gift-billing-input-email, #gift-payment-input-email").inputmask("email");
+		$("#gift-billing-input-extension").inputmask("9{1,5}", {placeholder: ''});
 
 		<?php if(!empty($formGiftLists)){
 				foreach($formGiftLists AS $listKey => $listData){ ?>
@@ -1184,7 +1406,7 @@
 		return true;
 	}
 
-	function validateForm(){
+	function validateForm(){		
 		if(giftLists.length == 0){
 			noty({text: "Please add at least 1 gift before submit this donation form.", type: 'error'});
 			return false;
@@ -1215,15 +1437,16 @@
 					noty({text: "Please fill in name on account.", type: 'error'});
 					return false;
 				}
-			}else if($('#payment-us-paymode').val() == "cc" && !validateCC()){
-				return false;
-			}
-		<?php }else{ ?>
-			if(!validateCC()){
-				return false;
-			}
-		<?php } ?>
-
+			}//else if($('#payment-us-paymode').val() == "cc" ){ && !validateCC()){ //disable 
+				//return false;
+			//}
+		<?php }//else{ //disable?>
+			//if(!validateCC()){
+			//	return false;
+			//}
+		<?php //} ?>
+		
+		/* //test
 		if(!bootstrapValidateEmpty("gift-billing-input-name", "")){
 			noty({text: "Please fill in full name.", type: 'error'});
 			return false;
@@ -1282,6 +1505,9 @@
 				noty({text: "Please fill in zipcode.", type: 'error'});
 				return false;
 			}
+			*/
+			/*
+			//DISABLE: Remove phone & email for mailing address, billing & mailing will share the same email and phone
 			if(!bootstrapValidateEmpty("gift-mailing-input-email", "")){
 				noty({text: "Please fill in email.", type: 'error'});
 				return false;
@@ -1290,8 +1516,9 @@
 				noty({text: "Please fill in phone.", type: 'error'});
 				return false;
 			}
-		}
-
+			*/
+		//}
+		
 		if($('#gift-create-account').prop('checked')){
 			if(!bootstrapValidateEmpty("gift-save-password", "")){
 				noty({text: "Please fill in password.", type: 'error'});
@@ -1315,11 +1542,18 @@
 			$('<input>').attr({name: 'catalog-value-comment[]', value: giftLists[i].comment}).appendTo('#submit-variable');
 			$('<input>').attr({name: 'catalog-value-anonymous[]', value: giftLists[i].anonymous}).appendTo('#submit-variable');
 			$('<input>').attr({name: 'catalog-value-amount[]', value: giftLists[i].amount}).appendTo('#submit-variable');
+			
+			if(giftLists[i].recurring_check && giftLists[i].recurring == ''){
+				noty({text: "Please select date for recurring gift.", type: 'error'});
+				return false;
+			}
 			$('<input>').attr({name: 'catalog-value-recurring[]', value: giftLists[i].recurring}).appendTo('#submit-variable');
 		}
 
 		$('<input>').attr({name: 'submit-currency-code', value: $('.currency-code').html().substr(0, 3)}).appendTo('#submit-variable');
 		$('<input>').attr({name: 'submit-currency-symbol', value: $('.currency-symbol').html()}).appendTo('#submit-variable');
+		
+		return true;
 	}
 
 	function revealPayment(){
@@ -1337,6 +1571,8 @@
 		$('.datetimepicker').datetimepicker({
 			format: 'Do',
 			allowInputToggle: true
+		}).on("dp.change", function (e) {
+			assignDate();
 		});
 
 		$('.gift-list-currency-value').off();
@@ -1355,6 +1591,7 @@
 	}
 
 	function toggleCardPayment(mode){
+		/*
 		if(mode == "edit"){
 			$('.gift-payment').ploading({action: 'show'});
 			$.ajax({
@@ -1388,16 +1625,12 @@
 				$('body').ploading({action: 'hide'});
 			});
 		}else{
-			if($('#gift-cc-form-new').is(':visible')){
-				$('#gift-cc-input-number').val('');
-				$('#gift-cc-input-name').val('');
-				$('#gift-cc-input-expiration').val('');
-				$('#gift-cc-input-cvv').val('');
-			}
+		*/
 			$('#gift-cc-input-mode').val(mode);
 			$('#gift-cc-form-select').toggle();
 			$('#gift-cc-form-new').toggle();
-		}
+			$('#gift-payment-save-details').toggle();
+		//}
 		$('.gift-cvv-tooltip').tooltip({html: 'true'});
 	}
 

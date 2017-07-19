@@ -186,7 +186,7 @@ case 'donor_management.transaction.view':
 		header("Location: ".getModuleURL('donor_management.transaction.list')."?invalid=2");
 		exit;
 	}
-	$transactionData = $objDonor->getGivingHistoryData(" AND p.`id`='".$arrKeys[0]."' AND d.`id`='".$arrKeys[1]."' AND dd.`id`='".$arrKeys[2]."' ");
+	$transactionData = $objDonor->getAdminGivingHistoryData(" AND p.`id`='".$arrKeys[0]."' AND d.`id`='".$arrKeys[1]."' AND dd.`id`='".$arrKeys[2]."' ");
 	//echo "<pre>";print_r($transactionData);echo "</pre>";exit;
 	
 	$allowView 		= checkAccess('donor_management.transaction.view');
@@ -258,7 +258,7 @@ case 'donor_management.transaction.list':
 	$setting['center_dir'] = DIR_ACTIVE_THEME."/donor_management/transaction/list_transaction.php";
 	$start = 0;
 	$itemsPerPage = 15;
-	$fields = $objDonor->listGivingHistoryField();
+	$fields = $objDonor->listAdminGivingHistoryField();
 	//echo "<pre>";print_r($fields);echo "</pre>";exit;
 	if(!empty($_GET)){
 		$invalidGet = checkParam('invalid');
@@ -591,12 +591,12 @@ break;
 							$condition .= " ORDER BY p.`id` DESC ";
 						}
 						$_SESSION['donor_management.transaction.list_filter'] = $condition." LIMIT ".$start.", ".($limit+1);
-						$output['total'] = $objDonor->listGivingHistory($condition, false, false, true);
+						$output['total'] = $objDonor->listAdminGivingHistory($condition, false, false, true);
 						if(strlen($start) != 0 && strlen($limit) != 0){
 							$condition .= " LIMIT ".$start.", ".$limit;
 						}
 						//$selection = "`id`, `username`, `email`, `uid`, `first_name`, `last_name`, `access`, `status`, `created_by`, `created_date`, `modified_by`, `modified_date`";
-						$output['table'] = $objDonor->listGivingHistory($condition, false, false, false);
+						$output['table'] = $objDonor->listAdminGivingHistory($condition, false, false, false);
 						//echo "<pre>";print_r($output);echo "</pre>";exit;
 						$output['success'] = true;
 					break;

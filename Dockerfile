@@ -3,8 +3,9 @@ FROM ubuntu
 MAINTAINER ferdie.putrawan@polarisnet.com.my
 
 RUN apt-get update
-RUN apt-get install -y nano nginx php7.0 php7.0-cli php7.0-cgi php7.0-fpm php7.0-gd php7.0-mbstring php7.0-imap php7.0-odbc php7.0-mysqli php7.0-curl php7.0-mcrypt php7.0-zip
+RUN apt-get install -y nano nginx php7.0 php7.0-cli php7.0-cgi php7.0-fpm php7.0-gd php7.0-mbstring php7.0-imap php7.0-odbc php7.0-mysqli php7.0-curl php7.0-mcrypt php7.0-zip php7.0-xml
 
+RUN chmod +x nginx.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
 COPY default /etc/nginx/sites-available/default
@@ -25,4 +26,6 @@ RUN chmod 777 /etc/nginx/nginx.conf && chmod 777 /etc/nginx/sites-available/defa
 
 EXPOSE 80
 
+RUN chmod +x /etc/start.sh
+RUN dos2unix /etc/start.sh
 CMD /etc/start.sh

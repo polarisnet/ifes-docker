@@ -25,12 +25,16 @@
 		
 		function getFirstDateByUserID($id){
 			$output = array();
+			$output = "";
 			$sql = "SELECT `created_date` FROM `donations` WHERE `user_id`='".$id."' ORDER BY `created_date` ASC LIMIT 1 ";
 			$this->db->query($sql);
 			if($this->db->nextRecord()){
 				$output = $this->db->getRecord();
+				$result = $this->db->getRecord();
+				$output = date("d M Y", strtotime($result['created_date']));
 			}
 			$output = date("d M Y", strtotime($output['created_date']));
+			
 			return $output;
 		}
 		
@@ -58,9 +62,69 @@
 			return $output;
 		}
 		
+		function listGivingHistory($condition, $recent = false){
+			$output = array();
+			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
+			$sql = "SELECT p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
+			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
+			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
+			$sql .= "WHERE 1=1";
+			$sql = "SELECT d.`stripe_charge_id`, d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
+			$sql .= "FROM `donations` d INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
+			$sql .= "WHERE 1=1"; 
+
+
+			if($condition != ""){
+				$sql .= $condition;
+			}
+			if($recent){
+				$sql .= " LIMIT 5";
+			}
+			
+			$this->db->query($sql);
+			while($this->db->nextRecord()){
+				$result = $this->db->getRecord();
+				$temp = array();
+				$currencySymbol = "";
+				$temp['id'] = $result['stripe_charge_id'];
+				$temp['designation'] = $result['description'];
+				switch($result['currency_code']){
+					case 'EUR':
+					$currencySymbol = '&euro;';
+					break;
+					case 'USD':
+					$currencySymbol = '&dollar;';
+					break;
+					case 'GBP':
+					$currencySymbol = '&pound;';
+					break;
+				}
+				$temp['amount'] = $currencySymbol.$result['amount'];
+				if($result['recurring'] !== ""){
+					$temp['amount'] .= " (monthly)";
+				}
+				$temp['date'] = date("d M Y", strtotime($result['created_date']));
+				if(!$recent){
+					$temp['type'] = "";
+					if($result['type'] == "card"){
+						$temp['type'] = "Credit Card";
+					}
+					$temp['download'] = '<span class="span-link">DOWNLOAD</span>';
+				}
+				$temp['link'] = "<a href=".HTTP_SERVER.HTTP_ROOT."/giving"." ><span class='span-link'>GIVE AGAIN</span></a>"; 
+				
+				if(!$recent){
+					//convert the associative array to index base
+					$temp = array_values($temp);
+				}
+				
+				array_push($output, $temp);
+			}
+			
+			return $output;
+		}
 		
-		
-		function listGivingHistoryField(){
+		function listAdminGivingHistoryField(){
 			$output = array();
 			/*$sql = "SHOW COLUMNS FROM `payments`, `donations`, `donations_details`";
 			$this->db->query($sql);
@@ -82,27 +146,11 @@
 			array_push($output, "'enc_id'");
 			return $output;
 		}
-		
-		function listGivingHistoryTotal($condition, $recent = false, $convert_array = true){
+		function listAdminGivingHistory($condition, $recent = false, $convert_array = true, $count_totalrow = false){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
 			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
-					p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
-			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
-			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
-			$sql .= "WHERE 1=1";
-			if($condition != ""){
-				$sql .= $condition;
-			}
-			
-			$this->totalRow = $this->db->countRow('id', 'sys_users', $condition);
-			
-		}
-		function listGivingHistory($condition, $recent = false, $convert_array = true, $count_totalrow = false){
-			$output = array();
-			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
-			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
-					p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
+					d.`stripe_charge_id`, p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
 			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
 			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
 			$sql .= "WHERE 1=1";
@@ -124,6 +172,7 @@
 				$temp = array();
 				//$temp = $result;
 				$currencySymbol = "";
+				$temp['id'] = $result['stripe_charge_id'];
 				$temp['designation'] = $result['description'];
 				switch($result['currency_code']){
 					case 'EUR':
@@ -173,7 +222,7 @@
 			
 			return $output;
 		}
-		function getGivingHistoryData($condition, $encrypt = true){
+		function getAdminGivingHistoryData($condition, $encrypt = true){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
 			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
@@ -331,6 +380,32 @@
 			}
 		}
 		
+		function getSubscriptionOfTheDay($condition){
+			$output = array();
+			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
+			$sql = "SELECT u.`stripe_cust_id`, s.* FROM `subscriptions` s INNER JOIN `sys_users` u ON s.`user_id`=u.`id` ";
+			$sql .= "WHERE 1=1";
+			if($condition != ""){
+				$sql .= $condition;
+			}
+			$this->db->query($sql);
+			while($this->db->nextRecord()){
+				$result = $this->db->getRecord();
+				$temp = array();
+			}
+
+			
+			return $output;
+		}
+		
+		function saveSubscriptionLog($data){
+			if($this->db->insert("subscriptions_trail", $data)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
 		function getPaymentData($id, $encrypt = true){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
@@ -338,6 +413,7 @@
 			$this->db->query($sql);
 			if($this->db->nextRecord()){
 				$output = $this->db->getRecord();
+				$output['number'] = 'XXXX-XXXX-XXXX-'.$output['number'];
 			}
 			if($encrypt){
 				$output['id'] = encryption($output['id'], $salt, true);
@@ -348,7 +424,7 @@
 		function listPaymentMethods($condition){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
-			$sql = "SELECT * FROM `payments` WHERE 1=1";
+			$sql = "SELECT * FROM `payments` WHERE 1=1 AND `display_info` =1";
 			if($condition != ""){
 				$sql .= $condition;
 			}
@@ -362,7 +438,7 @@
 				if($result['type'] == "card"){
 					$temp['type'] = "Credit Card";
 				}
-				$temp['card_number'] = str_repeat('*', strlen($result['number']) - 4) . substr($result['number'], -4);;
+				$temp['card_number'] = 'XXXX-XXXX-XXXX-'.$result['number'];
 				$temp['expiration'] = $result['name_1'];
 				$temp['modify'] = '<span class="span-link" onclick="toggleModalPayment(\'update\', \''.$encryptID.'\'); return false">MODIFY</span>';
 				$temp['delete'] = '<span class="span-link" onclick="deleteRow(\'payment\', \''.$encryptID.'\'); return false">REMOVE</span>'; 
