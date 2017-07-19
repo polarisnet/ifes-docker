@@ -24,16 +24,13 @@
 		}
 		
 		function getFirstDateByUserID($id){
-			$output = array();
 			$output = "";
 			$sql = "SELECT `created_date` FROM `donations` WHERE `user_id`='".$id."' ORDER BY `created_date` ASC LIMIT 1 ";
 			$this->db->query($sql);
 			if($this->db->nextRecord()){
-				$output = $this->db->getRecord();
 				$result = $this->db->getRecord();
 				$output = date("d M Y", strtotime($result['created_date']));
 			}
-			$output = date("d M Y", strtotime($output['created_date']));
 			
 			return $output;
 		}
@@ -65,15 +62,9 @@
 		function listGivingHistory($condition, $recent = false){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
-			$sql = "SELECT p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
-			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
-			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
-			$sql .= "WHERE 1=1";
 			$sql = "SELECT d.`stripe_charge_id`, d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
 			$sql .= "FROM `donations` d INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
 			$sql .= "WHERE 1=1"; 
-
-
 			if($condition != ""){
 				$sql .= $condition;
 			}
@@ -150,7 +141,7 @@
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
 			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
-					d.`stripe_charge_id`, p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
+					d.`stripe_charge_id`, d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
 			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
 			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
 			$sql .= "WHERE 1=1";
@@ -222,7 +213,7 @@
 			
 			return $output;
 		}
-		function getAdminGivingHistoryData($condition, $encrypt = true){
+		function getGivingHistoryData($condition, $encrypt = true){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
 			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
@@ -393,7 +384,6 @@
 				$result = $this->db->getRecord();
 				$temp = array();
 			}
-
 			
 			return $output;
 		}
