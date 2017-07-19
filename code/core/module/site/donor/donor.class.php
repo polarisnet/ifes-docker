@@ -213,7 +213,7 @@
 			
 			return $output;
 		}
-		function getGivingHistoryData($condition, $encrypt = true){
+		function getAdminGivingHistoryData($condition, $encrypt = true){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
 			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
