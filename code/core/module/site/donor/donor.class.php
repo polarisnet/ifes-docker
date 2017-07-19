@@ -62,9 +62,9 @@
 		function listGivingHistory($condition, $recent = false){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
-			$sql = "SELECT d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
+			$sql = "SELECT d.`stripe_charge_id`, d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_date` ";
 			$sql .= "FROM `donations` d INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
-			$sql .= "WHERE 1=1";
+			$sql .= "WHERE 1=1"; 
 			if($condition != ""){
 				$sql .= $condition;
 			}
@@ -77,6 +77,7 @@
 				$result = $this->db->getRecord();
 				$temp = array();
 				$currencySymbol = "";
+				$temp['id'] = $result['stripe_charge_id'];
 				$temp['designation'] = $result['description'];
 				switch($result['currency_code']){
 					case 'EUR':
@@ -197,6 +198,31 @@
 			}
 		}
 		
+		function getSubscriptionOfTheDay($condition){
+			$output = array();
+			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
+			$sql = "SELECT u.`stripe_cust_id`, s.* FROM `subscriptions` s INNER JOIN `sys_users` u ON s.`user_id`=u.`id` ";
+			$sql .= "WHERE 1=1";
+			if($condition != ""){
+				$sql .= $condition;
+			}
+			$this->db->query($sql);
+			while($this->db->nextRecord()){
+				$result = $this->db->getRecord();
+				$temp = array();
+			}
+			
+			return $output;
+		}
+		
+		function saveSubscriptionLog($data){
+			if($this->db->insert("subscriptions_trail", $data)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
 		function getPaymentData($id, $encrypt = true){
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
@@ -204,6 +230,7 @@
 			$this->db->query($sql);
 			if($this->db->nextRecord()){
 				$output = $this->db->getRecord();
+				$output['number'] = 'XXXX-XXXX-XXXX-'.$output['number'];
 			}
 			if($encrypt){
 				$output['id'] = encryption($output['id'], $salt, true);
@@ -228,7 +255,7 @@
 				if($result['type'] == "card"){
 					$temp['type'] = "Credit Card";
 				}
-				$temp['card_number'] = str_repeat('*', strlen($result['number']) - 4) . substr($result['number'], -4);;
+				$temp['card_number'] = 'XXXX-XXXX-XXXX-'.$result['number'];
 				$temp['expiration'] = $result['name_1'];
 				$temp['modify'] = '<span class="span-link" onclick="toggleModalPayment(\'update\', \''.$encryptID.'\'); return false">MODIFY</span>';
 				$temp['delete'] = '<span class="span-link" onclick="deleteRow(\'payment\', \''.$encryptID.'\'); return false">REMOVE</span>'; 

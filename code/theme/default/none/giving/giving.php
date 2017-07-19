@@ -358,14 +358,14 @@
 							<div class="col-xs-4" style="padding-right: 0; text-align: right;">
 								<div style="padding: 6px 0;"><span class="currency-symbol"><?php echo $formCurrencySymbol; ?></span> <span class="currency-value">%templateAmountFormat%</span></div>
 								<div style="padding: 5px 0; clear: both;">
-									<div class="input-group date datetimepicker gift-list-datepicker">
+									<div class="input-group date datetimepicker gift-list-datepicker" id="gift-recurring-date-edit">
 										<input type="text" class="form-control gift-list-input-recurring gift-list-input-recurring-view" value="%templateRecurring%" onchange="changeRecurringDate('%templateId%', this.value);" />
 										<span class="input-group-addon" style="padding-bottom: 7px;">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 									<div class="gift-list-label-recurring">Monthly Gift on the</div>
-									<input type="checkbox" class="gift-list-input-recurring-check-view" onclick="toggleRecurring('%templateId%', this);" style="position: relative; top: 5px;">
+									<input type="checkbox" class="gift-list-input-recurring-check-view" onclick="modifiyGiftList('%templateId%', this);" style="position: relative; top: 5px;"> <!-- toggleRecurring('%templateId%', this) -->
 								</div>
 								<div style="padding: 6px 0; float: right;">
 									<div><a onclick="modifiyGiftList('%templateId%');">Modify</a> | <a onclick="removeGiftList('%templateId%');">Remove</a></div>
@@ -395,7 +395,7 @@
 										</span>
 									</div>
 									<div class="gift-list-label-recurring">Monthly Gift on the</div>
-									<input type="checkbox" class="gift-list-input-recurring-check-edit" onclick="toggleRecurring('%templateId%', this);" style="position: relative; top: 5px;">
+									<input type="checkbox" class="gift-list-input-recurring-check-edit"  style="position: relative; top: 5px;"> <!-- onclick="toggleRecurring('%templateId%', this);" -->
 								</div>
 								<div class="gift-list-save-container">
 									<div><a class="gift-list-input-save" onclick="saveGiftList('%templateId%');">Save</a> | <a onclick="cancelGiftList('%templateId%');">Cancel</a></div>
@@ -437,7 +437,7 @@
 	</table>
 </div>
 <form id="gift-submit-form" role="form" method="post" >
-	<div class="gift-payment" style="<?php if(empty($_POST)){echo "display: none;";} //debug?>">
+	<div class="gift-payment" style="<?php if(empty($_POST)){echo "display: none;";} ?>">
 		<div class="container">
 			<table class="gift-payment-table">
 				<tr>
@@ -538,6 +538,7 @@
 
 						<!-- Used to display Element errors -->
 						<div class="stripe-error" id="card-errors" role="alert"></div>
+						<div class="stripe-error" id="bank-errors" role="alert"></div>
 					</div>
 
 						<?php if(!empty($listCreditCards)){ ?>
@@ -788,17 +789,47 @@
 			return false;
 		}
 		
-		if($('#gift-cc-input-mode').val() == "new"){
-			stripe.createToken(card).then(function(result) {
-				if (result.error) {
-				  // Inform the user if there was an error
-				  var errorElement = document.getElementById('card-errors');
-				  errorElement.textContent = result.error.message;
-				} else {
-				  // Send the token to your server
-				  stripeTokenHandler(result.token);
-				}
-			});
+		//console.log(giftLists); //debug
+		//return false;  //debug
+
+		if($('#gift-cc-input-mode').val() == "new"){ //TODO: ASK country & account_holder_type
+			if($('#payment-us-paymode').val() == 'check'){
+				stripe.createToken('bank_account', {
+				country: $("#gift-billing-input-countrycode").val(),
+				currency: $('.currency-code').html().substr(0, 3),
+				routing_number: $("gift-echeck-input-route-no").val(),
+				account_number: $("gift-echeck-input-acc-no").val(),
+				account_holder_name: $("gift-echeck-input-name").val(),
+				account_holder_type: 'individual',
+				}).then(function(result) {
+				// handle result.error or result.token
+					if (result.error) {
+					  // Inform the user if there was an error
+					  var errorElement = document.getElementById('bank-errors');
+					  errorElement.textContent = result.error.message;
+					} else {
+					  // Send the token to your server
+					  stripeTokenHandler(result.token);
+					}
+					
+				});
+			}else{
+				var extraDetails = {
+					name: $('#gift-billing-input-name').val(),
+				};
+  
+				stripe.createToken(card, extraDetails).then(function(result) {
+					if (result.error) {
+					  // Inform the user if there was an error
+					  var errorElement = document.getElementById('card-errors');
+					  errorElement.textContent = result.error.message;
+					} else {
+					  // Send the token to your server
+					  stripeTokenHandler(result.token);
+					}
+				});
+			}
+			
 		}else{
 			$("#gift-save-payment").val('on');
 			var form = document.getElementById('gift-submit-form');
@@ -1043,31 +1074,31 @@
 		calcGiftList();
 		$('.gift-list-tooltip').tooltip();
 	}
-
+	
+	/* //disable //mark for delete
 	function toggleRecurring(index, obj){
 		for(var i=0; i<giftLists.length; i++){
 			if(giftLists[i].id == index){
 				if($(obj).prop('checked')){
-					giftLists[i].recurring_check = true;
+					giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-edit').prop('checked');
 				}else{
-					giftLists[i].recurring_check = false;
+					giftLists[i].recurring = '';
 				}
-				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', giftLists[i].recurring_check);
-				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', giftLists[i].recurring_check);
 				break;
 			}
 		}
-		calcGiftList();
 	}
-
+	*/
 	function changeRecurringDate(index, val){
 		for(var i=0; i<giftLists.length; i++){
 			if(giftLists[i].id == index){
 				giftLists[i].recurring = val;
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-view').val(val);
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-edit').val(val);
 				break;
 			}
 		}
-		calcGiftList();
+		//calcGiftList(); //test
 	}
 
 	function renderGiftLists(index){
@@ -1104,24 +1135,47 @@
 		}
 	}
 
-	function modifiyGiftList(index){
+	function modifiyGiftList(index, obj = 0){
 		for(var i=0; i<giftLists.length; i++){
 			if(giftLists[i].id == index){
+				if(obj != 0){
+					if($(obj).prop('checked')){
+						$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', true);
+						//giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(); //test
+					}else{
+						$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', false);
+						//giftLists[i].recurring = ''; //test
+					}
+				}
+			
 				$('#gift-list-container-'+index).find('.gift-list-currency-value').val(giftLists[i].amount);
 				$('#gift-list-container-'+index).find('.gift-list-input-anonymous').prop('checked', giftLists[i].anonymous);
 				$('#gift-list-container-'+index).find('.gift-list-input-comment').val(giftLists[i].comment);
-				giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val();
-				$('#gift-list-container-'+index).find('.gift-list-input-recurring').val(giftLists[i].recurring);
+				//giftLists[i].recurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(); //test
+				//$('#gift-list-container-'+index).find('.gift-list-input-recurring').val(giftLists[i].recurring); //test
+				
+				
 				break;
 			}
 		}
 		$('#gift-list-container-'+index).children('.gift-list-container-view').hide();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').show();
+		
+		calcGiftList();
 	}
 
 	function cancelGiftList(index){
 		$('#gift-list-container-'+index).children('.gift-list-container-view').show();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').hide();
+		
+		for(var i=0; i<giftLists.length; i++){
+			if(giftLists[i].id == index){
+				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', giftLists[i].recurring_check);
+				$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked', giftLists[i].recurring_check);
+			}
+		}
+		
+		calcGiftList();
 	}
 
 	function saveGiftList(index){
@@ -1147,9 +1201,10 @@
 			$('#gift-list-container-'+index).find('.gift-list-view-comment').html(inputComment);
 		}
 
-		var inputRecurringCheck = $('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').val();
+		var inputRecurringCheck = $('#gift-list-container-'+index).find('.gift-list-input-recurring-check-edit').prop('checked');
 		var inputRecurring = $('#gift-list-container-'+index).find('.gift-list-input-recurring-edit').val();
 		$('#gift-list-container-'+index).find('.gift-list-input-recurring-view').val(inputRecurring);
+		$('#gift-list-container-'+index).find('.gift-list-input-recurring-check-view').prop('checked', inputRecurringCheck);
 
 		$('#gift-list-container-'+index).children('.gift-list-container-view').show();
 		$('#gift-list-container-'+index).children('.gift-list-container-edit').hide();
@@ -1172,8 +1227,9 @@
 	function calcGiftList(){
 		var tmpRecurring = 0;
 		var tmpOnetime = 0;
+		
 		for(var i=0; i<giftLists.length; i++){
-			if(giftLists[i].recurring == '' && !giftLists[i].recurring_check){
+			if(giftLists[i].recurring_check == false){
 				tmpOnetime += giftLists[i].amount;
 			}else{
 				tmpRecurring += giftLists[i].amount;
@@ -1202,6 +1258,20 @@
 
 		$('.total-recurring').html(number_format(tmpRecurring, 2, ".", ","));
 		$('.total-onetime').html(number_format(tmpOnetime, 2, ".", ","));
+	}
+	
+	function assignDate(){
+		for(var i=0; i<giftLists.length; i++){
+			if($('#gift-list-container-'+giftLists[i].id).children('.gift-list-container-view').is(':visible')){
+				var inputRecurring = $('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-view').val();
+				giftLists[i].recurring = inputRecurring;
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-edit').val(inputRecurring);
+			}else{
+				var inputRecurring = $('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-edit').val();
+				giftLists[i].recurring = inputRecurring;
+				$('#gift-list-container-'+giftLists[i].id).find('.gift-list-input-recurring-view').val(inputRecurring);
+			}		
+		}
 	}
 	
 	function changePhoneMask(region = 'row'){
@@ -1376,7 +1446,7 @@
 			//}
 		<?php //} ?>
 		
-		/*
+		/* //test
 		if(!bootstrapValidateEmpty("gift-billing-input-name", "")){
 			noty({text: "Please fill in full name.", type: 'error'});
 			return false;
@@ -1472,6 +1542,11 @@
 			$('<input>').attr({name: 'catalog-value-comment[]', value: giftLists[i].comment}).appendTo('#submit-variable');
 			$('<input>').attr({name: 'catalog-value-anonymous[]', value: giftLists[i].anonymous}).appendTo('#submit-variable');
 			$('<input>').attr({name: 'catalog-value-amount[]', value: giftLists[i].amount}).appendTo('#submit-variable');
+			
+			if(giftLists[i].recurring_check && giftLists[i].recurring == ''){
+				noty({text: "Please select date for recurring gift.", type: 'error'});
+				return false;
+			}
 			$('<input>').attr({name: 'catalog-value-recurring[]', value: giftLists[i].recurring}).appendTo('#submit-variable');
 		}
 
@@ -1496,6 +1571,8 @@
 		$('.datetimepicker').datetimepicker({
 			format: 'Do',
 			allowInputToggle: true
+		}).on("dp.change", function (e) {
+			assignDate();
 		});
 
 		$('.gift-list-currency-value').off();

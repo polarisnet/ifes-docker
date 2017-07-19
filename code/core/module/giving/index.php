@@ -25,18 +25,7 @@
 	$message2 	= array('type' => 'message', 'title' => 'Message', 'content' => '', 'position' => 'right', 'autoclose' => false);
 
 	switch(MODULE_UID){
-		default:
-			/*
-			$customer = \Stripe\Customer::retrieve("cus_AwE72N9iaJdaMN");
-			$customer->sources->create(array("source" => "card_1Ac5NTLFYPszptrvi9fLSEkF"));
-			$customer->save();
-			echo "<pre>";
-			echo "done";
-			//print_r($charge->source->id);
-			echo "</pre>";
-			
-			exit();//debug
-			*/
+		default:			
 			$isLogin = matchCookieSession();
 			if($isLogin){
 				$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION['username']);
@@ -464,7 +453,7 @@
 					if($stripeDescription == ""){
 						$stripeDescription = $formGiftLists[$typeKey]['description']." - ".$formGiftLists[$typeKey]['amount'];
 					}else{
-						$stripeDescription += ", ".$formGiftLists[$typeKey]['description']." - ".$formGiftLists[$typeKey]['amount'];
+						$stripeDescription .= ", ".$formGiftLists[$typeKey]['description']." - ".$formGiftLists[$typeKey]['amount'];
 					}
 				}
 
@@ -552,6 +541,42 @@
 				}
 
 				$formPaymentId = "";
+				//echo "token is ".$formStripeToken; //debug
+				//exit();//debug
+				
+				if($formPaymentCCMode === "select"){ //$formPaymentCCMode == "edit" ||  //debug
+					$paymentData = array();
+					$paymentData = $objGiving->getPaymentData($formPaymentCCSelect);
+
+					if(empty($paymentData)){
+						$GLOBALS['myDB']->rollbackTrans();
+						$error['content'] = "Could not retrieve your payment card details. Please try again.";
+						break;
+					}else{
+						$formPaymentId = $paymentData['id'];
+						$stripe_source = $paymentData['stripe_source_id'];
+						/*
+						//disable
+						if($formPaymentCCMode == "edit"){
+							$paymentData['user_id'] = $formDonorId;
+							$paymentData['type'] = "card";
+							$paymentData['type_1'] = "";
+							$paymentData['number'] = $formPaymentCCNumber;
+							$paymentData['number_1'] = $formPaymentCCCVV;
+							$paymentData['name_1'] = $formPaymentCCExpiration;
+							$paymentData['name'] = $formPaymentCCName;
+							$paymentData['display_info'] = "1";
+							$paymentData['modified_by'] = $formDonorId;
+							$paymentData['modified_date'] = date("Y-m-d H:i:s");
+							if(!$GLOBALS['myDB']->update('payments', $paymentData, "`id`='$formPaymentId'")){
+								$GLOBALS['myDB']->rollbackTrans();
+								$error['content'] = "Could not update your payment card details. Please try again.";
+								break;
+							}
+						}
+						*/
+					}
+				}
 				
 				if($formPaymentSaveInformation == ""){
 					$formPaymentId  = "-1";
@@ -610,7 +635,7 @@
 							$formPaymentId = $GLOBALS['myDB']->getInsertedId();
 						}
 					}else{				
-						if($formPaymentCCMode === "new"){	
+						if($formPaymentCCMode == "new"){	
 							/** Stripe Card - Start **/							
 							try{
 								$stripe_card = $stripe_customer->sources->create(array(
@@ -655,7 +680,7 @@
 							$paymentData['display_info'] = "1";
 							$paymentData['number'] = $stripe_card->last4; //last 4 only
 							//$paymentData['number_1'] = $formPaymentCCCVV;
-							$paymentData['name_1'] = $formPaymentCCExpiration; //todo: get expiration
+							$paymentData['name_1'] = str_pad($stripe_card->exp_month, 2, "0", STR_PAD_LEFT)."/".substr($stripe_card->exp_year, -2);
 							//$paymentData['name'] = $formPaymentCCName;
 							$paymentData['created_by'] = $formDonorId;
 							$paymentData['created_date'] = date("Y-m-d H:i:s");
@@ -666,37 +691,6 @@
 								$formPaymentId = $GLOBALS['myDB']->getInsertedId();
 							}
 							
-						}else if($formPaymentCCMode === "select"){ //$formPaymentCCMode == "edit" ||  //debug
-							$paymentData = array();
-							$paymentData = $objGiving->getPaymentData($formPaymentCCSelect);
-							if(empty($paymentData)){
-								$GLOBALS['myDB']->rollbackTrans();
-								$error['content'] = "Could not retrieve your payment card details. Please try again.";
-								break;
-							}else{
-								$formPaymentId = $paymentData['id'];
-								$stripe_source = $paymentData['stripe_source_id'];
-								/*
-								//disable
-								if($formPaymentCCMode == "edit"){
-									$paymentData['user_id'] = $formDonorId;
-									$paymentData['type'] = "card";
-									$paymentData['type_1'] = "";
-									$paymentData['number'] = $formPaymentCCNumber;
-									$paymentData['number_1'] = $formPaymentCCCVV;
-									$paymentData['name_1'] = $formPaymentCCExpiration;
-									$paymentData['name'] = $formPaymentCCName;
-									$paymentData['display_info'] = "1";
-									$paymentData['modified_by'] = $formDonorId;
-									$paymentData['modified_date'] = date("Y-m-d H:i:s");
-									if(!$GLOBALS['myDB']->update('payments', $paymentData, "`id`='$formPaymentId'")){
-										$GLOBALS['myDB']->rollbackTrans();
-										$error['content'] = "Could not update your payment card details. Please try again.";
-										break;
-									}
-								}
-								*/
-							}
 						}
 						
 					}
@@ -706,80 +700,56 @@
 					$stripeStatus = false;
 					$errorStatus = "";
 
-					/** Stripe Payment - Start **/
-						// Do strip payment here, retrive payment data from array $paymentData 
-						
-						// Charge the user's card:
-						try{
-							$charge = \Stripe\Charge::create(array(
-								"amount" => $formTotalOneTime*100, //convert amount to cents
-								"currency" => strtolower($formCurrencyCode),
-								"description" => $stripeDescription,
-								"source" => $stripe_source,
-								"customer" => $stripe_customer->id
-							));
+					if($formTotalOneTime != ''){
+						/** Stripe Payment - Start **/
+							
+							// Charge the user's card:
+							try{
+								$charge = \Stripe\Charge::create(array(
+									"amount" => $formTotalOneTime*100, //convert amount to cents
+									"currency" => strtolower($formCurrencyCode),
+									"description" => $stripeDescription,
+									"source" => $stripe_source,
+									"customer" => $stripe_customer->id
+								));
 
-						}catch(\Stripe\Error\Card $e) {
-							// The card has been declined
-							$error['content'] = $e->getMessage();
-							break;
-						} catch (\Stripe\Error\RateLimit $e) {
-							// Too many requests made to the API too quickly
-							$error['content'] = $e->getMessage();
-							break;
-						} catch (\Stripe\Error\InvalidRequest $e) {
-							// Invalid parameters were supplied to Stripe's API
-							$error['content'] = $e->getMessage();
-							break;
-						} catch (\Stripe\Error\Authentication $e) {
-							// Authentication with Stripe's API failed
-							// (maybe you changed API keys recently)
-							$error['content'] = $e->getMessage();
-							break;
-						} catch (\Stripe\Error\ApiConnection $e) {
-						  // Network communication with Stripe failed
-							$error['content'] = $e->getMessage();
-							break;
-						} catch (\Stripe\Error\Base $e) {
-						  // Display a very generic error to the user, and maybe send
-						  // yourself an email
-							$error['content'] = $e->getMessage();
-							break;
-						} catch (Exception $e) {
-						  // Something else happened, completely unrelated to Stripe
-							$error['content'] = $e->getMessage();
-							break;
-						}
-						
-						// Verify the charge by fetching it from Stripe
-						try {
-							$confirm = \Stripe\Charge::retrieve($charge->id);
-						} catch(\Stripe\Error\InvalidRequest $e) {
-							// No such Charge
-							$errorStatus = $e->getMessage();
-						} catch (\Stripe\Error\RateLimit $e) {
-						  // Too many requests made to the API too quickly
-						  $errorStatus = $e->getMessage();
-						} catch (\Stripe\Error\InvalidRequest $e) {
-						  // Invalid parameters were supplied to Stripe's API
-						  $errorStatus = $e->getMessage();
-						} catch (\Stripe\Error\Authentication $e) {
-						  // Authentication with Stripe's API failed
-						  // (maybe you changed API keys recently)
-						  $errorStatus = $e->getMessage();
-						} catch (\Stripe\Error\ApiConnection $e) {
-						  // Network communication with Stripe failed
-						  $errorStatus = $e->getMessage();
-						} catch (\Stripe\Error\Base $e) {
-						  // Display a very generic error to the user, and maybe send
-						  // yourself an email
-						  $errorStatus = $e->getMessage();
-						} catch (Exception $e) {
-						  // Something else happened, completely unrelated to Stripe
-						  $errorStatus = $e->getMessage();
-						}
-					/** Stripe Payment - End **/
-					if($errorStatus == ''){
+							}catch(\Stripe\Error\Card $e) {
+								// The card has been declined
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\RateLimit $e) {
+								// Too many requests made to the API too quickly
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\InvalidRequest $e) {
+								// Invalid parameters were supplied to Stripe's API
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Authentication $e) {
+								// Authentication with Stripe's API failed
+								// (maybe you changed API keys recently)
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\ApiConnection $e) {
+							  // Network communication with Stripe failed
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (\Stripe\Error\Base $e) {
+							  // Display a very generic error to the user, and maybe send
+							  // yourself an email
+								$error['content'] = $e->getMessage();
+								break;
+							} catch (Exception $e) {
+							  // Something else happened, completely unrelated to Stripe
+								$error['content'] = $e->getMessage();
+								break;
+							}
+							
+						/** Stripe Payment - End **/
+					}
+					
+					
+					if($errorStatus == '' || ($formTotalOneTime == '' && $formTotalRecurring != '')){
 						$stripeStatus = true;
 					}
 
@@ -859,6 +829,32 @@
 									$error['content'] = "Could not save your donation details. Please try again.";
 									break;
 								}
+								
+								/** Recurring Gift - Start **/
+								if($detailsData['recurring'] != ''){
+									$subscriptionData = array();
+									$subscriptionData['user_id'] = $formDonorId;
+									$subscriptionData['stripe_source_id'] = $stripe_source;
+									$subscriptionData['description'] = $detailsData['description'];
+									$subscriptionData['currency_code'] = $formCurrencyCode;
+									$subscriptionData['amount'] = $detailsData['amount'];
+									if($formPaymentUSPaymode == 'check'){
+										$subscriptionData['type'] = 'check';
+									}else{
+										$subscriptionData['type'] = 'card';
+									}
+									$subscriptionData['billing_interval'] = 'month';
+									$subscriptionData['billing_date'] =  substr($detailsData['recurring'], 0, -2);
+									$subscriptionData['created_by'] = $formDonorId;
+									$subscriptionData['created_date'] = date("Y-m-d H:i:s");
+									
+								}
+								if(!$GLOBALS['myDB']->insert('subscriptions', $subscriptionData)){
+									$GLOBALS['myDB']->rollbackTrans();
+									$error['content'] = "Could not save your donation details. Please try again.";
+									break;
+								}
+								/** Recurring Gift - End **/
 							}
 
 							if($formPaymentSaveInformation != ""){

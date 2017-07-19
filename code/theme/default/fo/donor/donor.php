@@ -1,3 +1,4 @@
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 <style type="text/css">
 	.social-header a.social-link.fb {
 		background-image: url(<?php echo HTTP_MEDIA.'/site-image/fb-icon.png'; ?>);
@@ -430,6 +431,7 @@
 									<table id="giving-grid" class="table table-hover dt-responsive" cellspacing="0" width="100%">
 										<thead>
 											<tr>
+												<th>ID</th>
 												<th>DESIGNATION</th>
 												<th>AMOUNT</th>
 												<th>DONATION DATE</th>
@@ -530,34 +532,45 @@
 					<div style="padding:10px;"></div>
 				</div>
 				<div style="padding-bottom:10px;"></div>
-				<?php if(REGION == 'us'){ ?>
-					<div class="row" name="modal-payment-new" style="padding:10px;">
-						<div class="col-xs-6">
-							<button type="button" id="btn-us-payment-cc" class="btn btn-default btn-ifes <?php if($formPaymentUSPaymode == "cc"){echo 'btn-ifes-active';} ?>" style="margin-right: 15px;width: 100%;" onclick="toggleUSPayment('cc', this);">ADD CREDIT OR DEBIT CARD</button>
-						</div>
-						<div class="col-xs-6">
-							<button type="button" id="btn-us-payment-check" class="btn btn-default btn-ifes <?php if($formPaymentUSPaymode == "check"){echo 'btn-ifes-active';} ?>" style="width: 100%;" onclick="toggleUSPayment('check', this);">ADD eCHECK</button>
-						</div>
-						<input type="hidden" id="payment-us-paymode" name="payment-us-paymode" value="<?php echo $formPaymentUSPaymode; ?>">
-					</div>
-				<?php } ?>
 				<div class="modal-subtitle" name="modal-payment-new">
 					<p style="display: inline-block;">We accept major cards:</p>
 					<img src="<?php echo HTTP_MEDIA.'/site-image/cards.png';?>" style="margin-left: 5px;">
 				</div>
-				
+				<input type="hidden" name="payment-modal-type" id="payment-modal-type" />
 				<form id="donor-payment-modal" class="form-vertical" role="form" method="post">
 					<input type="hidden" name="payment-cc-id" value=""> 
 					<div class="modal-body donor-custom">
 						<div class="container-fluid no-gutters payment-form">
-							<div class="row" id="payment-form-cc">
+							<div class="row" id="payment-form-cc-new" name="modal-payment-new">
+								<div class="col-xs-12" style="padding-bottom: 20px;">
+									<label for="payment-cc-customname">CUSTOM NAME</label>
+									<input type="text" name="payment-cc-customname" id="payment-cc-customname" class="form-control" placeholder="Custom Name">
+								</div>
+								
+								<div class="col-xs-12" > <!-- style="padding-bottom: 10px;" -->
+									<label class="stripe-info" for="card-element">
+									  CREDIT OR DEBIT CARD
+									</label>
+									<div id="card-element">
+									  <!-- a Stripe Element will be inserted here. -->
+									</div>
+
+									<!-- Used to display Element errors -->
+									<div class="stripe-error" id="card-errors" role="alert"></div>
+								</div>
+								<div class="col-xs-12" style="padding-bottom: 20px;">
+									<label for="payment-cc-name">NAME ON CARD</label>
+									<input type="text" name="payment-cc-name" id="payment-cc-name" class="form-control" placeholder="Name on Card">
+								</div>
+							</div>
+							<div class="row" id="payment-form-cc-update" name="modal-payment-update">
 								<div class="col-xs-12" style="padding-bottom: 10px;">
 									<label for="payment-cc-customname">CUSTOM NAME</label>
 									<input type="text" name="payment-cc-customname" id="payment-cc-customname" class="form-control" placeholder="Custom Name">
 								</div>
 								<div class="col-xs-12" style="padding-bottom: 10px;">
 									<label for="payment-cc-number">CARD NUMBER</label>
-									<input type="text" name="payment-cc-number" id="payment-cc-number" class="form-control" placeholder="Card Number">
+									<input type="text" name="payment-cc-number" id="payment-cc-number" class="form-control" placeholder="Card Number"  disabled>
 								</div>
 								<div class="col-xs-12" style="padding-bottom: 10px;">
 									<label for="payment-cc-name">NAME ON CARD</label>
@@ -707,6 +720,98 @@
 
 <script type="text/javascript">
 	//var regionData = "<?php echo REGION; ?>";
+	var stripe = Stripe('<?php echo STRIPE_PUBLIC_KEY; ?>');
+	var elements = stripe.elements();
+	
+	// Custom styling can be passed to options when creating an Element.
+	var style = {
+		base: {
+			color: '#32325d',
+			lineHeight: '24px',
+			fontSmoothing: 'antialiased',
+			fontSize: '16px',
+			'::placeholder': {
+				color: '#aab7c4'
+			}
+		},
+		invalid: {
+			color: '#fa755a',
+			iconColor: '#fa755a'
+		}
+	};
+	
+	// Create an instance of the card Element
+	var card = elements.create('card', {style: style});
+
+	// Add an instance of the card Element into the `card-element` <div>
+	card.mount('#card-element');
+	
+	card.addEventListener('change', function(event) {
+	  var displayError = document.getElementById('card-errors');
+	  if (event.error) {
+		displayError.textContent = event.error.message;
+	  } else {
+		displayError.textContent = '';
+	  }
+	});
+	
+	var cardform = document.getElementById('donor-payment-modal');
+	cardform.addEventListener('submit', function(event) {
+		event.preventDefault();
+		
+		var submit_type = $("#payment-modal-type").val();
+
+		if(submit_type == 'new'){
+			var extraDetails = {
+				name: $('#payment-cc-name').val(),
+			};
+				
+			stripe.createToken(card, extraDetails).then(function(result) {
+			if (result.error) {
+			  // Inform the user if there was an error
+			  var errorElement = document.getElementById('card-errors');
+			  errorElement.textContent = result.error.message;
+			} else {
+			  // Send the token to your server
+			  stripeTokenHandler(result.token);
+			}
+		});
+		}else{
+			if(!bootstrapValidateEmpty("payment-cc-cvv", "")){
+				noty({text: "Please fill in CVV.", type: 'error'});
+				return false;
+			}
+			
+			var cardform = document.getElementById('donor-payment-modal');
+			var submitMode = document.createElement('input');
+			submitMode.setAttribute('type', 'hidden');
+			submitMode.setAttribute('name', 'submit_mode');
+			submitMode.setAttribute('value', 'payment_update');
+			cardform.appendChild(submitMode);
+
+			cardform.submit();
+		}
+		
+	});
+	
+	function stripeTokenHandler(token) {
+	  // Insert the token ID into the form so it gets submitted to the server
+	  var cardform = document.getElementById('donor-payment-modal');
+	  var hiddenInput = document.createElement('input');
+	  hiddenInput.setAttribute('type', 'hidden');
+	  hiddenInput.setAttribute('name', 'stripeToken');
+	  hiddenInput.setAttribute('value', token.id);
+	  cardform.appendChild(hiddenInput);
+	  
+	  var submitMode = document.createElement('input');
+	  submitMode.setAttribute('type', 'hidden');
+	  submitMode.setAttribute('name', 'submit_mode');
+	  submitMode.setAttribute('value', 'payment_new');
+	  cardform.appendChild(submitMode);
+
+	  // Submit the form
+	  cardform.submit();
+	}
 	
 	function changePhoneMask(region = 'row'){
 		//for us
@@ -793,10 +898,10 @@
 	
 	function toggleUSPayment(mode, obj){
 		if(mode == 'cc'){
-			$('#payment-form-cc').show();
+			$('#payment-form-cc-new').show();
 			$('#payment-form-echeck').hide();
 		}else{
-			$('#payment-form-cc').hide();
+			$('#payment-form-cc-new').hide();
 			$('#payment-form-echeck').show();
 		}
 		$('#payment-us-paymode').val(mode);
@@ -836,6 +941,8 @@
 						.find('[name="payment-cc-expiration"]').val('').end()
 						.find('[name="payment-cc-cvv"]').val('').end();
 				$('[name="modal-payment-new"]').show();
+				
+				$("#payment-modal-type").val('new');
 			break;	
 			case 'update':
 				$.ajax({
@@ -852,10 +959,11 @@
 						.find('[name="payment-cc-customname"]').val(response.data['custom_name']).end()
 						.find('[name="payment-cc-number"]').val(response.data['number']).end()
 						.find('[name="payment-cc-name"]').val(response.data['name']).end()
-						.find('[name="payment-cc-expiration"]').val(response.data['name_1']).end()
-						.find('[name="payment-cc-cvv"]').val(response.data['number_1']).end();
+						.find('[name="payment-cc-expiration"]').val(response.data['name_1']).end();
 					$('[name="modal-payment-update"]').show();
-					$("#payment-modal").modal();				
+					$("#payment-modal").modal();
+
+					$("#payment-modal-type").val('update');					
 				});
 			break;
 		}
@@ -1113,7 +1221,7 @@
 			givingGrid.ajax.reload();
 		});
 		
-		toggleDonorProfileHeader('settings'); //dashboard, settings, giving
+		toggleDonorProfileHeader('giving'); //dashboard, settings, giving
 		toggleTelephoneInput('daytime');
 	});
 	

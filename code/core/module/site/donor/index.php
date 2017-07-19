@@ -4,6 +4,9 @@
 	$objUser = new User($GLOBALS['myDB']);
 	$objDonor = new Donor($GLOBALS['myDB']);
 	
+	require_once DIR_LIBS.'/stripe-php/init.php';
+	\Stripe\Stripe::setApiKey(STRIPE_PRIVATE_KEY);
+	
 	$breadCrumbData = getBreadCrumbData(MODULE_UID, "/");
 	$setting = array(
 		"title" => SITE_NAME.$breadCrumbData['title'],
@@ -23,6 +26,10 @@
 	switch(MODULE_UID){
 		default:
 			$userData = $objUser->getUserData($_SESSION['user_id']);
+			if($userData['stripe_cust_id'] != ''){
+				$stripe_customer = \Stripe\Customer::retrieve($userData['stripe_cust_id']);
+			}
+			
 			$listCountries = $objDonor->listCountries();
 			
 			$formCurrencySymbol = "&dollar;";
@@ -322,8 +329,6 @@
 					
 					$id = encryption($id, $_SESSION['salt'], false);
 					
-					//TODO:STRIPE, create new plan and update
-					
 					$newData 						= array();
 					$newData['id']		 			= $id;
 					$newData['amount']				= $formSubscriptionAmount;
@@ -340,24 +345,58 @@
 				
 				if($submitMode == "payment_new"){
 					$formCardCustName = checkParam("payment-cc-customname");
-					$formCardNumber = checkParam("payment-cc-number");
-					$formCardName = checkParam("payment-cc-name");
-					$formCardExpiration = checkParam("payment-cc-expiration");
-					$formCardCVV = checkParam("payment-cc-cvv");
+					$formCardHolderName = checkParam("payment-cc-name");
+					$formStripeToken = checkParam("stripeToken");
 					
-					//TODO:STRIPE, create card object
+					
+					/** Stripe Card - Start **/							
+					try{
+						$stripe_card = $stripe_customer->sources->create(array(
+							"source" => $formStripeToken
+						));
+					} catch (\Stripe\Error\RateLimit $e) {
+						// Too many requests made to the API too quickly
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\InvalidRequest $e) {
+						// Invalid parameters were supplied to Stripe's API
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\Authentication $e) {
+						// Authentication with Stripe's API failed
+						// (maybe you changed API keys recently)
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\ApiConnection $e) {
+					  // Network communication with Stripe failed
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\Base $e) {
+					  // Display a very generic error to the user, and maybe send
+					  // yourself an email
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (Exception $e) {
+					  // Something else happened, completely unrelated to Stripe
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					}
+					
+					/** Stripe Card - End **/
 					
 					$data 						= array();
 					$data['user_id']		 	= $userData['id'];
 					$data['custom_name']		= $formCardCustName;
-					$data['name']				= $formCardName;
-					$data['type']				= "card";
-					$data['name_1']				= $formCardExpiration;
-					$data['number']				= $formCardNumber;
-					$data['number_1']			= $formCardCVV;
+					$data['name']				= $formCardHolderName;
+					$data['stripe_source_id']	= $stripe_card->id;
+					$data['type'] 				= "card";
+					$data['type_1'] 			= "";
+					$data['display_info'] 		= "1";
+					$data['number'] 			= $stripe_card->last4; //last 4 only
+					$data['name_1'] 			= str_pad($stripe_card->exp_month, 2, "0", STR_PAD_LEFT)."/".substr($stripe_card->exp_year, -2);
 					$data['created_by']			= $_SESSION['user_id'];
 					$data['created_date']		= date("Y-m-d H:i:s");
-					
+										
 					if($objDonor->savePaymentMethod($data)){
 						insertAuditTrails('payments', 'new', "", $data);					
 						$message['content'] = 'New payment method saved successfully!';						
@@ -368,22 +407,57 @@
 				if($submitMode == "payment_update"){
 					$id = checkParam("payment-cc-id");
 					$formCardCustName = checkParam("payment-cc-customname");
-					$formCardNumber = checkParam("payment-cc-number");
 					$formCardName = checkParam("payment-cc-name");
 					$formCardExpiration = checkParam("payment-cc-expiration");
-					$formCardCVV = checkParam("payment-cc-cvv");
 					
 					$id = encryption($id, $_SESSION['salt'], false);
+					$exp_date = explode('/', $formCardExpiration);
+					$exp_month = intval($exp_date[0]);
+					$exp_year = intval($exp_date[1]);
 					
-					//TODO:STRIPE, create card object
+					/** Stripe Card - Start **/
+					$paymentData = $objDonor->getPaymentData($id);
+					
+					try{
+						$stripe_card = $stripe_customer->sources->retrieve($paymentData['stripe_source_id']);
+						$stripe_card->exp_month = $exp_month;
+						$stripe_card->exp_year = $exp_year;
+						$stripe_card->save();
+					} catch (\Stripe\Error\RateLimit $e) {
+						// Too many requests made to the API too quickly
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\InvalidRequest $e) {
+						// Invalid parameters were supplied to Stripe's API
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\Authentication $e) {
+						// Authentication with Stripe's API failed
+						// (maybe you changed API keys recently)
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\ApiConnection $e) {
+					  // Network communication with Stripe failed
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (\Stripe\Error\Base $e) {
+					  // Display a very generic error to the user, and maybe send
+					  // yourself an email
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					} catch (Exception $e) {
+					  // Something else happened, completely unrelated to Stripe
+						$error['content'] = addslashes($e->getMessage());
+						break;
+					}
+					
+					/** Stripe Card - End **/
 					
 					$newData 						= array();
 					$newData['id']		 			= $id;
 					$newData['custom_name']			= $formCardCustName;
 					$newData['name']				= $formCardName;
 					$newData['name_1']				= $formCardExpiration;
-					$newData['number']				= $formCardNumber;
-					$newData['number_1']			= $formCardCVV;
 					$newData['modified_by']			= $_SESSION['user_id'];
 					$newData['modified_date']		= date("Y-m-d H:i:s");
 					
@@ -478,6 +552,42 @@
 						$id = encryption($id, $_SESSION['salt'], false);
 						
 						$data = $objDonor->getPaymentData($id);
+						
+						/** Stripe Card - Start **/
+						$paymentData = $objDonor->getPaymentData($id);
+						
+						try{
+							$stripe_card = $stripe_customer->sources->retrieve($paymentData['stripe_source_id'])->delete();
+						} catch (\Stripe\Error\RateLimit $e) {
+							// Too many requests made to the API too quickly
+							$error['content'] = addslashes($e->getMessage());
+							break;
+						} catch (\Stripe\Error\InvalidRequest $e) {
+							// Invalid parameters were supplied to Stripe's API
+							$error['content'] = addslashes($e->getMessage());
+							break;
+						} catch (\Stripe\Error\Authentication $e) {
+							// Authentication with Stripe's API failed
+							// (maybe you changed API keys recently)
+							$error['content'] = addslashes($e->getMessage());
+							break;
+						} catch (\Stripe\Error\ApiConnection $e) {
+						  // Network communication with Stripe failed
+							$error['content'] = addslashes($e->getMessage());
+							break;
+						} catch (\Stripe\Error\Base $e) {
+						  // Display a very generic error to the user, and maybe send
+						  // yourself an email
+							$error['content'] = addslashes($e->getMessage());
+							break;
+						} catch (Exception $e) {
+						  // Something else happened, completely unrelated to Stripe
+							$error['content'] = addslashes($e->getMessage());
+							break;
+						}
+						
+						/** Stripe Card - End **/
+						
 						if($objDonor->deletePaymentMethod($id)){
 							$output['success'] = true;							
 							$output['data'] = $data;					
