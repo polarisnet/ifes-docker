@@ -742,7 +742,7 @@
 						}
 						
 						$_SESSION['oz.system.user_management.users.list_filter'] = $condition." LIMIT ".$start.", ".($limit+1);
-						$selection = "`id`, `username`, `email`, `uid`, `first_name`, `last_name`, `access`, `status`, `created_by`, `created_date`, `modified_by`, `modified_date`";
+						$selection = "`id`, `username`, `email`, `first_name`, `last_name`, `created_by`, `created_date`, `modified_by`, `modified_date`";
 						$output['table'] = $objUser->listUser($condition, $start, $limit, $selection);
 						$output['total'] = $objUser->getTotalRow();
 						$output['success'] = true;

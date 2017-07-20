@@ -1,7 +1,7 @@
 <body>
     <div class="container" style="position:relative;">
         <form id="form-login" name="form-login" enctype="multipart/form-data" method="post" class="form-signin" 
-        style="background: #EBEBEB;margin: 10% auto;width: 400px; text-align: center; border: 1px solid #dddddd; padding:40px;">
+        	style="background: #EBEBEB;margin: 10% auto;width: 400px; text-align: center; border: 1px solid #dddddd; padding:40px;">
             <strong style="font-size:16px;">Sign In</strong><hr />
             
             <div class="row" style="text-align:left;">
@@ -19,12 +19,6 @@
             <div class="row" style="margin-left:0; margin-right:0; text-align:center; padding-top:12px; padding-bottom:12px;">
                 <div class="col-xs-12"><button type="submit" class="btn" style="padding:10px 40px 10px 40px;background-color:#646464;color:#FFF;">Sign in</button></div>
             </div>
-            
-            <br /><strong style="font-size:14px;">Don't have an account?</strong><br />
-            <div class="row" style="margin-left:0; margin-right:0; text-align:center; padding-top:12px; padding-bottom:12px;">
-                <div class="col-xs-12"><button type="button" class="btn" style="padding:10px 40px 10px 40px;background-color:#EBEBEB;color:#666;border:1px solid #AFAFAF;" onclick="javascript:window.location.href='<?php echo getModuleURL('register');?>'">Sign up</button></div>
-            </div>
-            
         </form>
     </div>
 </body>

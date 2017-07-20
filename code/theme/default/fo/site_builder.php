@@ -43,97 +43,101 @@
 				<?php echo onReadyMessageVJOB($message, $message2, $error, $warning); ?>
 			});
 		</script>
-		<nav class="navbar navbar-default navbar-static-top">
-			<div class="container">
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="https://www.ifesworld.org/en">Home</a></li>
-						<li class="dropdown">
-							<a href="https://www.ifesworld.org/en/about" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="https://www.ifesworld.org/en/our-people">Our people</a></li>
-								<li><a href="https://www.ifesworld.org/en/our-vision">Our vision</a></li>
-								<li><a href="https://www.ifesworld.org/en/our-beliefs">Our beliefs</a></li>
-								<li><a href="https://www.ifesworld.org/en/our-history">Our history</a></li>
-								<li><a href="https://www.ifesworld.org/en/our-work">Our work</a></li>
-								<li><a href="https://www.ifesworld.org/en/our-governance">Our governance</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="https://www.ifesworld.org/en/en/regions" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Regions <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="https://www.ifesworld.org/en/regions/caribbean">Caribbean</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/epsa-english-and-portuguese-speaking-africa">EPSA - English- and Portuguese- Speaking Africa</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/east-asia">East Asia</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/eurasia">Eurasia</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/europe">Europe</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/francophone-africa">Francophone Africa</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/latin-america">Latin America</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/mena-middle-east-and-north-africa">MENA - Middle East and North Africa</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/north-america">North America</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/south-asia">South Asia</a></li>
-								<li><a href="https://www.ifesworld.org/en/regions/south-pacific">South Pacific</a></li>
-							</ul>
-						</li>
-						<li class="dropdown active">
-							<a href="https://www.ifesworld.org/en/en/get-involved" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Get involved <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="https://www.ifesworld.org/en/events" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="https://www.ifesworld.org/en/world-assembly">World Assembly</a></li>
-								<li><a href="https://www.ifesworld.org/en/world-student-day">World Student Day</a></li>
-								<li><a href="https://www.ifesworld.org/en/regional-events">Publications</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="https://www.ifesworld.org/en/en/resources" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Resources <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="https://www.ifesworld.org/en/books">Books</a></li>
-								<li><a href="https://www.ifesworld.org/en/brand-resources">Brand Resources</a></li>
-								<li><a href="https://www.ifesworld.org/en/publications">Publications</a></li>
-								<li><a href="https://www.ifesworld.org/en/reports">Reports</a></li>
-								<li><a href="https://www.ifesworld.org/en/word-and-world">Word &amp; World</a></li>
-							</ul>
-						</li>
-						<li><a href="https://www.ifesworld.org/en/form/contact-us">Contact</a></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<?php if(matchCookieSession()){
-							echo '<li class="dropdown">';
-								echo '<a href="'.getModuleURL('donor').'" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">'.$_SESSION['user_fullname'].' <span class="caret"></span></a>';
-								echo '<ul class="dropdown-menu">';
-								echo	'<li><a href="'.HTTP_SERVER.HTTP_ROOT.SITE_FO_LOGIN.'?action=logout">Log Out</a></li>';
-	
-								echo '</ul>';
-							echo '</li>';
-							
-						}else{
-							echo '<li><a href="'.HTTP_SERVER.HTTP_ROOT.'/login>Log in</a></li>';
-						}
-						?>
-						<li><a href="../navbar/">Language</a></li>
-						<li><a href="../navbar/">Search</a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
+		<?php if(isset($setting['header']) && $setting['header'] == '1'){ ?>
+            <nav class="navbar navbar-default navbar-static-top">
+                <div class="container">
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="https://www.ifesworld.org/en">Home</a></li>
+                            <li class="dropdown">
+                                <a href="https://www.ifesworld.org/en/about" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://www.ifesworld.org/en/our-people">Our people</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/our-vision">Our vision</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/our-beliefs">Our beliefs</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/our-history">Our history</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/our-work">Our work</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/our-governance">Our governance</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="https://www.ifesworld.org/en/en/regions" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Regions <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://www.ifesworld.org/en/regions/caribbean">Caribbean</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/epsa-english-and-portuguese-speaking-africa">EPSA - English- and Portuguese- Speaking Africa</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/east-asia">East Asia</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/eurasia">Eurasia</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/europe">Europe</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/francophone-africa">Francophone Africa</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/latin-america">Latin America</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/mena-middle-east-and-north-africa">MENA - Middle East and North Africa</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/north-america">North America</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/south-asia">South Asia</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regions/south-pacific">South Pacific</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="https://www.ifesworld.org/en/en/get-involved" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Get involved <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="https://www.ifesworld.org/en/events" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://www.ifesworld.org/en/world-assembly">World Assembly</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/world-student-day">World Student Day</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/regional-events">Publications</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="https://www.ifesworld.org/en/en/resources" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Resources <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://www.ifesworld.org/en/books">Books</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/brand-resources">Brand Resources</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/publications">Publications</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/reports">Reports</a></li>
+                                    <li><a href="https://www.ifesworld.org/en/word-and-world">Word &amp; World</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="https://www.ifesworld.org/en/form/contact-us">Contact</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <?php if(matchCookieSession()){
+                                echo '<li class="dropdown">';
+                                    echo '<a href="'.getModuleURL('donor').'" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">'.$_SESSION['user_fullname'].' <span class="caret"></span></a>';
+                                    echo '<ul class="dropdown-menu">';
+                                    echo	'<li><a href="'.HTTP_SERVER.HTTP_ROOT.SITE_FO_LOGIN.'?action=logout">Log Out</a></li>';
+        
+                                    echo '</ul>';
+                                echo '</li>';
+                                
+                            }else{
+                                echo '<li><a href="'.HTTP_SERVER.HTTP_ROOT.'/login>Log in</a></li>';
+                            }
+                            ?>
+                            <li><a href="../navbar/">Language</a></li>
+                            <li><a href="../navbar/">Search</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+		<?php } ?>
 		<?php require $setting['center_dir']; ?>
-		<footer class="footer">
-			<div class="container">
-				<p class="title">International Fellowship of Evangelical Students</p>
-			</div>
-			<div class="container">
-				<p class="content">
-					<?php if(defined('REGION') && REGION == "us"){ ?>
-						International Fellowship of Evangelical Students/USA, Inc. (IFES/USA) is a &sect;501(c)(3)<br>organization, gifts to which are deductible as charitable contributions for Federal income tax purposes.
-					<?php }else{ ?>
-						&copy; 2014 IFES, une organisation dÃ©clarÃ©e Ã  Lausanne, Suisse.<br>IFES is a registered charity in England and Wales (247919), and a limited company (876229).<br>The IFES website uses cookies to give you the best experience through your visit.
-					<?php } ?>
-				</p>
-			</div>
-		</footer>
+		<?php if(isset($setting['footer']) && $setting['footer'] == '1'){ ?>
+            <footer class="footer">
+                <div class="container">
+                    <p class="title">International Fellowship of Evangelical Students</p>
+                </div>
+                <div class="container">
+                    <p class="content">
+                        <?php if(defined('REGION') && REGION == "us"){ ?>
+                            International Fellowship of Evangelical Students/USA, Inc. (IFES/USA) is a &sect;501(c)(3)<br>organization, gifts to which are deductible as charitable contributions for Federal income tax purposes.
+                        <?php }else{ ?>
+                            &copy; 2014 IFES, une organisation dÃ©clarÃ©e Ã  Lausanne, Suisse.<br>IFES is a registered charity in England and Wales (247919), and a limited company (876229).<br>The IFES website uses cookies to give you the best experience through your visit.
+                        <?php } ?>
+                    </p>
+                </div>
+            </footer>
+		<?php } ?>
 	</body>
 </html>

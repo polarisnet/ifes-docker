@@ -817,6 +817,11 @@
 						}else{
 							$headerData['type'] = "card";
 						}
+						
+						// Donate/ Giving on behalf
+						if(isset($_SESSION["login"]["give_behalf"])&&$_SESSION["login"]["give_behalf"]&&isset($_SESSION["login"]["give_behalf_id"])&&$_SESSION["login"]["give_behalf_id"]!="") {
+							$headerData['donate_on_behalf'] = "1";
+						}
 
 						$headerData['transaction_date'] = date("Y-m-d H:i:s");
 						$headerData['created_date'] = $headerData['transaction_date'];
