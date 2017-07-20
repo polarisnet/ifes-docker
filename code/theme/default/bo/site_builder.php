@@ -50,10 +50,9 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/font.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo HTTP_PLUGIN; ?>/css/breadcrumbs/crumbs.css">
         
-        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/custom_style.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/fo/font/font.css?ver=1" />
+        <?php /*<link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/font/font.css?ver=1" />*/ ?>
         <link rel="stylesheet" type="text/css" href="<?php echo HTTP_PLUGIN; ?>/bootstrap-3.3.6/css/bootstrap-custom.css?ver=1" />
-        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/fo/style.css?ver=1" />
+        <link rel="stylesheet" type="text/css" href="<?php echo HTTP_ACTIVE_THEME; ?>/custom_style.css" />
 	</head>
 	<?php $winReady = ""; ?>
 	<body>

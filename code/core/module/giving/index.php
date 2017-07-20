@@ -28,7 +28,12 @@
 		default:			
 			$isLogin = matchCookieSession();
 			if($isLogin){
-				$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION['username']);
+				if(isset($_SESSION["login"]["give_behalf"])&&$_SESSION["login"]["give_behalf"]&&isset($_SESSION["login"]["give_behalf_username"])&&$_SESSION["login"]["give_behalf_username"]!="") {
+					$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION["login"]["give_behalf_username"]);
+				} else {
+					$formDonorAccountData = $objGiving->getDonorAccountData($_SESSION['username']);
+				}
+				//echo "<pre>";print_r($formDonorAccountData);echo "</pre>";exit;
 				$stripe_customer = \Stripe\Customer::retrieve($formDonorAccountData['stripe_cust_id']);
 			}
 			$formCurrencySymbol = "&dollar;";
@@ -332,7 +337,11 @@
 						$error['content'] = "Please select a region where you are reside in.";
 					}else{
 						$newUserData = array();
-						$newUserData['id'] = $_SESSION['user_id'];
+						if(isset($_SESSION["login"]["give_behalf"])&&$_SESSION["login"]["give_behalf"]&&isset($_SESSION["login"]["give_behalf_id"])&&$_SESSION["login"]["give_behalf_id"]!="") {
+							$newUserData['id'] = $_SESSION["login"]["give_behalf_id"];
+						} else {
+							$newUserData['id'] = $_SESSION['user_id'];
+						}
 						$newUserData['region'] = $changeRegion;
 						$newUserData['modified_by'] = $_SESSION['user_id'];
 						$newUserData['modified_date'] = date("Y-m-d H:i:s");
@@ -471,7 +480,11 @@
 				$formDonorId = "";
 				$formDonorAccountData = array();
 				if($isLogin){
-					$formDonorId = $_SESSION['user_id'];
+					if(isset($_SESSION["login"]["give_behalf"])&&$_SESSION["login"]["give_behalf"]&&isset($_SESSION["login"]["give_behalf_id"])&&$_SESSION["login"]["give_behalf_id"]!="") {
+						$formDonorId = $_SESSION["login"]["give_behalf_id"];
+					} else {
+						$formDonorId = $_SESSION['user_id'];
+					}
 				}else{
 					$formDonorAccountData = $objGiving->getDonorAccountData($formPaymentBillingEmail);
 					if(!empty($formDonorAccountData) && $formPaymentCreateAccount != "" && $formDonorAccountData['status'] == '1'){

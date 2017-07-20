@@ -141,7 +141,7 @@
 			$output = array();
 			if(isset($_SESSION['salt'])){$salt = $_SESSION['salt'];}else{$salt = PUBLIC_SALT;}
 			$sql = "SELECT CONCAT(p.`id`,'-',d.`id`,'-',dd.`id`) as `id`, p.`id` as `pid`, d.`id` as `did`, p.`user_id`, dd.`id` as `ddid`, 
-					d.`stripe_charge_id`, d.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
+					d.`stripe_charge_id`, p.`type`, dd.`description`, d.`currency_code`, dd.`amount`, dd.`recurring`, d.`created_by`, d.`created_date` ";
 			$sql .= "FROM `payments` p INNER JOIN `donations` d ON p.`id`=d.`payment_id` ";
 			$sql .= "INNER JOIN `donations_details` dd ON d.`id`=dd.`header_id` ";
 			$sql .= "WHERE 1=1";

@@ -1,4 +1,4 @@
-	<body>
+<body>
 		<div class="container" style="position: relative;">
 			<form class="form-vertical form-login" role="form" method="post" style="background: #ffffff; margin: 10% auto; width: 400px; text-align: center; border: 1px solid #dddddd;">
 				<br>
@@ -20,7 +20,7 @@
 			</form>
 		</div>
 	</body>
-	<style>
+		<style>
 		.form-control{
 			width: auto;
 			margin: auto;

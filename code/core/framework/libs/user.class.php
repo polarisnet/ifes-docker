@@ -213,9 +213,22 @@
 			while($this->db->nextRecord()){
 				$result_data = $this->db->getRecord();
 				$temp = array();
-				$temp['id'] = rawurlencode(encryption($result_data['id'], $salt, true));
+				$temp['encid'] = rawurlencode(encryption($result_data['id'], $salt, true));
+				$temp['id'] = $result_data['id'];
 				$temp['username'] = $result_data['username'];
 				$temp['name'] = $result_data['first_name'].' '.$result_data['last_name'];
+				$temp['first_name'] = $result_data['first_name'];
+				$temp['last_name'] = $result_data['last_name'];
+				$temp['address'] = $result_data['billing_address1'].' '.$result_data['billing_address2'].' '.$result_data['billing_city'].' '.$result_data['billing_state'].' '.$result_data['billing_zipcode'].' '.$result_data['billing_country'];
+				$temp['address1'] = $result_data['billing_address1'];
+				$temp['address2'] = $result_data['billing_address2'];
+				$temp['city'] = $result_data['billing_city'];
+				$temp['state'] = $result_data['billing_state'];
+				$temp['zipcode'] = $result_data['billing_zipcode'];
+				$temp['country'] = $result_data['billing_country'];
+				$temp['telephone'] = $result_data['phone'];
+				$temp['region'] = $result_data['region'];
+				$temp['email'] = $result_data['email'];
 				array_push($output, $temp);
 			}
 			
